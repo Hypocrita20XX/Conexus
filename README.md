@@ -13,7 +13,7 @@ It is worth mentioning that the end results are purely functional, you will not 
 This is due in part to how the game loads mods, and also certainly limitations in my understanding of SteamCMD
 I would recommend going in-game into the mods UI, if you hover over the mod listing, it will tell you which folder it comes from
 
-Furthermore, I highly recommend using Notepad++ for this method as its RegEx find/replace functionality is used extensively/
+Furthermore, I highly recommend using Notepad++ for this method as its RegEx find/replace functionality is used extensively\
 You can find a download for Notepad++ [here](https://notepad-plus-plus.org/download/v7.7.html)
 
 All batch files were made with the D drive in mind
