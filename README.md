@@ -2,6 +2,7 @@
 A process and set of batch files that allows mods to be downloaded and organized according to a Steam collection\
 Intended to be used with Darkest Dungeon
 
+## Video guide available [here](https://www.youtube.com/watch?v=lFbpYOpG9FU&feature=youtu.be)
 
 ### Caveats
 This process is meant to be used in conjunction with a Steam collection\
