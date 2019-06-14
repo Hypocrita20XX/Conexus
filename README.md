@@ -1,3 +1,5 @@
+6-14-2019: The tools have been updated to allow for more streamlined updating, I don't have the time for proper documentation right now. Currently, run 1_init_download > 3_init_copy.bat > 4_init_rename. Mods will be downloaded, then copied to the Darkest Dungeon mod directory, and then renamed. Originally named mods will be retained in the steamcmd directory.
+
 # Download_And_Organize_Mods
 A process and set of batch files that allows mods to be downloaded and organized according to a Steam collection\
 Intended to be used with Darkest Dungeon
