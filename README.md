@@ -1,3 +1,5 @@
+6-18-2019: I decided that it would be in the best interest of everyone if I created a far more streamlined and accessible option for an organized mod list. With those goals in mind, I've begun work on what is essentially the successor of these tools: a standalone application that will take out almost all of the manual work, and streamline everything into a straightforward GUI. I've made some progress, and am hoping to have a public release for testing sooner rather than later.
+
 6-14-2019: The tools have been updated to allow for more streamlined updating, I don't have the time for proper documentation right now. Currently, run 1_init_download > 3_init_copy.bat > 4_init_rename. Mods will be downloaded, then copied to the Darkest Dungeon mod directory, and then renamed. Originally named mods will be retained in the steamcmd directory.
 
 # Download_And_Organize_Mods
