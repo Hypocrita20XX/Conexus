@@ -15,7 +15,7 @@
 ***
 
 ### Disclaimers
-*Please keep in mind that Conexus was developed on a machine running Windows 10. I don't have any experience with Linux or Mac, and cannot provide support for those operating systems. Thanks to the [license](https://github.com/Hypocrita20XX/Conexus/blob/master/LICENSE) though, feel free to modify the code to create builds for those platforms! Just be sure to link back here, I would appreciate it.*</br>
+*Please keep in mind that Conexus was developed on a machine running Windows 10. I don't have any experience with Linux or Mac, and cannot provide support for those operating systems. Thanks to the [MIT license](https://github.com/Hypocrita20XX/Conexus/blob/master/LICENSE) though, feel free to modify the code to create builds for those platforms! Just be sure to link back here, I would appreciate it.*</br>
 
 *Also, you absolutely have to have a Steam collection, otherwise Conexus simply cannot work. Steam collections thankfully provide a functional way to organize one's mods that Darkest Dungeon's UI simply cannot do at this point in time, and so Conexus has a hard requirement of you having one.*
 
