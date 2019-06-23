@@ -1,0 +1,73 @@
+﻿<Window x:Class="Conexus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Conexus"
+        mc:Ignorable="d"
+        Title="Conexus" Height="400" Width="600"
+        Name="Conexus"
+        Icon="Conexus.ico"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        Closed="Window_Closed">
+    <Grid Background="DarkGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15" />
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="15" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Required inputs -->
+        <Label Grid.Column="1" Grid.Row="1" Content="Collection URL" Margin="5" Background="Bisque" />
+        <TextBox  Grid.Column="3" Grid.Row="1" Name="URLLink" Text="Paste URL" TextAlignment="Center" Margin="5" Background="LightGray"/>
+
+        <Label Grid.Column="1" Grid.Row="2" Content="SteamCMD Directory" Margin="5" Background="Bisque"/>
+        <Button Grid.Column="3" Grid.Row="2" Name="SteamCMDDir" Content="Select Directory" Click="SteamCMDDir_Click" Margin="5" Background="LightGray"/>
+
+        <Label Grid.Column="1" Grid.Row="3" Content="Mod Directory" Margin="5" Background="Bisque"/>
+        <Button Grid.Column="3" Grid.Row="3" Name="ModDir" Content="Select Directory" Click="ModDir_Click" Margin="5" Background="LightGray"/>
+        
+
+        <!-- Misc inputs -->
+
+        <Label Grid.Column="1" Grid.Row="5" Content="Steam Username" Margin="5" Background="Bisque" />
+        <TextBox Grid.Column="3" Grid.Row="5" Name="SteamUsername" Margin="5" Background="LightGray"/>
+
+        <Label Grid.Column="1" Grid.Row="6" Content="Steam Password" Margin="5" Background="Bisque" />
+        <TextBox Grid.Column="3" Grid.Row="6" Name="SteamPassword" Margin="5" Background="LightGray"/>
+
+        <!-- User options -->
+
+        <Label Grid.Column="1" Grid.Row="8" Content="Download Mods" Margin="5" Background="Bisque"/>
+        <CheckBox Grid.Column="3" Grid.Row="8" Name="DownloadMods" Checked="DownloadMods_IsChecked" Unchecked="DownloadMods_IsUnchecked" Margin="5" Background="LightGray"/>
+
+        <Label Grid.Column="1" Grid.Row="9" Content="Update Mods" Margin="5" Background="Bisque"/>
+        <CheckBox Grid.Column="3" Grid.Row="9" Name="UpdateMods" Checked="UpdateMods_IsChecked" Unchecked="UpdateMods_IsUnchecked" Margin="5" Background="LightGray"/>
+
+        <Label Grid.Column="1" Grid.Row="10" Content="Save Credentials" Margin="5" Background="Bisque"/>
+        <CheckBox Grid.Column="3" Grid.Row="10" Name="SaveCredentials" Checked="SaveCredentials_IsChecked" Unchecked="SaveCredentials_IsUnchecked" Margin="5" Background="LightGray"/>
+
+        <!-- Run whichever process the user wants -->
+        <Button Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="12" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#ffc2c2"/>
+    </Grid>
+</Window>
