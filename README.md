@@ -39,7 +39,7 @@
 * *The directory that SteamCMD was extracted/installed to*
 * *The directory of Darkest Dungeon's mod folder*
 * *Your Steam credentials (username and password*
-*Once you have that, you're ready to begin your adventure with Conexus!*</br>
+*Once you have that, you're ready to begin your adventure with Conexus!*</br></br>
 
 *You'll notice that there are three options at the bottom:*
 * *Download mods*
@@ -51,6 +51,7 @@
 * *Save credentials, when checked, will save your Steam username and password. Please keep in mind that they will be saved unencrypted, in plain text. This is why Conexus does not have this checked by default.*</br>
 
 *Once you have all the needed information stored with Conexus, and your mode of operation has been decided, simply hit the "organize mods" button and Conexus will do his best to ensure your in-game load order is of the highest quality.*
-*Do note that this can take some time, depending on how large your mod list is. If you want to make sure everything is operating normally, just navigate to your Darkest Dungeon mod directory and your SteamCMD workshop directory. If you see folders appearing, disappearing, and/or doing a fine jig, everything is as it should be. Just be patient, quality work takes time.*</br>
+*Do note that this can take some time, depending on how large your mod list is. If you want to make sure everything is operating normally, just navigate to your Darkest Dungeon mod directory and your SteamCMD workshop directory. If you see folders appearing, disappearing, and/or doing a fine jig, everything is as it should be.</br>
+Just be patient, quality work takes time.*</br>
 
 ####
