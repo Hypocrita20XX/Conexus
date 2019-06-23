@@ -59,6 +59,11 @@ Just be patient, quality work takes time!*</br>
 *After an operation, it's always best to ensure your SteamCMD workshop directory is clean of any excess folders.*</br>
 *If you encounter any other issues, do let me know! Unfortunately I don't have a PHD in pest control, so bugs could happen spontaneously.*</br></br>
 
+#### Closing Thoughts
+*As I mentioned earlier, this entire project, source code included, is [license under MIT](https://github.com/Hypocrita20XX/Conexus/blob/master/LICENSE)*
+*This means that if you, or anyone else, knows of a game that could use Conexus, you're more than welcome to modify him as needed to work with those games.*
+*I'm also very much open to others taking what I've done here and making it even better. Knowledge should be open to everyone, and I intend on doing my best to share what I can without any limitations.*</br>
+
 ## I Hope Conexus Will Take You On Many Fulfilling Adventures!</br>
 
 ![Conexus Banner](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Banner.png)
