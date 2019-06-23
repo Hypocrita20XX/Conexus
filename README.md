@@ -39,12 +39,12 @@
 * *The directory that SteamCMD was extracted/installed to*
 * *The directory of Darkest Dungeon's mod folder*
 * *Your Steam credentials (username and password*
-*Once you have that, you're ready to begin your adventure with Conexus!*</br></br>
+*Once you have that, you're ready to begin your adventure with Conexus!*</br>
 
 *You'll notice that there are three options at the bottom:*
 * *Download mods*
 * *Update mods*
-* *Save credentials*</br>
+* *Save credentials*</br></br>
 
 * *Download mods, when checked, will do a full download of all mods listed in the provided collection URL. Please note that this assumes your Darkest Dungeon mod directory is empty, otherwise Conexus may explode. Best used when you're on your first adventure.*
 * *Update mods, when checked, will move all mods from the Darkest Dungeon mod directory to the SteamCMD/workshop directory, renaming as needed and allowing SteamCMD to ensure your mods are up to date with their counterparts in the Workshop.*
@@ -52,6 +52,13 @@
 
 *Once you have all the needed information stored with Conexus, and your mode of operation has been decided, simply hit the "organize mods" button and Conexus will do his best to ensure your in-game load order is of the highest quality.*
 *Do note that this can take some time, depending on how large your mod list is. If you want to make sure everything is operating normally, just navigate to your Darkest Dungeon mod directory and your SteamCMD workshop directory. If you see folders appearing, disappearing, and/or doing a fine jig, everything is as it should be.</br>
-Just be patient, quality work takes time.*</br>
+Just be patient, quality work takes time!*</br>
 
-####
+#### Potential Issues
+*Sometimes Conexus gets too caught up in his work, and can leave behind folders in places they shouldn't be.*</br>
+*After an operation, it's always best to ensure your SteamCMD workshop directory is clean of any excess folders.*</br>
+*If you encounter any other issues, do let me know! Unfortunately I don't have a PHD in pest control, so bugs could happen spontaneously.*</br></br>
+
+## I Hope Conexus Will Take You On Many Fulfilling Adventures!</br>
+
+![Conexus Banner](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Banner.png)
