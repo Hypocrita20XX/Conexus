@@ -28,7 +28,7 @@
 * *To get all the necessary files downloaded, you'll need to open the command prompt (Windows key + R, type in "cmd.")*
 * *Once you've done that, type "cd: <location of steamcmd>"*
 * *Next, type "steamcmd" and hit enter, SteamCMD should do its thing!*
-* *Lastly, you'll need to download and install the latest [release}(https://github.com/Hypocrita20XX/Conexus/releases) of Conexus, it'll save to C:\Conexus by default*
+* *Lastly, you'll need to download and install the latest [release](https://github.com/Hypocrita20XX/Conexus/releases) of Conexus, it'll save to C:\Conexus by default*
 * That's all the really hard stuff out of the way, let's get to organizing!
 
 ***
