@@ -1,0 +1,9 @@
+﻿<Application x:Class="Conexus_GOG_Standalone.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Conexus_GOG_Standalone"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <FontFamily x:Key="VT323_Regular">pack://application:,,/Assets/Fonts/#VT323</FontFamily>
+    </Application.Resources>
+</Application>
