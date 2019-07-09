@@ -8,6 +8,10 @@
         mc:Ignorable="d"
         Title="" Height="800" Width="1000">
 
+    <Window.Style>
+        <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
+    </Window.Style>
+    
     <Grid Background="DarkGray">
 
         <Grid.ColumnDefinitions>
