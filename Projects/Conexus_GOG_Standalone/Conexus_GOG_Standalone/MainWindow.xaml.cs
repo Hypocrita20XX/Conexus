@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Net;
+using GongSolutions.Wpf.DragDrop;
+using System.IO;
 
 namespace Conexus_GOG_Standalone
 {
@@ -21,20 +23,20 @@ namespace Conexus_GOG_Standalone
     {
         List<ModInfo> items = new List<ModInfo>();
         int index = 0;
-
         public MainWindow()
         {
             //Init MainWindow
             InitializeComponent();
 
             //Create a new blank listing
-            items.Add(new ModInfo { UserIndex = index.ToString(), UserModInfo = "Provide A Url"});
+            //items.Add(new ModInfo { UserIndex = index.ToString(), UserModInfo = "Provide A Url"});
+
+            items.Add(new ModInfo {UserModInfo = "Provide A Url" });
             //Add that listing to the listView
             ModInfo_ListView.Items.Add(items[index]);
             //Increment index
             index++;
         }
-
         //Only fired when the enter(return) key is pressed
         private void UserIndex_TextChanged(object sender, KeyEventArgs e)
         {
@@ -72,7 +74,8 @@ namespace Conexus_GOG_Standalone
                     textBox.ToolTip = tooltip;
 
                     //Now a new entry needs to be added below this one (NOT WORKING)
-                    items.Add(new ModInfo { UserIndex = index.ToString(), UserModInfo = "Provide A Url" });
+                    //items.Add(new ModInfo { UserIndex = index.ToString(), UserModInfo = "Provide A Url" });
+                    items.Add(new ModInfo {UserModInfo = "Provide A Url" });
                     //Add that blank entry to the listView
                     ModInfo_ListView.Items.Add(items[index]);
                     //Increment index
@@ -87,7 +90,9 @@ namespace Conexus_GOG_Standalone
 
     public class ModInfo
     {
-        public string UserIndex { get; set; }
+        //public string UserIndex { get; set; }
         public string UserModInfo { get; set; }
     }
+
+
 }
