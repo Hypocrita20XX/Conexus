@@ -94,5 +94,16 @@ namespace Conexus_GOG_Standalone
         public string UserModInfo { get; set; }
     }
 
+    public class DragDropHandler : IDropTarget
+    {
+        public void DragOver(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void Drop(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
