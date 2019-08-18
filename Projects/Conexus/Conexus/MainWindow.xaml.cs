@@ -57,9 +57,13 @@ namespace Conexus
         //Lists to store info related to the mods that will/are downloaded
         List<string> modInfo;
         List<string> appIDs;
-        //Bools to store the value of each checkbox
+        //Bools to store the value of each combobox
         bool downloadMods;
         bool updateMods;
+
+        bool steam;
+        bool gog;
+        //Bools to store the value of each checkbox
         bool saveCredentials;
 
         public MainWindow()
@@ -105,7 +109,7 @@ namespace Conexus
 
         #region ComboBox Functionality
 
-        void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        void Mode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //Get the index of the selected item
             //0 = download
@@ -126,6 +130,30 @@ namespace Conexus
                 //Change local variables accordingly
                 downloadMods = false;
                 updateMods = true;
+            }
+        }
+
+        void Platform_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            //Get the index of the selected item
+            //0 = steam
+            //1 = gog
+            int i = cmbPlatform.SelectedIndex;
+
+            //If the user is using Steam
+            if (i == 0)
+            {
+                //Change local variables accordingly
+                steam = true;
+                gog = false;
+            }
+
+            //If the user is using GOG
+            if (i == 1)
+            {
+                //Change local variables accordingly
+                steam = false;
+                gog = true;
             }
         }
 
@@ -601,9 +629,6 @@ namespace Conexus
         //Called when the UI window has loaded, used to set proper info in the UI from the settings file
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Set the default process to be downloading mods - ***EDIT***
-            //DownloadMods.IsChecked = true;
-
             //Ensure user.settings exists before checking its data
             if (UserSettings.Default.CollectionURL == null)
                 UserSettings.Default.CollectionURL = "";
@@ -627,15 +652,21 @@ namespace Conexus
                 SteamUsername.Text = UserSettings.Default.SteamUsername;
                 //Indicate to the user (through the checkbox) that their credentials are and will be saved
                 //This check only needs to be done once, as technically the credentials are the same (they both are sensitive data and handled as a pair)
-                //SaveCredentials.IsChecked = true;  - ***EDIT***
+                SaveCredentials.IsChecked = true;
             }
-            //Otherwise, make sure the user (through the checkbox state) knows that their username will not be saved
+            //Otherwise, make sure the user (through the checkbox state) knows that their credentials will not be saved
             else
-            //SaveCredentials.IsChecked = false;  - ***EDIT***
+                SaveCredentials.IsChecked = false;
 
-            //Check the length of the SteamPassword variable in the settings file, if so, set it to the UI variable
+            //Check the length of the SteamPassword variable in the settings file, if data exists, set it to the UI variable
             if (UserSettings.Default.SteamPassword.Length > 0)
                 SteamPassword.Text = UserSettings.Default.SteamPassword;
+
+            //Check the platform variable and set the platform combobox accordingly
+            if (UserSettings.Default.Platform == "steam")
+                cmbPlatform.SelectedIndex = 0;
+            else if (UserSettings.Default.Platform == "gog")
+                cmbPlatform.SelectedIndex = 1;
         }
 
         //Called right after the user indicates they want to close the program (through the use of the "X" button)
@@ -668,6 +699,12 @@ namespace Conexus
                 if (SteamPassword.Text.Length > 0)
                     UserSettings.Default.SteamPassword = SteamPassword.Text;
             }
+
+            //Save which platform the user has chosen
+            if (steam)
+                UserSettings.Default.Platform = "steam";
+            else
+                UserSettings.Default.Platform = "gog";
         }
 
         //Final call that happens right after the window starts to close

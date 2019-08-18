@@ -58,12 +58,12 @@
 
         <!-- User options -->
 
-        <ComboBox Grid.Column="1" Grid.Row="8" Margin="5" Name="cmbMode" SelectedValuePath="ValueString" SelectionChanged="ComboBox_SelectionChanged" Background="Bisque">
+        <ComboBox Grid.Column="1" Grid.Row="8" Margin="5" Name="cmbMode" SelectionChanged="Mode_SelectionChanged" Background="Bisque">
             <ComboBoxItem IsSelected="True">Download Mods</ComboBoxItem>
             <ComboBoxItem>Update Mods</ComboBoxItem>
         </ComboBox>
 
-        <ComboBox Grid.Column="1" Grid.Row="9" Margin="5" Background="Bisque">
+        <ComboBox Grid.Column="1" Grid.Row="9" Margin="5" Name="cmbPlatform" SelectionChanged="Platform_SelectionChanged" Background="Bisque">
             <ComboBoxItem IsSelected="True">Steam</ComboBoxItem>
             <ComboBoxItem>GOG</ComboBoxItem>
         </ComboBox>
