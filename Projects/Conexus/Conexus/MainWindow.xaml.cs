@@ -44,6 +44,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using Path = System.IO.Path;
 
 #endregion
@@ -102,51 +103,35 @@ namespace Conexus
             this.DataContext = this;
         }
 
+        #region ComboBox Functionality
+
+        void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            //Get the index of the selected item
+            //0 = download
+            //1 = update
+            int i = cmbMode.SelectedIndex;
+
+            //If the user wishes to download mods
+            if (i == 0)
+            {
+                //Change local variables accordingly
+                downloadMods = true;
+                updateMods = false;
+            }
+
+            //If the user wishes to update their existing mods
+            if (i == 1)
+            {
+                //Change local variables accordingly
+                downloadMods = false;
+                updateMods = true;
+            }
+        }
+
+        #endregion
+
         #region Checkbox Functionality
-
-        void DownloadMods_IsChecked(object sender, RoutedEventArgs e)
-        {
-            //Change local variables accordingly
-            downloadMods = true;
-            updateMods = false;
-            
-            //Ensure only the proper checkbox is checked
-            DownloadMods.IsChecked = true;
-            UpdateMods.IsChecked = false;
-        }
-
-        void DownloadMods_IsUnchecked(object sender, RoutedEventArgs e)
-        {
-            //Change local variables accordingly
-            downloadMods = false;
-            updateMods = true;
-
-            //Ensure only the proper checkbox is checked
-            DownloadMods.IsChecked = false;
-            UpdateMods.IsChecked = true;
-        }
-
-        void UpdateMods_IsChecked(object sender, RoutedEventArgs e)
-        {
-            //Change local variables accordingly
-            downloadMods = false;
-            updateMods = true;
-
-            //Ensure only the proper checkbox is checked
-            DownloadMods.IsChecked = false;
-            UpdateMods.IsChecked = true;
-        }
-
-        void UpdateMods_IsUnchecked(object sender, RoutedEventArgs e)
-        {
-            //Change local variables accordingly
-            downloadMods = true;
-            updateMods = false;
-
-            //Ensure only the proper checkbox is checked
-            DownloadMods.IsChecked = true;
-            UpdateMods.IsChecked = false;
-        }
 
         void SaveCredentials_IsChecked(object sender, RoutedEventArgs e)
         {
@@ -616,8 +601,8 @@ namespace Conexus
         //Called when the UI window has loaded, used to set proper info in the UI from the settings file
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Set the default process to be downloading mods
-            DownloadMods.IsChecked = true;
+            //Set the default process to be downloading mods - ***EDIT***
+            //DownloadMods.IsChecked = true;
 
             //Ensure user.settings exists before checking its data
             if (UserSettings.Default.CollectionURL == null)
@@ -642,11 +627,11 @@ namespace Conexus
                 SteamUsername.Text = UserSettings.Default.SteamUsername;
                 //Indicate to the user (through the checkbox) that their credentials are and will be saved
                 //This check only needs to be done once, as technically the credentials are the same (they both are sensitive data and handled as a pair)
-                SaveCredentials.IsChecked = true;
+                //SaveCredentials.IsChecked = true;  - ***EDIT***
             }
             //Otherwise, make sure the user (through the checkbox state) knows that their username will not be saved
             else
-                SaveCredentials.IsChecked = false;
+            //SaveCredentials.IsChecked = false;  - ***EDIT***
 
             //Check the length of the SteamPassword variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.SteamPassword.Length > 0)

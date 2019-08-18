@@ -19,7 +19,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="15" />
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
@@ -36,7 +36,7 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <!-- Required inputs -->
         <Label Grid.Column="1" Grid.Row="1" Content="Collection URL" Margin="5" Background="Bisque" />
         <TextBox  Grid.Column="3" Grid.Row="1" Name="URLLink" Text="Paste URL" TextAlignment="Center" Margin="5" Background="LightGray"/>
@@ -46,7 +46,7 @@
 
         <Label Grid.Column="1" Grid.Row="3" Content="Mod Directory" Margin="5" Background="Bisque"/>
         <Button Grid.Column="3" Grid.Row="3" Name="ModDir" Content="Select Directory" Click="ModDir_Click" Margin="5" Background="LightGray"/>
-        
+
 
         <!-- Misc inputs -->
 
@@ -58,14 +58,24 @@
 
         <!-- User options -->
 
-        <Label Grid.Column="1" Grid.Row="8" Content="Download Mods" Margin="5" Background="Bisque"/>
-        <CheckBox Grid.Column="3" Grid.Row="8" Name="DownloadMods" Checked="DownloadMods_IsChecked" Unchecked="DownloadMods_IsUnchecked" Margin="5" Background="LightGray"/>
+        <ComboBox Grid.Column="1" Grid.Row="8" Margin="5" Name="cmbMode" SelectedValuePath="ValueString" SelectionChanged="ComboBox_SelectionChanged" Background="Bisque">
+            <ComboBoxItem IsSelected="True">Download Mods</ComboBoxItem>
+            <ComboBoxItem>Update Mods</ComboBoxItem>
+        </ComboBox>
 
-        <Label Grid.Column="1" Grid.Row="9" Content="Update Mods" Margin="5" Background="Bisque"/>
-        <CheckBox Grid.Column="3" Grid.Row="9" Name="UpdateMods" Checked="UpdateMods_IsChecked" Unchecked="UpdateMods_IsUnchecked" Margin="5" Background="LightGray"/>
+        <ComboBox Grid.Column="1" Grid.Row="9" Margin="5" Background="Bisque">
+            <ComboBoxItem IsSelected="True">Steam</ComboBoxItem>
+            <ComboBoxItem>GOG</ComboBoxItem>
+        </ComboBox>
 
-        <Label Grid.Column="1" Grid.Row="10" Content="Save Credentials" Margin="5" Background="Bisque"/>
-        <CheckBox Grid.Column="3" Grid.Row="10" Name="SaveCredentials" Checked="SaveCredentials_IsChecked" Unchecked="SaveCredentials_IsUnchecked" Margin="5" Background="LightGray"/>
+        <Rectangle Fill="Bisque" Grid.Column="1" Grid.Row="10" Margin="6,4"/>
+
+        <CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="10" Name="SaveCredentials" Checked="SaveCredentials_IsChecked" Unchecked="SaveCredentials_IsUnchecked" Margin="10,10,12,0" Padding="15,5,5,15">
+            <TextBlock FlowDirection="LeftToRight" Text="Save Credentials?"  Margin="-5" Padding="5,0,5,0" Background="Bisque"/>
+        </CheckBox>
+
+        <!-- <Label Grid.Column="1" Grid.Row="10" Content="Save Credentials?" Margin="5" Background="Bisque"/>
+        <CheckBox Grid.Column="3" Grid.Row="10" Name="SaveCredentials" Checked="SaveCredentials_IsChecked" Unchecked="SaveCredentials_IsUnchecked" Margin="5" Background="LightGray"/> -->
 
         <!-- Run whichever process the user wants -->
         <Button Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="12" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#ffc2c2"/>

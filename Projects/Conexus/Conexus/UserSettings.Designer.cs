@@ -94,5 +94,17 @@ namespace Conexus {
                 this["CredentialsPrompt"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("steam")]
+        public string Platform {
+            get {
+                return ((string)(this["Platform"]));
+            }
+            set {
+                this["Platform"] = value;
+            }
+        }
     }
 }
