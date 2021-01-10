@@ -1,7 +1,7 @@
 ![Conexus Banner](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Banner.png)
 
 # Welcome To Conexus!
-*Conexus is an all-in-one tool to convert a Steam collection into a load order for the game [Darkest Dungeon](https://store.steampowered.com/app/262060/Darkest_Dungeon/).* 
+*Conexus is an all-in-one tool to convert a Steam collection orlist of links into a load order for the game [Darkest Dungeon](https://store.steampowered.com/app/262060/Darkest_Dungeon/).* 
 
 ## Your Load Order, Simplified
 *If you've modded Darkest Dungeon for any length of time, you've more than likely discovered that the in-game UI breaks after an unknown  amount of mods are loaded in.*  
