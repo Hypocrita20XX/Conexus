@@ -30,7 +30,7 @@
 * *Once you've done that, type "cd: <location of steamcmd>"*
 * *Next, type "steamcmd" and hit enter, SteamCMD should do its thing!*
 * *Lastly, you'll need to download the latest [release](https://github.com/Hypocrita20XX/Conexus/releases) of Conexus. As of version 1.1.0, the installation is portable, put him wherever you want!*
-* That's all the really hard stuff out of the way, let's get to organizing!
+* *That's all the really hard stuff out of the way, let's get to organizing!*
 
 ***
 
