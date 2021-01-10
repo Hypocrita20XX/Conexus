@@ -118,7 +118,7 @@ namespace Conexus
             //As such, ModInfo.txt will contain different info based on each mode
             //Such weirdness includes, but is not limited to, multiple copies of mods with different names in the mods directory
             if (Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
-                Directory.Delete(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                Directory.Delete(UserSettings.Default.ModsDir + "\\_DD_TextFiles", true);
 
             //If this directory is deleted or otherwise not found, it needs to be created, otherwise stuff will break
             if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
@@ -472,7 +472,7 @@ namespace Conexus
                     CopyFolders(source[i], destination[i]);
 
                 //Check to ensure the last mod is in the destination directory
-                if (Directory.Exists(destination[modInfo.Count - 1]))
+                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
                 {
                     //If so, delete all folders/files in the source destination
                     for (int i = 0; i < appIDs.Count; i++)
@@ -502,7 +502,7 @@ namespace Conexus
                     CopyFolders(source[i], destination[i]);
 
                 //Check to ensure the last mod is in the destination directory
-                if (Directory.Exists(destination[modInfo.Count - 1]))
+                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
                 {
                     //If so, delete all folders/files in the source destination
                     for (int i = 0; i < appIDs.Count; i++)
