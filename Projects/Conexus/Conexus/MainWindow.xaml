@@ -39,22 +39,13 @@
 
         <!-- Required inputs -->
         <Label Grid.Column="1" Grid.Row="1" Content="Collection URL" Margin="5" Background="Bisque" />
-        <TextBox  Grid.Column="3" Grid.Row="1" Name="URLLink" Text="Paste URL" TextAlignment="Center" Margin="5" Background="LightGray"/>
+        <TextBox  Grid.Column="3" Grid.Row="1" Name="URLLink" TextAlignment="Center" Margin="5" Background="LightGray"/>
 
         <Label Grid.Column="1" Grid.Row="2" Content="SteamCMD Directory" Margin="5" Background="Bisque"/>
         <Button Grid.Column="3" Grid.Row="2" Name="SteamCMDDir" Content="Select Directory" Click="SteamCMDDir_Click" Margin="5" Background="LightGray"/>
 
         <Label Grid.Column="1" Grid.Row="3" Content="Mod Directory" Margin="5" Background="Bisque"/>
         <Button Grid.Column="3" Grid.Row="3" Name="ModDir" Content="Select Directory" Click="ModDir_Click" Margin="5" Background="LightGray"/>
-
-
-        <!-- Misc inputs -->
-
-        <Label Grid.Column="1" Grid.Row="5" Content="Steam Username" Margin="5" Background="Bisque" />
-        <TextBox Grid.Column="3" Grid.Row="5" Name="SteamUsername" Margin="5" Background="LightGray"/>
-
-        <Label Grid.Column="1" Grid.Row="6" Content="Steam Password" Margin="5" Background="Bisque" />
-        <TextBox Grid.Column="3" Grid.Row="6" Name="SteamPassword" Margin="5" Background="LightGray"/>
 
         <!-- User options -->
 
@@ -64,18 +55,11 @@
         </ComboBox>
 
         <ComboBox Grid.Column="1" Grid.Row="9" Margin="5" Name="cmbPlatform" SelectionChanged="Platform_SelectionChanged" Background="Bisque">
-            <ComboBoxItem IsSelected="True">Steam</ComboBoxItem>
-            <ComboBoxItem>GOG</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">Steam Collection</ComboBoxItem>
+            <ComboBoxItem>List</ComboBoxItem>
         </ComboBox>
 
         <Rectangle Fill="Bisque" Grid.Column="1" Grid.Row="10" Margin="6,4"/>
-
-        <CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="10" Name="SaveCredentials" Checked="SaveCredentials_IsChecked" Unchecked="SaveCredentials_IsUnchecked" Margin="10,10,12,0" Padding="15,5,5,15">
-            <TextBlock FlowDirection="LeftToRight" Text="Save Credentials?"  Margin="-5" Padding="5,0,5,0" Background="Bisque"/>
-        </CheckBox>
-
-        <!-- <Label Grid.Column="1" Grid.Row="10" Content="Save Credentials?" Margin="5" Background="Bisque"/>
-        <CheckBox Grid.Column="3" Grid.Row="10" Name="SaveCredentials" Checked="SaveCredentials_IsChecked" Unchecked="SaveCredentials_IsUnchecked" Margin="5" Background="LightGray"/> -->
 
         <!-- Run whichever process the user wants -->
         <Button Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="12" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#ffc2c2"/>

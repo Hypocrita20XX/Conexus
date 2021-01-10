@@ -13,7 +13,7 @@
     Source: http://www.csharp411.com/c-copy-folder-recursively/
 
 > License: MIT
-    Copyright (c) 2019 MatthiosArcanus/Hypocrita_2013/Hypocrita20XX
+    Copyright (c) 2019, 2020, 2021 MatthiosArcanus/Hypocrita_2013/Hypocrita20XX
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -62,48 +62,11 @@ namespace Conexus
         bool updateMods;
 
         bool steam;
-        bool gog;
-        //Bools to store the value of each checkbox
-        bool saveCredentials;
 
         public MainWindow()
         {
             InitializeComponent();
             
-            //Initialize modInfo and appIDs lists based on the existence of the appropriate text files
-            if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-            {
-                //Instantiate the lists
-                modInfo = new List<string>();
-                appIDs = new List<string>();
-
-                //Temp variable to store an individual line
-                string line;
-
-                //Create a file reader and load the previously saved ModInfo file
-                StreamReader file = new StreamReader(@UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt");
-
-                //Iterate through the file one line at a time
-                while ((line = file.ReadLine()) != null)
-                {
-                    //Information in the file can be added as-is to the modInfo list
-                    modInfo.Add(line);
-                    //On the other hand, info specific to the app ID needs extracted
-                    //Strip off the index of the folder name, store it
-                    line = line.Substring(4);
-                    //Strip off the ID, store it
-                    line = line.Substring(0, line.IndexOf("_"));
-                    //Now store that ID in the appIDs list
-                    appIDs.Add(line);
-                }
-            }
-            else
-            {
-                //if the modInfo file does not exist, instantiate the lists with no data
-                modInfo = new List<string>();
-                appIDs = new List<string>();
-            }
-
             this.DataContext = this;
         }
 
@@ -137,93 +100,29 @@ namespace Conexus
         {
             //Get the index of the selected item
             //0 = steam
-            //1 = gog
+            //1 = list
             int i = cmbPlatform.SelectedIndex;
 
             //If the user is using Steam
             if (i == 0)
-            {
                 //Change local variables accordingly
                 steam = true;
-                gog = false;
-            }
 
-            //If the user is using GOG
+            //If the user is using a list
             if (i == 1)
-            {
                 //Change local variables accordingly
                 steam = false;
-                gog = true;
-            }
-        }
 
-        #endregion
+            //When changed, the _DD_TextFiles directory, and all contents, need to be deleted, if it exists
+            //because otherwise, really odd stuff will happen, as both modes are tied to the ModInfo text file
+            //As such, ModInfo.txt will contain different info based on each mode
+            //Such weirdness includes, but is not limited to, multiple copies of mods with different names in the mods directory
+            if (Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+                Directory.Delete(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
 
-        #region Checkbox Functionality
-
-        void SaveCredentials_IsChecked(object sender, RoutedEventArgs e)
-        {
-            //If the credentials prompt has not been shown/this checkbox was not previously active
-            if (UserSettings.Default.CredentialsPrompt)
-            {
-                //Create a new TaskDialog
-                using (TaskDialog prompt = new TaskDialog())
-                {
-                    //Set an appropriate prompt title
-                    prompt.WindowTitle = "Please Verify Saving Your Credentials";
-                    //Set the content of the prompt
-                    prompt.Content = "Your Steam credentials will NOT be saved with encryption, but will only be saved locally." +
-                                     "\n" + "If this is acceptable, press yes." +
-                                     "\n" + "If you press no, you will need to re-enter your credentials " +
-                                     "\n" + "every time you run this program.";
-                    //Create two appropriately labeled buttons
-                    TaskDialogButton yesButton = new TaskDialogButton("Yes");
-                    TaskDialogButton noButton = new TaskDialogButton("No");
-                    //Add them to the prompt
-                    prompt.Buttons.Add(yesButton);
-                    prompt.Buttons.Add(noButton);
-                    //Show the prompt
-                    TaskDialogButton button = prompt.ShowDialog(this);
-
-                    //If the yes button is pressed
-                    if (button == yesButton)
-                    {
-                        //Show a confirmation prompt
-                        MessageBox.Show(this, "You can change this at any time by unchecking \"Save Steam Credentials\"");
-                        //Indicate that the program should now save the user's credentials
-                        saveCredentials = true;
-                    }
-
-                    //If the no button is pressed
-                    if (button == noButton)
-                    {
-                        //Make sure the checkbox is unchecked
-                        SaveCredentials.IsChecked = false;
-                    }
-                }
-
-                //Ensure the prompt does not show up again (unless the user unchecks and then rechecks this option)
-                UserSettings.Default.CredentialsPrompt = false;
-                //Save this setting to the settings file
-                UserSettings.Default.Save();
-            }
-            //Otherwise, the checkbox is most likely set at start and the prompt does not need to be shown
-            else
-                return;
-        }
-
-        void SaveCredentials_IsUnchecked(object sender, RoutedEventArgs e)
-        {
-            //Show relevant info
-            MessageBox.Show(this, "Your Steam credentials won't be saved" + 
-                                  "\n" + "Please delete the folder located at " + 
-                                  "\n" + "C:\\Users\\<Username>\\AppData\\Local\\Conexus");
-
-            //Ensure credentials aren't saved
-            saveCredentials = false;
-            //Ensure credential prompt is shown next time it's checked
-            UserSettings.Default.CredentialsPrompt = true;
-            UserSettings.Default.Save();
+            //If this directory is deleted or otherwise not found, it needs to be created, otherwise stuff will break
+            if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+                Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
         }
 
         #endregion
@@ -273,85 +172,58 @@ namespace Conexus
         //Main workhorse function
         void OrganizeMods_Click(object sender, RoutedEventArgs e)
         {
-            //It is assumed that at this point, the user has entered a valid URL to the collection
-            if (URLLink.Text.Length > 0)
+            //If the user wants to use a Steam collection, ensure all fucntionality relates to that
+            if (steam)
             {
-                //Set the setting's file variable to the correct URL
-                UserSettings.Default.CollectionURL = URLLink.Text;
-                //Save this setting
-                UserSettings.Default.Save();
-            }
-            //Otherwise we need to quit and provide an error message
-            else
-            {
-                //Provide a clear reason for aborting the process
-                OrganizeMods.Content = "Invalid URL, process has now stopped.";
-                //Exit out of this function
-                return;
-            }
 
-            //If the user desires that their credentials are saved (it is assumed that the user has entered valid Steam credentials)
-            if (saveCredentials)
-            {
-                //Check the length of the SteamUsername field
-                if (SteamUsername.Text.Length > 0)
+                //It is assumed that at this point, the user has entered a valid URL to the collection
+                if (URLLink.Text.Length > 0)
                 {
-                    //If the length is greater than 0 (has data) then set that to the settings file variable
-                    UserSettings.Default.SteamUsername = SteamUsername.Text;
-                    //Save that data to the file
+                    //Set the setting's file variable to the correct URL
+                    UserSettings.Default.CollectionURL = URLLink.Text;
+                    //Save this setting
                     UserSettings.Default.Save();
                 }
-                //Check the length of the SteamPassword field
-                if (SteamPassword.Text.Length > 0)
+                //Otherwise we need to quit and provide an error message
+                else
                 {
-                    //If the length is greater than 0 (has data) then set that to the settings file variable
-                    UserSettings.Default.SteamPassword = SteamPassword.Text;
-                    //Save that data to the file
-                    UserSettings.Default.Save();
-                }
-            }
-
-            //Check if Steam can log in
-            //We'll do this by downloading a single mod, then checking to make sure it was indeed downloaded, and deleting it afterwards
-            //Create a process that will contain all relevant SteamCMD commands for all mods
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + SteamUsername.Text + " " + SteamPassword.Text + " " + "+\"workshop_download_item 262060 " + "879079478" + "\" " + "validate " + "+quit");
-
-            //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
-            using (Process process = new Process())
-            {
-                //Set the commands for this process
-                process.StartInfo = processInfo;
-                //Start the commandline process
-                process.Start();
-                //Wait until SteamCMD finishes
-                process.WaitForExit();
-
-                //If the directory does not exist, it's safe to assume that Steam could not log in, return and print an appropriate message
-                if (!Directory.Exists(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\879079478"))
-                {
-                    OrganizeMods.Content = "Invalid Steam credentials, process has now stopped.";
+                    //Provide a clear reason for aborting the process
+                    OrganizeMods.Content = "Invalid URL, process has now stopped.";
+                    //Exit out of this function
                     return;
                 }
-
-                //Otherwise the credentials are valid, and the downloaded file needs deleted
-                if (Directory.Exists(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\879079478"))
-                    Directory.Delete(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\879079478", true);
 
                 //If the user wants to download mods, send them through that chain
                 if (downloadMods)
                 {
-                        //Create all necessary text files
-                        DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-                        //Start downloading mods
-                        DownloadModsFromSteam();
+                    //Create all necessary text files
+                    DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                    //Start downloading mods
+                    DownloadModsFromSteam();
                 }
 
                 //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
                 if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                     UpdateModsFromSteam();
                 //Otherwise the user needs to download and create all relevant text files
-                else if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                     DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+            }
+            //Otherwise, the user wants to use a list of URLs
+            else
+            {
+                //If the user wants to download mods, send them through that chain
+                if (downloadMods)
+                {
+                    //Parse IDs from the user-populated list
+                    ParseFromList(UserSettings.Default.ModsDir);
+
+                    DownloadModsFromSteam();
+                }
+
+                //If the user wants to update mods, send them through that chain
+                if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                    UpdateModsFromSteam();
             }
         }
 
@@ -361,6 +233,10 @@ namespace Conexus
             //If the _DD_TextFiles folder does not exist, create it
             if (!Directory.Exists(fileDir))
                 Directory.CreateDirectory(fileDir);
+
+            //Overwrite whatever may be in ModInfo.txt, if it exists
+            if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                File.WriteAllText(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
 
             //Create a new WebClient
             WebClient webClient = new WebClient();
@@ -454,6 +330,62 @@ namespace Conexus
             WriteToFile(modInfo.ToArray(), @fileDir + "\\ModInfo.txt");
         }
 
+        void ParseFromList(string fileDir)
+        {
+            //Format: https://steamcommunity.com/sharedfiles/filedetails/?id=1282438975
+            //Ignore: * 50% Stealth Chance in Veteran Quests
+
+            //Overwrite whatever may be in ModInfo.txt, if it exists
+            if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                File.WriteAllText(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
+
+            //Temp variable to store an individual line
+            string line;
+            //Stores the initial folder index
+            int folderIndex = 0;
+            //Stores the final folder index (with leading zeroes)
+            string folderIndex_S = "";
+            //Load the previously stored file for further refinement
+            StreamReader file = new StreamReader(@fileDir + "\\Links.txt");
+
+            //Iterate through each line the file
+            while ((line = file.ReadLine()) != null)
+            {
+                //If the line being looked at is a comment, marked by *, then skip this line
+                //Otherwise, we need to get the ID from this line
+                if (!line.Contains("*"))
+                {
+                    //Remove everything up to ?id=, plus 4 to remove ?id= in the link
+                    string id = line.Substring(line.IndexOf("?id=") + 4);
+
+                    //Add leading zeroes to the folder index, two if the index is less than 10
+                    if (folderIndex < 10)
+                        folderIndex_S = "00" + folderIndex.ToString();
+
+                    //Add leading zeroes to the folder index, one if the index is more than 9 and less than 100
+                    if (folderIndex > 9 & folderIndex < 100)
+                        folderIndex_S = "0" + folderIndex.ToString();
+
+                    //If the index is greater than 100, no leading zeroes should be added
+                    if (folderIndex > 100)
+                        folderIndex_S = folderIndex.ToString();
+
+                    //Add the final name to the modInfo list
+                    modInfo.Add(folderIndex_S + "_" + id);
+
+                    //Add this ID to the appIDs list
+                    appIDs.Add(id);
+
+                    //Increment folderIndex
+                    folderIndex++;
+                }
+            }
+
+            //Write the modInfo to a text file if the file doesn't exist
+            if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
+        }
+
         void DownloadModsFromSteam()
         {
             //Stores the proper commands that will be passed to SteamCMD
@@ -464,10 +396,12 @@ namespace Conexus
                 cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" " + "validate ";
 
             string exe = UserSettings.Default.SteamCMDDir + "\\steamcmd.exe";
-            string cmd = "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit";
+            string cmd = "+login anonymous " + cmdList + "+quit";
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
+            //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
+
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login anonymous " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
@@ -496,7 +430,9 @@ namespace Conexus
                 cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" " + "validate ";
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
+            //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
+
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login anonymous " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
@@ -541,8 +477,11 @@ namespace Conexus
                     //If so, delete all folders/files in the source destination
                     for (int i = 0; i < appIDs.Count; i++)
                     {
-                        //Delete the directory
-                        Directory.Delete(source[i], true);
+                        if (Directory.Exists(source[i]))
+                        {
+                            //Delete the directory
+                            Directory.Delete(source[i], true);
+                        }
                     }
                 }
             }
@@ -568,8 +507,11 @@ namespace Conexus
                     //If so, delete all folders/files in the source destination
                     for (int i = 0; i < appIDs.Count; i++)
                     {
-                        //Delete the directory
-                        Directory.Delete(source[i], true);
+                        if (Directory.Exists(source[i]))
+                        {
+                            //Delete the directory
+                            Directory.Delete(source[i], true);
+                        }
                     }
                 }
             }
@@ -645,28 +587,77 @@ namespace Conexus
             if (UserSettings.Default.ModsDir.Length > 0)
                 ModDir.Content = UserSettings.Default.ModsDir;
 
-            //Check the length of the SteamUsername variable in the settings file
-            if (UserSettings.Default.SteamUsername.Length > 0)
-            {
-                //If so, set it to the UI variable
-                SteamUsername.Text = UserSettings.Default.SteamUsername;
-                //Indicate to the user (through the checkbox) that their credentials are and will be saved
-                //This check only needs to be done once, as technically the credentials are the same (they both are sensitive data and handled as a pair)
-                SaveCredentials.IsChecked = true;
-            }
-            //Otherwise, make sure the user (through the checkbox state) knows that their credentials will not be saved
-            else
-                SaveCredentials.IsChecked = false;
-
-            //Check the length of the SteamPassword variable in the settings file, if data exists, set it to the UI variable
-            if (UserSettings.Default.SteamPassword.Length > 0)
-                SteamPassword.Text = UserSettings.Default.SteamPassword;
-
             //Check the platform variable and set the platform combobox accordingly
             if (UserSettings.Default.Platform == "steam")
+            {
                 cmbPlatform.SelectedIndex = 0;
-            else if (UserSettings.Default.Platform == "gog")
+                steam = true;
+            }
+            else if (UserSettings.Default.Platform == "other")
+            {
                 cmbPlatform.SelectedIndex = 1;
+                steam = false;
+            }
+
+            //Make sure that Links.txt exists
+            if (!File.Exists(UserSettings.Default.ModsDir + "\\Links.txt"))
+                File.Create(UserSettings.Default.ModsDir + "\\Links.txt").Dispose();
+
+            //Initialize modInfo and appIDs lists based on the existence of the appropriate text files
+            if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+            {
+                //Instantiate the lists
+                modInfo = new List<string>();
+                appIDs = new List<string>();
+
+                //Temp variable to store an individual line
+                string line;
+
+                //Create a file reader and load the previously saved ModInfo file
+                StreamReader file = new StreamReader(@UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt");
+
+                if (steam)
+                {
+                    //Iterate through the file one line at a time
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        //Information in the file can be added as-is to the modInfo list
+                        modInfo.Add(line);
+                        //On the other hand, info specific to the app ID needs extracted
+                        //Strip off the index of the folder name, store it
+                        line = line.Substring(4);
+                        //Strip off the ID, store it
+                        line = line.Substring(0, line.IndexOf("_"));
+                        //Now store that ID in the appIDs list
+                        appIDs.Add(line);
+                    }
+                }
+                else
+                {
+                    //Iterate through the file one line at a time
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        //Information in the file can be added as-is to the modInfo list
+                        modInfo.Add(line);
+                        //On the other hand, info specific to the app ID needs extracted
+                        //Strip off the index of the folder name, store it
+                        line = line.Substring(4);
+                        //Strip off the ID, store it
+                        //line = line.Substring(0, line.IndexOf("_"));
+                        //Now store that ID in the appIDs list
+                        appIDs.Add(line);
+                    }
+                }
+            }
+            else
+            {
+                //if the modInfo file does not exist, instantiate the lists with no data
+                modInfo = new List<string>();
+                appIDs = new List<string>();
+            }
+
+            if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+                Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
         }
 
         //Called right after the user indicates they want to close the program (through the use of the "X" button)
@@ -688,23 +679,11 @@ namespace Conexus
             if (ModDir.Content != null)
                 UserSettings.Default.ModsDir = ModDir.Content.ToString();
 
-            //If the user wants to save their credentials
-            if (saveCredentials)
-            {
-                //Ensure that the field has data, then make sure the settings variable is correct 
-                if (SteamUsername.Text.Length > 0)
-                    UserSettings.Default.SteamUsername = SteamUsername.Text;
-
-                //Ensure that the field has data, then make sure the settings variable is correct
-                if (SteamPassword.Text.Length > 0)
-                    UserSettings.Default.SteamPassword = SteamPassword.Text;
-            }
-
             //Save which platform the user has chosen
             if (steam)
                 UserSettings.Default.Platform = "steam";
             else
-                UserSettings.Default.Platform = "gog";
+                UserSettings.Default.Platform = "other";
         }
 
         //Final call that happens right after the window starts to close
