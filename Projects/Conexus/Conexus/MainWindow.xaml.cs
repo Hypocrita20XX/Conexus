@@ -112,17 +112,6 @@ namespace Conexus
             if (i == 1)
                 //Change local variables accordingly
                 steam = false;
-
-            //When changed, the _DD_TextFiles directory, and all contents, need to be deleted, if it exists
-            //because otherwise, really odd stuff will happen, as both modes are tied to the ModInfo text file
-            //As such, ModInfo.txt will contain different info based on each mode
-            //Such weirdness includes, but is not limited to, multiple copies of mods with different names in the mods directory
-            //if (Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
-            //    Directory.Delete(UserSettings.Default.ModsDir + "\\_DD_TextFiles", true);
-
-            //If this directory is deleted or otherwise not found, it needs to be created, otherwise stuff will break
-            //if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
-            //    Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
         }
 
         #endregion
@@ -172,7 +161,11 @@ namespace Conexus
         //Main workhorse function
         void OrganizeMods_Click(object sender, RoutedEventArgs e)
         {
-            //If the user wants to use a Steam collection, ensure all fucntionality relates to that
+            //If this directory is deleted or otherwise not found, it needs to be created, otherwise stuff will break
+            if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+                Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+
+            //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
             {
 
