@@ -117,12 +117,12 @@ namespace Conexus
             //because otherwise, really odd stuff will happen, as both modes are tied to the ModInfo text file
             //As such, ModInfo.txt will contain different info based on each mode
             //Such weirdness includes, but is not limited to, multiple copies of mods with different names in the mods directory
-            if (Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
-                Directory.Delete(UserSettings.Default.ModsDir + "\\_DD_TextFiles", true);
+            //if (Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+            //    Directory.Delete(UserSettings.Default.ModsDir + "\\_DD_TextFiles", true);
 
             //If this directory is deleted or otherwise not found, it needs to be created, otherwise stuff will break
-            if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
-                Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+            //if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+            //    Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
         }
 
         #endregion
@@ -207,7 +207,10 @@ namespace Conexus
                     UpdateModsFromSteam();
                 //Otherwise the user needs to download and create all relevant text files
                 else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                {
                     DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                    UpdateModsFromSteam();
+                }
             }
             //Otherwise, the user wants to use a list of URLs
             else
@@ -224,6 +227,12 @@ namespace Conexus
                 //If the user wants to update mods, send them through that chain
                 if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                     UpdateModsFromSteam();
+                //Otherwise the user needs to download and create all relevant text files
+                else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                {
+                    ParseFromList(UserSettings.Default.ModsDir);
+                    UpdateModsFromSteam();
+                }
             }
         }
 
