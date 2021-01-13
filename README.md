@@ -18,7 +18,7 @@
 ### Disclaimers
 *Please keep in mind that Conexus was developed on a machine running Windows 10. I don't have any experience with Linux or Mac, and cannot provide support for those operating systems. Thanks to the [MIT license](https://github.com/Hypocrita20XX/Conexus/blob/master/LICENSE) though, feel free to modify the code to create builds for those platforms! Just be sure to link back here, I would appreciate it.*</br>
 
-*Ideally, you'll have a Steam collection where you've got all your mods organized in whatever order you like. However, with version 1.1.0, you can now provide a list of links, and Conexus will work all the same.*
+*Ideally, you'll have a Steam collection where you've got all your mods organized in whatever order you like. However, with version 1.1.0, you can now provide a list of links, and Conexus will work all the same.*</br>
 *Also be aware that if you're using a Steam collection, it needs the vsibility set to either unlisted or public. Private or friends-only unfortunately won't work.*
 
 ### Requirements
