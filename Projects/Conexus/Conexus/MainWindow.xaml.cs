@@ -63,6 +63,9 @@ namespace Conexus
 
         bool steam;
 
+        //TESTING ONLY
+        string meh = "";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -168,6 +171,22 @@ namespace Conexus
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
             {
+                //NEW:
+                
+
+                //Validate provided collection URL
+                if (VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+                {
+                    meh += " - VALID";
+                }
+                else
+                {
+                    meh += " - INVALID";
+                }
+
+                //Testing, don't want to proceed until this works
+                return;
+
 
                 //It is assumed that at this point, the user has entered a valid URL to the collection
                 if (URLLink.Text.Length > 0)
@@ -398,12 +417,16 @@ namespace Conexus
                 cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" " + "validate ";
 
             string exe = UserSettings.Default.SteamCMDDir + "\\steamcmd.exe";
-            string cmd = "+login anonymous " + cmdList + "+quit";
+
+            //tmp
+            string installDir = UserSettings.Default.ModsDir.Substring(0, UserSettings.Default.ModsDir.Length - 5);
+
+            string cmd = "+login anonymous " + "+" + "force_install_dir " + "\"" + installDir + "\" " + cmdList + "+quit";
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
             //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login anonymous " + cmdList + "+quit");
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
@@ -434,7 +457,10 @@ namespace Conexus
             //Create a process that will contain all relevant SteamCMD commands for all mods
             //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login anonymous " + cmdList + "+quit");
+            //tmp
+            string installDir = UserSettings.Default.ModsDir.Substring(0, UserSettings.Default.ModsDir.Length - 5);
+
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
@@ -564,6 +590,158 @@ namespace Conexus
         void WriteToFile(string[] text, string fileDir)
         {
             File.WriteAllLines(@fileDir, text);
+        }
+
+        #endregion
+
+        #region Verification Functionality
+
+        //Added v1.2.0
+        //Goes through several verification steps to ensure a proper Steam collection URL has been entered
+        bool VerifyCollectionURL(string url, string fileDir)
+        {
+            /*
+             * 
+             * URL verification is a bit tricky
+             * This is because Steam has a landing page with "valid" results, 
+             * as opposed to a 404 page, or similar.
+             * Because of this, the HTML contents of the given URL need to be downloaded
+             * so that we can be sure we have a valid collection URL.
+             * 
+             * This validation only tests for links that have somehow gotten messed up
+             * IE https://steamcommunity.com/workshop/filedetails/?id=2362884526 (valid) versus
+             * https://steamcommunity.com/workshop/filfadsfafaedetails/?id=2362884526 (invalid)
+             * 
+             * It does not test for something such as https://steamc431241134ommunity.com/workshop/filedetails/?id=2362884526
+             * which will not lead to a Steam site at all (in fact it leads to a completely invalid site)
+             * For this, we need another validation, which checks if the link is in any way valid
+             * 
+             * There also needs to be a check to ensure that the site is actually for Steam
+             * For instance someone accidently pastes a Youtube link instead of a Steam collection link.
+             * This check basically will search through a line or two of the HTML code
+             * and compare it to a known good Steam site
+             * 
+             * Order of validation:
+             * 1.) Check for any valid link
+             * 2.) Check to make sure it's a Steam site
+             * 3.) Check to make sure it leads to a collection
+             * 
+             */
+
+            //Create a new WebClient
+            WebClient webClient = new WebClient();
+
+            //Assum the URL is valid unless an exception occurs
+            bool validURL = true;
+
+            //Attempt to download the HTML from the provided URL
+            try
+            {
+                //Download the desired collection and save the file
+                webClient.DownloadFile(url, fileDir + "\\HTML.txt");
+            }
+            //Not a valid URL
+            catch (System.Net.WebException)
+            {
+                meh = "Not valid Steam or collection";
+                validURL = false;
+            }
+            //No URL at all, or something else that was unexpected
+            catch (ArgumentException)
+            {
+                meh = "No URL provided";
+                validURL = false;
+            }
+
+            //If the link is valid, leads to an actual site, we need to check for a valid Steam site
+            if (validURL)
+            {
+                //Create a new WebClient
+                //WebClient webClient = new WebClient();
+                //Download the desired collection and save the file
+                webClient.DownloadFile(url, fileDir + "\\HTML.txt");
+
+                /*
+                 * Now we need to check to see if this is a valid Steam site
+                 * 
+                 * We need something to compare to though, to do this
+                 * 
+                 * A valid Steam site has various tells, 
+                 * most important of which is that it will contain links that start with https://steamcommunity-a.akamaihd.net
+                 * These links start on line 8 on several Steam sites I looked like, but start on line 12 in a collection
+                 * Because of this slight discrepency, we need to look at a range of lines
+                 * Let's say we start at line 0,up to 50 (as this is zero-based, we'll stop at 49)
+                 * We shouldn't go further than is needed though, as this will affect overall performance
+                 * 
+                 * While we're doing this check, we'll also look for the next verification's tell, "Steam Workshop: Darkest Dungeon"
+                 * Both checks use the same iteration process and should be combined for performance reasons
+                 * Because of this, we'll go further than the previous 50 lines, to 100 (stopping at 99)
+                 * The HTML I looked at contained this tell on line 71, but we need to be sure
+                 * 
+                 */
+
+                //Temp variable to store an individual line
+                string line;
+                //List of strings to store all ines in a given range
+                List<string> lines = new List<string>();
+                //Create a file reader and load the saved HTML file
+                StreamReader file = new StreamReader(@fileDir + "\\HTML.txt");
+
+                //Keeps track of line count
+                int lineCount = 0;
+
+                //Stores the result of the verification check for a valid Steam link
+                bool isValidSteam = false;
+                //Stores the result of the verification check for a valid Steam collection link
+                bool isValidCollection = false;
+
+                //Iterate through the given file up to line 100, line by line
+                while ((line = file.ReadLine()) != null && lineCount < 100)
+                {
+                    //Check 2
+                    //If we find a line that contains "https://steamcommunity-a.akamaihd.net", we can safely say this is a Steam link
+                    if (line.Contains("steamcommunity-a.akamaihd.net"))
+                        isValidSteam = true;
+
+                    //If we find a line that contains "Steam Workshop: Darkest Dungeon", we say this is a Steam Collection link
+                    if (line.Contains(""))
+                        isValidCollection = true;
+
+                    //Increment lineCount
+                    lineCount++;
+                }
+
+                //Now that we have a valid result, we can continue executing the program
+                if (isValidSteam && isValidCollection)
+                {
+                    //TESTING
+                    meh = "Steam and collection";
+                    //Rturn true to indicate a valid URL
+                    return true;
+                }
+                //Otherwise this is not a valid Steam link and the user needs to know that
+                else
+                {
+                    //Reprimand user here
+
+                    //TESTING
+                    meh = "No Steam and/or collection";
+
+                    //Return false to indicate an invalid URL
+                    return false;
+                }
+            }
+            //Otherwise this is not a valid link and the user needs to know that
+            else
+            {
+                //Reprimand user here
+
+                //TESTING
+                meh = "Not Steam or collection";
+
+                //Return false to indicate an invalid URL
+                return false;
+            }
         }
 
         #endregion
