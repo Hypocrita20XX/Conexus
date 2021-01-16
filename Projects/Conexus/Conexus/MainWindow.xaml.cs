@@ -1,16 +1,24 @@
 ﻿/*
 > Darkest Dungeon - Organize Mods
     Created by MatthiosArcanus(Discord)/Hypocrita_2013(Steam)/Hypocrita20XX(GitHub) 
-    A GUI-based program designed to streamline the process of organizing mods according to an existing Steam collection
+    A GUI-based program designed to streamline the process of organizing mods according to an existing Steam collection or list of links
+    Handles downloading and updating mods through the use of SteamCMD (https://developer.valvesoftware.com/wiki/SteamCMD)
 
 > APIs used:
     Ookii.Dialogs
     Source: http://www.ookii.org/software/dialogs/
 
+    Extended WPF Toolkit
+    Source: https://github.com/xceedsoftware/wpftoolkit
+
 > Code used/adapated:
     Function: CopyFolders
     Author: Timm
     Source: http://www.csharp411.com/c-copy-folder-recursively/
+
+    Function: password reveal functionality
+    Author: DaisyTian-MSFT
+    Source: https://docs.microsoft.com/en-us/answers/questions/99602/wpf-passwordbox-passwordrevealmode-was-not-found-i.html
 
 > License: MIT
     Copyright (c) 2019, 2020, 2021 MatthiosArcanus/Hypocrita_2013/Hypocrita20XX
@@ -79,6 +87,7 @@ namespace Conexus
 
         #region TextBox Functionality
 
+        /*
         //Added v1.2.0
         //Handles clearing of text when the user wants to enter a URL into the URLLink textbox, mouse
         private void URLLink_GotFocus(object sender, RoutedEventArgs e)
@@ -98,6 +107,7 @@ namespace Conexus
             textBox.Text = string.Empty;
             textBox.GotFocus -= Steam_Password_GotFocus;
         }
+        */
 
         #endregion
 
@@ -222,7 +232,7 @@ namespace Conexus
         #region Checkbox Functionality
 
         //Added v1.2.0
-        //Code directly derived from that provided by user DaisyTian-MSFT on Microsoft's Q&A forum
+        //Reveals the username when the checkbox is checked
         void UsernameReveal_Checked(object sender, RoutedEventArgs e)
         {
             //Assign the text in the textbox to the given password
@@ -234,7 +244,7 @@ namespace Conexus
         }
 
         //Added v1.2.0
-        //Code directly derived from that provided by user DaisyTian-MSFT on Microsoft's Q&A forum
+        //Hides the username when the checkbox is unchecked
         void UsernameReveal_Unchecked(object sender, RoutedEventArgs e)
         {
             //Assign the text in the password to what's in the text box
@@ -246,7 +256,7 @@ namespace Conexus
         }
 
         //Added v1.2.0
-        //Code directly derived from that provided by user DaisyTian-MSFT on Microsoft's Q&A forum
+        //Reveals the password when the checkbox is unchecked
         void PasswordReveal_Checked(object sender, RoutedEventArgs e)
         {
             //Assign the text in the textbox to the given password
@@ -258,7 +268,7 @@ namespace Conexus
         }
 
         //Added v1.2.0
-        //Code directly derived from that provided by user DaisyTian-MSFT on Microsoft's Q&A forum
+        //Hides the password when the checkbox is unchecked
         void PasswordReveal_Unchecked(object sender, RoutedEventArgs e)
         {
             //Assign the text in the password to what's in the text box
@@ -322,9 +332,9 @@ namespace Conexus
                         UpdateModsFromSteam();
                     }
                 }
-                //URL is not valid and user needs to know about it
+                //URL is not valid, don't do anything
                 else
-                    URLLink.Text = "Not a valid URL: " + URLLink.Text;
+                    return;
             }
             //Otherwise, the user wants to use a list of URLs
             else
@@ -466,8 +476,9 @@ namespace Conexus
 
         void ParseFromList(string fileDir)
         {
-            //Format: https://steamcommunity.com/sharedfiles/filedetails/?id=1282438975
-            //Ignore: * 50% Stealth Chance in Veteran Quests
+            //Examples:
+            // > Format: https://steamcommunity.com/sharedfiles/filedetails/?id=1282438975
+            // > Ignore: * 50% Stealth Chance in Veteran Quests
 
             //Overwrite whatever may be in ModInfo.txt, if it exists
             if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
@@ -747,32 +758,40 @@ namespace Conexus
             //Not a valid URL
             catch (WebException)
             {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
                 //Provide a message to the user
-                URLLink.Text = "Not a valid URL: " + url;
+                URLLink.Watermark = "Not a valid URL: " + url;
                 //Flag this URL as invalid
                 validURL = false;
             }
             //No URL at all, or something else that was unexpected
             catch (ArgumentException)
             {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
                 //Provide a message to the user
-                URLLink.Text = "Not a valid URL: " + url;
+                URLLink.Watermark = "Not a valid URL: " + url;
                 //Flag this URL as invalid
                 validURL = false;
             }
             //I don't know why this triggers, but it does, and it's not for valid reasons
             catch (NotSupportedException)
             {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
                 //Provide a message to the user
-                URLLink.Text = "Not a valid URL: " + url;
+                URLLink.Watermark = "Not a valid URL: " + url;
                 //Flag this URL as invalid
                 validURL = false;
             }
             //URL is too long
             catch (PathTooLongException)
             {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
                 //Provide a message to the user
-                URLLink.Text = "URL is too long (more than 260 characters)";
+                URLLink.Watermark = "URL is too long (more than 260 characters)";
                 //Flag this URL as invalid
                 validURL = false;
             }
@@ -836,8 +855,10 @@ namespace Conexus
                 //If these checks fail, this is not a valid Steam collection link and the user needs to know that
                 if (!isValidSteam && !isValidCollection || isValidSteam && !isValidCollection)
                 {
+                    //Clear URLLink Text
+                    URLLink.Text = string.Empty;
                     //Provide a message to the user
-                    URLLink.Text = "Not a valid URL: " + url;
+                    URLLink.Watermark = "Not a valid URL: " + url;
 
                     //Cleanup
                     webClient.Dispose();
@@ -857,8 +878,10 @@ namespace Conexus
             //Otherwise this is not a valid link and the user needs to know that
             else
             {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
                 //Provide a message to the user
-                URLLink.Text = "Not a valid URL: " + url;
+                URLLink.Watermark = "Not a valid URL: " + url;
 
                 //Cleanup
                 webClient.Dispose();

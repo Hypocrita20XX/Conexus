@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Conexus"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Conexus" Height="400" Width="600"
         Name="Conexus"
@@ -41,7 +42,7 @@
         <!-- Required inputs -->
         <!-- Added "GotMouseCapture", "GotKeyboardFocus" in v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="1" Content="Collection URL" Margin="5" Background="Bisque" />
-        <TextBox  Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" Name="URLLink" GotMouseCapture="URLLink_GotFocus" GotKeyboardFocus="URLLink_GotFocus" TextAlignment="Center" Margin="5" Background="LightGray"/>
+        <xctk:WatermarkTextBox Watermark="Enter Steam Collection URL" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" Name="URLLink" TextAlignment="Center" Margin="5" Background="LightGray"/>
 
         <Label Grid.Column="1" Grid.Row="2" Content="SteamCMD Directory" Margin="5" Background="Bisque"/>
         <Button Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="2" Name="SteamCMDDir" Content="Select Directory" Click="SteamCMDDir_Click" Margin="5" Background="LightGray"/>
@@ -55,6 +56,7 @@
         <TextBox Grid.Column="3" Grid.Row="5" Name="SteamUsername_TextBox" Visibility="Collapsed" Margin="5" Background="LightGray"/>
         <CheckBox Grid.Column="4" Grid.Row="5" Name="UsernameReveal" Unchecked="UsernameReveal_Unchecked" Checked="UsernameReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="LightGray"/>
 
+        <!-- Added v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="6" Content="Steam Password" Margin="5" Background="Bisque"/>
         <PasswordBox Grid.Column="3" Grid.Row="6" Name="SteamPassword" Margin="5" Background="LightGray"/>
         <TextBox Grid.Column="3" Grid.Row="6" Name="SteamPassword_TextBox" Visibility="Collapsed" Margin="5" Background="LightGray"/>
@@ -75,7 +77,7 @@
 
         <Rectangle Fill="Bisque" Grid.Column="1" Grid.Row="10" Margin="6,4"/>
 
-        <!-- Not implemented, will be where progress and error messages show up eventually
+        <!-- Not yet implemented, will be where progress and error messages show up eventually
         <TextBlock  Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Name="Messages" TextAlignment="Center" Margin="5" Background="LightGray"/> 
         -->
         
