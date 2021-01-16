@@ -38,9 +38,9 @@
         </Grid.RowDefinitions>
 
         <!-- Required inputs -->
-        <!-- Added "GotMouseCapture", "GotKeyboardFocus" and "LostFocus" in v1.2.0 -->
+        <!-- Added "GotMouseCapture", "GotKeyboardFocus" in v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="1" Content="Collection URL" Margin="5" Background="Bisque" />
-        <TextBox  Grid.Column="3" Grid.Row="1" Name="URLLink" GotMouseCapture="URLLink_GotFocus" GotKeyboardFocus="URLLink_GotFocus" LostFocus="URLLink_LostFocus" TextChanged="URLLink_TextChanged" TextAlignment="Center" Margin="5" Background="LightGray"/>
+        <TextBox  Grid.Column="3" Grid.Row="1" Name="URLLink" GotMouseCapture="URLLink_GotFocus" GotKeyboardFocus="URLLink_GotFocus" TextAlignment="Center" Margin="5" Background="LightGray"/>
 
         <Label Grid.Column="1" Grid.Row="2" Content="SteamCMD Directory" Margin="5" Background="Bisque"/>
         <Button Grid.Column="3" Grid.Row="2" Name="SteamCMDDir" Content="Select Directory" Click="SteamCMDDir_Click" Margin="5" Background="LightGray"/>

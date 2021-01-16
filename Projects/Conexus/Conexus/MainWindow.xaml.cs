@@ -63,10 +63,8 @@ namespace Conexus
         bool downloadMods;
         bool updateMods;
 
+        //Bool to store which method the user has selected
         bool steam;
-
-        //TESTING ONLY
-        string meh = "";
 
         public MainWindow()
         {
@@ -85,23 +83,6 @@ namespace Conexus
             TextBox textBox = (TextBox)sender;
             textBox.Text = string.Empty;
             textBox.GotFocus -= URLLink_GotFocus;
-        }
-
-        //Added v1.2.0
-        void URLLink_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //Keyboard.ClearFocus();
-
-            //VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-        }
-
-        //Added v1.2.0
-        //Handles validation of the URL
-        void URLLink_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //Validate provided collection URL
-            VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-                
         }
 
         #endregion
@@ -166,10 +147,26 @@ namespace Conexus
             folderBrowser.UseDescriptionForTitle = true;
             //Set the content of the button to what the user has selected
             ModDir.Content = folderBrowser.SelectedPath;
-            //Set the settings variable to the one selected
-            UserSettings.Default.ModsDir = folderBrowser.SelectedPath;
-            //Save this setting
-            UserSettings.Default.Save();
+
+            //Added v1.2.0
+            //Verify that the provided directory is valid, not empty, and contains Darkest.exe
+            if (VerifyModDir(folderBrowser.SelectedPath))
+            {
+                //Set the settings variable to the one selected
+                UserSettings.Default.ModsDir = folderBrowser.SelectedPath;
+                //Save this setting
+                UserSettings.Default.Save();
+            }
+            //If the given path is invalid, let the user know why
+            else
+            {
+                //If the given path contains any info, provide that with the error message
+                if (folderBrowser.SelectedPath.Length > 0)
+                    ModDir.Content = "Invalid mods location: " + folderBrowser.SelectedPath;
+                //If the given path is blank, provide that information
+                else
+                    ModDir.Content = "Invalid mods Location: no path given";
+            }
         }
 
         void SteamCMDDir_Click(object sender, RoutedEventArgs e)
@@ -185,7 +182,7 @@ namespace Conexus
             //Set the content of the button to what the user has selected
             SteamCMDDir.Content = folderBrowser.SelectedPath;
 
-            //Added v.1.2.0
+            //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
             if (VerifySteamCMDDir(folderBrowser.SelectedPath))
             {
@@ -199,14 +196,11 @@ namespace Conexus
             {
                 //If the given path contains any info, provide that with the error message
                 if (folderBrowser.SelectedPath.Length > 0)
-                    SteamCMDDir.Content = "Invalid SteamCMD Location: " + folderBrowser.SelectedPath;
+                    SteamCMDDir.Content = "Invalid SteamCMD location: " + folderBrowser.SelectedPath;
                 //If the given path is blank, provide that information
                 else
-                    SteamCMDDir.Content = "Invalid SteamCMD Location: No Path Given";
+                    SteamCMDDir.Content = "Invalid SteamCMD location: no path given";
             }
-
-
-
         }
 
         #endregion
@@ -223,44 +217,48 @@ namespace Conexus
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
             {
-                //Testing, don't want to proceed until this works
-                return;
-
-                //It is assumed that at this point, the user has entered a valid URL to the collection
-                if (URLLink.Text.Length > 0)
+                //Check the provided URL to make sure it's valid
+                if (VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
                 {
-                    //Set the setting's file variable to the correct URL
-                    UserSettings.Default.CollectionURL = URLLink.Text;
-                    //Save this setting
-                    UserSettings.Default.Save();
+                    //It is assumed that at this point, the user has entered a valid URL to the collection
+                    if (URLLink.Text.Length > 0)
+                    {
+                        //Set the setting's file variable to the correct URL
+                        UserSettings.Default.CollectionURL = URLLink.Text;
+                        //Save this setting
+                        UserSettings.Default.Save();
+                    }
+                    //Otherwise we need to quit and provide an error message
+                    else
+                    {
+                        //Provide a clear reason for aborting the process
+                        OrganizeMods.Content = "Invalid URL, process has now stopped.";
+                        //Exit out of this function
+                        return;
+                    }
+
+                    //If the user wants to download mods, send them through that chain
+                    if (downloadMods)
+                    {
+                        //Create all necessary text files
+                        DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                        //Start downloading mods
+                        DownloadModsFromSteam();
+                    }
+
+                    //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
+                    if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                        UpdateModsFromSteam();
+                    //Otherwise the user needs to download and create all relevant text files
+                    else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                    {
+                        DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                        UpdateModsFromSteam();
+                    }
                 }
-                //Otherwise we need to quit and provide an error message
+                //URL is not valid and user needs to know about it
                 else
-                {
-                    //Provide a clear reason for aborting the process
-                    OrganizeMods.Content = "Invalid URL, process has now stopped.";
-                    //Exit out of this function
-                    return;
-                }
-
-                //If the user wants to download mods, send them through that chain
-                if (downloadMods)
-                {
-                    //Create all necessary text files
-                    DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-                    //Start downloading mods
-                    DownloadModsFromSteam();
-                }
-
-                //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
-                if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                    UpdateModsFromSteam();
-                //Otherwise the user needs to download and create all relevant text files
-                else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                {
-                    DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-                    UpdateModsFromSteam();
-                }
+                    URLLink.Text = "Not a valid URL: " + URLLink.Text;
             }
             //Otherwise, the user wants to use a list of URLs
             else
@@ -636,7 +634,7 @@ namespace Conexus
 
         //Added v1.2.0
         //Goes through several verification steps to ensure a proper Steam collection URL has been entered
-        void VerifyCollectionURL(string url, string fileDir)
+        bool VerifyCollectionURL(string url, string fileDir)
         {
             /*
              * 
@@ -669,7 +667,7 @@ namespace Conexus
             //Create a new WebClient
             WebClient webClient = new WebClient();
 
-            //Assum the URL is valid unless an exception occurs
+            //Assume the URL is valid unless an exception occurs
             bool validURL = true;
 
             //Attempt to download the HTML from the provided URL
@@ -769,13 +767,23 @@ namespace Conexus
 
                 //If these checks fail, this is not a valid Steam collection link and the user needs to know that
                 if (!isValidSteam && !isValidCollection || isValidSteam && !isValidCollection)
+                {
                     //Provide a message to the user
                     URLLink.Text = "Not a valid URL: " + url;
+
+                    return false;
+                }
+                else
+                    return true;
             }
             //Otherwise this is not a valid link and the user needs to know that
             else
+            {
                 //Provide a message to the user
                 URLLink.Text = "Not a valid URL: " + url;
+
+                return false;
+            }
         }
 
         //Added v1.2.0
@@ -785,13 +793,37 @@ namespace Conexus
             /*
              * 
              * This verification check is fairly straightforward: we check the given directory and see if we can find steamcmd.exe
-             * Steamcmd.exe is thankfully located in the roto directory, which is what the user is asked to find
+             * Steamcmd.exe is thankfully located in the root directory, which is what the user is asked to find
              * so we can assume that if it's not in the given directory, the given directory is not valid
              * 
              */
 
             //Verify if this directory contains steamcmd.exe
             if (File.Exists(fileDir + "\\steamcmd.exe"))
+                return true;
+            else
+                return false;
+        }
+
+        //Added v1.2.0
+        //Goes through several verification steps to ensure that the given mods directory is valid, contains Darkest.exe
+        bool VerifyModDir(string fileDir)
+        {
+            /*
+             * 
+             * This verification check is fairly straightforward: we check the given directory and see if we can find Darkest.exe
+             * Unlike steamcmd.exe, this is located in a different folder DarkestDungeon\_windows
+             * So we first need to navigate to the root directory, then to _windows and check for the exe
+             * 
+             */
+
+            //Temp string to store the root directory
+            string dirRoot = fileDir.Substring(0, fileDir.Length - 5);
+            //Temp string to store the _windows directory
+            string win = dirRoot + "\\_windows";
+
+            //Verify if this directory contains steamcmd.exe
+            if (File.Exists(win + "\\Darkest.exe"))
                 return true;
             else
                 return false;
