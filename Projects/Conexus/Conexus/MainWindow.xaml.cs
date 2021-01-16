@@ -66,6 +66,10 @@ namespace Conexus
         //Bool to store which method the user has selected
         bool steam;
 
+        //For privacy, store the username and password internally, not displayed visually
+        string steamUsername;
+        string steamPassword;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -83,14 +87,6 @@ namespace Conexus
             TextBox textBox = (TextBox)sender;
             textBox.Text = string.Empty;
             textBox.GotFocus -= URLLink_GotFocus;
-        }
-
-        private void Steam_Username_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //Clear out any text in the Steam username text field when the user makes it active by clicking on it
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = string.Empty;
-            textBox.GotFocus -= Steam_Username_GotFocus;
         }
 
         //Added v1.2.0
@@ -219,6 +215,58 @@ namespace Conexus
                 else
                     SteamCMDDir.Content = "Invalid SteamCMD location: no path given";
             }
+        }
+
+        #endregion
+
+        #region Checkbox Functionality
+
+        //Added v1.2.0
+        //Code directly derived from that provided by user DaisyTian-MSFT on Microsoft's Q&A forum
+        void UsernameReveal_Checked(object sender, RoutedEventArgs e)
+        {
+            //Assign the text in the textbox to the given password
+            SteamUsername_TextBox.Text = SteamUsername.Password;
+            //Hide the password box
+            SteamUsername.Visibility = Visibility.Collapsed;
+            //Show the text box
+            SteamUsername_TextBox.Visibility = Visibility.Visible;
+        }
+
+        //Added v1.2.0
+        //Code directly derived from that provided by user DaisyTian-MSFT on Microsoft's Q&A forum
+        void UsernameReveal_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //Assign the text in the password to what's in the text box
+            SteamUsername.Password = SteamUsername_TextBox.Text;
+            //Hide the text box
+            SteamUsername_TextBox.Visibility = Visibility.Collapsed;
+            //Show the password box
+            SteamUsername.Visibility = Visibility.Visible;
+        }
+
+        //Added v1.2.0
+        //Code directly derived from that provided by user DaisyTian-MSFT on Microsoft's Q&A forum
+        void PasswordReveal_Checked(object sender, RoutedEventArgs e)
+        {
+            //Assign the text in the textbox to the given password
+            SteamPassword_TextBox.Text = SteamPassword.Password;
+            //Hide the password box
+            SteamPassword.Visibility = Visibility.Collapsed;
+            //Show the text box
+            SteamPassword_TextBox.Visibility = Visibility.Visible;
+        }
+
+        //Added v1.2.0
+        //Code directly derived from that provided by user DaisyTian-MSFT on Microsoft's Q&A forum
+        void PasswordReveal_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //Assign the text in the password to what's in the text box
+            SteamPassword.Password = SteamPassword_TextBox.Text;
+            //Hide the text box
+            SteamPassword_TextBox.Visibility = Visibility.Collapsed;
+            //Show the password box
+            SteamPassword.Visibility = Visibility.Visible;
         }
 
         #endregion
@@ -885,6 +933,26 @@ namespace Conexus
             if (UserSettings.Default.ModsDir.Length > 0)
                 ModDir.Content = UserSettings.Default.ModsDir;
 
+            //Added v1.2.0
+            //Ensure Steam username exists before checking its data
+            if (UserSettings.Default.SteamUsername == null)
+                UserSettings.Default.SteamUsername = "";
+
+            //Added v1.2.0
+            //Check the length of the username variable in the settings file, if so, set it to the UI variable
+            if (UserSettings.Default.SteamUsername.Length > 0)
+                SteamUsername.Password = UserSettings.Default.SteamUsername;
+
+            //Added v1.2.0
+            //Ensure Steam password exists before checking its data
+            if (UserSettings.Default.SteamPassword == null)
+                UserSettings.Default.SteamPassword = "";
+
+            //Added v1.2.0
+            //Check the length of the password variable in the settings file, if so, set it to the UI variable
+            if (UserSettings.Default.SteamPassword.Length > 0)
+                SteamPassword.Password = UserSettings.Default.SteamPassword;
+
             //Check the platform variable and set the platform combobox accordingly
             if (UserSettings.Default.Platform == "steam")
             {
@@ -977,6 +1045,18 @@ namespace Conexus
             if (ModDir.Content != null)
                 UserSettings.Default.ModsDir = ModDir.Content.ToString();
 
+            //Added v1.2.0
+            //Check to ensure the Steam username content is indeed provided (length greater than 0 indicates data in the field)
+            //Make sure the variable in the settings file is correct
+            if (SteamUsername.Password.Length > 0)
+                UserSettings.Default.SteamUsername = SteamUsername.Password;
+
+            //Added v1.2.0
+            //Check to ensure the Steam password content is indeed provided (length greater than 0 indicates data in the field)
+            //Make sure the variable in the settings file is correct
+            if (SteamPassword.Password.Length > 0)
+                UserSettings.Default.SteamPassword = SteamPassword.Password;
+
             //Save which platform the user has chosen
             if (steam)
                 UserSettings.Default.Platform = "steam";
@@ -993,8 +1073,7 @@ namespace Conexus
         }
 
 
+
         #endregion
-
-
     }
 }
