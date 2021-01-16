@@ -62,6 +62,8 @@
 
         <Rectangle Fill="Bisque" Grid.Column="1" Grid.Row="10" Margin="6,4"/>
 
+        <TextBlock  Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Name="Messages" TextAlignment="Center" Margin="5" Background="LightGray"/>
+
         <!-- Run whichever process the user wants -->
         <Button Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="12" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#ffc2c2"/>
     </Grid>

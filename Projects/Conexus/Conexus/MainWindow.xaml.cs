@@ -299,6 +299,9 @@ namespace Conexus
             WebClient webClient = new WebClient();
             //Download the desired collection and save the file
             webClient.DownloadFile(url, fileDir + "\\HTML.txt");
+            //Added v1.2.0
+            //Free up resources, cleanup
+            webClient.Dispose();
             //Move on to parsing through the raw source
             IterateThroughHTML(fileDir);
         }
@@ -323,6 +326,10 @@ namespace Conexus
                     mods.Add(line.Substring(line.IndexOf("<")));
                 }
             }
+
+            //Added v1.2.0
+            //Close file, cleanup
+            file.Close();
 
             //Write this information to a file
             WriteToFile(mods.ToArray(), fileDir + "\\Mods.txt");
@@ -383,6 +390,10 @@ namespace Conexus
                 folderIndex++;
             }
 
+            //Added v1.2.0
+            //Close file, cleanup
+            file.Close();
+
             //Write the modInfo to a text file
             WriteToFile(modInfo.ToArray(), @fileDir + "\\ModInfo.txt");
         }
@@ -441,6 +452,10 @@ namespace Conexus
             //Write the modInfo to a text file if the file doesn't exist
             if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                 WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
+
+            //Added v1.2.0
+            //Close file, cleanup
+            file.Close();
         }
 
         void DownloadModsFromSteam()
@@ -448,16 +463,9 @@ namespace Conexus
             //Stores the proper commands that will be passed to SteamCMD
             string cmdList = "";
 
-            //Get a list of commamds for each mod stored in a single string
+            //Get a list of commands for each mod stored in a single string
             for (int i =0; i < appIDs.Count; i++)
-                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" " + "validate ";
-
-            string exe = UserSettings.Default.SteamCMDDir + "\\steamcmd.exe";
-
-            //tmp
-            string installDir = UserSettings.Default.ModsDir.Substring(0, UserSettings.Default.ModsDir.Length - 5);
-
-            string cmd = "+login anonymous " + "+" + "force_install_dir " + "\"" + installDir + "\" " + cmdList + "+quit";
+                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
             //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
@@ -488,13 +496,7 @@ namespace Conexus
 
             //Get a list of commamds for each mod stored in a single string
             for (int i = 0; i < appIDs.Count; i++)
-                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" " + "validate ";
-
-            //Create a process that will contain all relevant SteamCMD commands for all mods
-            //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
-
-            //tmp
-            string installDir = UserSettings.Default.ModsDir.Substring(0, UserSettings.Default.ModsDir.Length - 5);
+                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
 
             ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
 
@@ -771,16 +773,29 @@ namespace Conexus
                     //Provide a message to the user
                     URLLink.Text = "Not a valid URL: " + url;
 
+                    //Cleanup
+                    webClient.Dispose();
+                    file.Close();
+
                     return false;
                 }
                 else
+                {
+                    //Cleanup
+                    webClient.Dispose();
+                    file.Close();
+
                     return true;
+                }
             }
             //Otherwise this is not a valid link and the user needs to know that
             else
             {
                 //Provide a message to the user
                 URLLink.Text = "Not a valid URL: " + url;
+
+                //Cleanup
+                webClient.Dispose();
 
                 return false;
             }
@@ -959,9 +974,6 @@ namespace Conexus
             UserSettings.Default.Save();
         }
 
-
         #endregion
-
-
     }
 }
