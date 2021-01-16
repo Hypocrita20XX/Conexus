@@ -74,42 +74,12 @@ namespace Conexus
         //Bool to store which method the user has selected
         bool steam;
 
-        //For privacy, store the username and password internally, not displayed visually
-        string steamUsername;
-        string steamPassword;
-
         public MainWindow()
         {
             InitializeComponent();
             
             this.DataContext = this;
         }
-
-        #region TextBox Functionality
-
-        /*
-        //Added v1.2.0
-        //Handles clearing of text when the user wants to enter a URL into the URLLink textbox, mouse
-        private void URLLink_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //Clear out any text in the URLLink text field when the user makes it active by clicking on it
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = string.Empty;
-            textBox.GotFocus -= URLLink_GotFocus;
-        }
-
-        //Added v1.2.0
-        //Handles clearing of text when the user wants to enter a password into the Steam password textbox
-        private void Steam_Password_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //Clear out any text in the Steam password text field when the user makes it active by clicking on it
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = string.Empty;
-            textBox.GotFocus -= Steam_Password_GotFocus;
-        }
-        */
-
-        #endregion
 
         #region ComboBox Functionality
 
@@ -547,7 +517,7 @@ namespace Conexus
             //Create a process that will contain all relevant SteamCMD commands for all mods
             //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
@@ -559,7 +529,7 @@ namespace Conexus
                 //Wait until SteamCMD finishes
                 process.WaitForExit();
                 //Move on to copying and renaming the mods
-                //RenameAndMoveMods("DOWNLOAD");
+                RenameAndMoveMods("DOWNLOAD");
             }
         }
 
@@ -575,7 +545,7 @@ namespace Conexus
             for (int i = 0; i < appIDs.Count; i++)
                 cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())

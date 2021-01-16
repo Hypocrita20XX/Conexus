@@ -52,13 +52,13 @@
 
         <!-- Added v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="5" Content="Steam Username" Margin="5" Background="Bisque"/>
-        <PasswordBox Grid.Column="3" Grid.Row="5" Name="SteamUsername" Margin="5" Background="LightGray"/>
+        <xctk:WatermarkPasswordBox Watermark="Enter Username" Grid.Column="3" Grid.Row="5" Name="SteamUsername" Margin="5" Background="LightGray"/>
         <TextBox Grid.Column="3" Grid.Row="5" Name="SteamUsername_TextBox" Visibility="Collapsed" Margin="5" Background="LightGray"/>
         <CheckBox Grid.Column="4" Grid.Row="5" Name="UsernameReveal" Unchecked="UsernameReveal_Unchecked" Checked="UsernameReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="LightGray"/>
 
         <!-- Added v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="6" Content="Steam Password" Margin="5" Background="Bisque"/>
-        <PasswordBox Grid.Column="3" Grid.Row="6" Name="SteamPassword" Margin="5" Background="LightGray"/>
+        <xctk:WatermarkPasswordBox Watermark="Enter Password" Grid.Column="3" Grid.Row="6" Name="SteamPassword" Margin="5" Background="LightGray"/>
         <TextBox Grid.Column="3" Grid.Row="6" Name="SteamPassword_TextBox" Visibility="Collapsed" Margin="5" Background="LightGray"/>
         <CheckBox Grid.Column="4" Grid.Row="6" Name="PasswordReveal" Unchecked="PasswordReveal_Unchecked" Checked="PasswordReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="LightGray"/>
 
