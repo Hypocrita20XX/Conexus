@@ -43,8 +43,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Path = System.IO.Path;
 
 #endregion
@@ -72,6 +74,37 @@ namespace Conexus
             
             this.DataContext = this;
         }
+
+        #region TextBox Functionality
+
+        //Added v1.2.0
+        //Handles clearing of text when the user wants to enter a URL into the URLLink textbox
+        void URLLink_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //Clear out any text in the URLLink text field when the user makes it active by clicking on it
+            TextBox textBox = (TextBox)sender;
+            textBox.Text = string.Empty;
+            textBox.GotFocus -= URLLink_GotFocus;
+        }
+
+        //Added v1.2.0
+        void URLLink_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //Keyboard.ClearFocus();
+
+            //VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+        }
+
+        //Added v1.2.0
+        //Handles validation of the URL
+        void URLLink_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //Validate provided collection URL
+            VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                
+        }
+
+        #endregion
 
         #region ComboBox Functionality
 
@@ -151,10 +184,29 @@ namespace Conexus
             folderBrowser.UseDescriptionForTitle = true;
             //Set the content of the button to what the user has selected
             SteamCMDDir.Content = folderBrowser.SelectedPath;
-            //Set the settings variable to the one selected
-            UserSettings.Default.SteamCMDDir = folderBrowser.SelectedPath;
-            //Save this setting
-            UserSettings.Default.Save();
+
+            //Added v.1.2.0
+            //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
+            if (VerifySteamCMDDir(folderBrowser.SelectedPath))
+            {
+                //Set the settings variable to the one selected
+                UserSettings.Default.SteamCMDDir = folderBrowser.SelectedPath;
+                //Save this setting
+                UserSettings.Default.Save();
+            }
+            //If the given path is invalid, let the user know why
+            else
+            {
+                //If the given path contains any info, provide that with the error message
+                if (folderBrowser.SelectedPath.Length > 0)
+                    SteamCMDDir.Content = "Invalid SteamCMD Location: " + folderBrowser.SelectedPath;
+                //If the given path is blank, provide that information
+                else
+                    SteamCMDDir.Content = "Invalid SteamCMD Location: No Path Given";
+            }
+
+
+
         }
 
         #endregion
@@ -171,22 +223,8 @@ namespace Conexus
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
             {
-                //NEW:
-                
-
-                //Validate provided collection URL
-                if (VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
-                {
-                    meh += " - VALID";
-                }
-                else
-                {
-                    meh += " - INVALID";
-                }
-
                 //Testing, don't want to proceed until this works
                 return;
-
 
                 //It is assumed that at this point, the user has entered a valid URL to the collection
                 if (URLLink.Text.Length > 0)
@@ -598,7 +636,7 @@ namespace Conexus
 
         //Added v1.2.0
         //Goes through several verification steps to ensure a proper Steam collection URL has been entered
-        bool VerifyCollectionURL(string url, string fileDir)
+        void VerifyCollectionURL(string url, string fileDir)
         {
             /*
              * 
@@ -641,23 +679,41 @@ namespace Conexus
                 webClient.DownloadFile(url, fileDir + "\\HTML.txt");
             }
             //Not a valid URL
-            catch (System.Net.WebException)
+            catch (WebException)
             {
-                meh = "Not valid Steam or collection";
+                //Provide a message to the user
+                URLLink.Text = "Not a valid URL: " + url;
+                //Flag this URL as invalid
                 validURL = false;
             }
             //No URL at all, or something else that was unexpected
             catch (ArgumentException)
             {
-                meh = "No URL provided";
+                //Provide a message to the user
+                URLLink.Text = "Not a valid URL: " + url;
+                //Flag this URL as invalid
+                validURL = false;
+            }
+            //I don't know why this triggers, but it does, and it's not for valid reasons
+            catch (NotSupportedException)
+            {
+                //Provide a message to the user
+                URLLink.Text = "Not a valid URL: " + url;
+                //Flag this URL as invalid
+                validURL = false;
+            }
+            //URL is too long
+            catch (PathTooLongException)
+            {
+                //Provide a message to the user
+                URLLink.Text = "URL is too long (more than 260 characters)";
+                //Flag this URL as invalid
                 validURL = false;
             }
 
             //If the link is valid, leads to an actual site, we need to check for a valid Steam site
             if (validURL)
             {
-                //Create a new WebClient
-                //WebClient webClient = new WebClient();
                 //Download the desired collection and save the file
                 webClient.DownloadFile(url, fileDir + "\\HTML.txt");
 
@@ -703,45 +759,42 @@ namespace Conexus
                     if (line.Contains("steamcommunity-a.akamaihd.net"))
                         isValidSteam = true;
 
-                    //If we find a line that contains "Steam Workshop: Darkest Dungeon", we say this is a Steam Collection link
-                    if (line.Contains(""))
+                    //If we find a line that contains "Steam Workshop: Darkest Dungeon", we can say this is a Steam Collection link
+                    if (line.Contains("Steam Workshop: Darkest Dungeon"))
                         isValidCollection = true;
 
                     //Increment lineCount
                     lineCount++;
                 }
 
-                //Now that we have a valid result, we can continue executing the program
-                if (isValidSteam && isValidCollection)
-                {
-                    //TESTING
-                    meh = "Steam and collection";
-                    //Rturn true to indicate a valid URL
-                    return true;
-                }
-                //Otherwise this is not a valid Steam link and the user needs to know that
-                else
-                {
-                    //Reprimand user here
-
-                    //TESTING
-                    meh = "No Steam and/or collection";
-
-                    //Return false to indicate an invalid URL
-                    return false;
-                }
+                //If these checks fail, this is not a valid Steam collection link and the user needs to know that
+                if (!isValidSteam && !isValidCollection || isValidSteam && !isValidCollection)
+                    //Provide a message to the user
+                    URLLink.Text = "Not a valid URL: " + url;
             }
             //Otherwise this is not a valid link and the user needs to know that
             else
-            {
-                //Reprimand user here
+                //Provide a message to the user
+                URLLink.Text = "Not a valid URL: " + url;
+        }
 
-                //TESTING
-                meh = "Not Steam or collection";
+        //Added v1.2.0
+        //Goes through several verification steps to ensure that the given SteamCMD directory is valid, contains steamcmd.exe
+        bool VerifySteamCMDDir(string fileDir)
+        {
+            /*
+             * 
+             * This verification check is fairly straightforward: we check the given directory and see if we can find steamcmd.exe
+             * Steamcmd.exe is thankfully located in the roto directory, which is what the user is asked to find
+             * so we can assume that if it's not in the given directory, the given directory is not valid
+             * 
+             */
 
-                //Return false to indicate an invalid URL
+            //Verify if this directory contains steamcmd.exe
+            if (File.Exists(fileDir + "\\steamcmd.exe"))
+                return true;
+            else
                 return false;
-            }
         }
 
         #endregion
@@ -874,6 +927,9 @@ namespace Conexus
             UserSettings.Default.Save();
         }
 
+
         #endregion
+
+
     }
 }
