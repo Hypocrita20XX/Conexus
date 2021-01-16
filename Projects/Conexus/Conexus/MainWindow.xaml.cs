@@ -76,61 +76,31 @@ namespace Conexus
         #region TextBox Functionality
 
         //Added v1.2.0
-        //Handles clearing of text when the user wants to enter a URL into the URLLink textbox, keyboard
-        void URLLink_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            //Clear out any text in the URLLink text field when the user makes it active by clicking on it
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = string.Empty;
-            textBox.GotKeyboardFocus-= URLLink_GotKeyboardFocus;
-        }
-
-        //Added v1.2.0
         //Handles clearing of text when the user wants to enter a URL into the URLLink textbox, mouse
-        private void URLLink_GotMouseCapture(object sender, MouseEventArgs e)
+        private void URLLink_GotFocus(object sender, RoutedEventArgs e)
         {
             //Clear out any text in the URLLink text field when the user makes it active by clicking on it
             TextBox textBox = (TextBox)sender;
             textBox.Text = string.Empty;
-            textBox.GotMouseCapture -= URLLink_GotMouseCapture;
+            textBox.GotFocus -= URLLink_GotFocus;
         }
 
-        private void Steam_Username_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void Steam_Username_GotFocus(object sender, RoutedEventArgs e)
         {
             //Clear out any text in the Steam username text field when the user makes it active by clicking on it
             TextBox textBox = (TextBox)sender;
             textBox.Text = string.Empty;
-            textBox.GotKeyboardFocus -= Steam_Username_GotKeyboardFocus;
-        }
-
-        //Added v1.2.0
-        //Handles clearing of text when the user wants to enter a username into the Steam username textbox
-        private void Steam_Username_GotMouseCapture(object sender, MouseEventArgs e)
-        {
-            //Clear out any text in the Steam username text field when the user makes it active by clicking on it
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = string.Empty;
-            textBox.GotMouseCapture -= Steam_Username_GotMouseCapture;
+            textBox.GotFocus -= Steam_Username_GotFocus;
         }
 
         //Added v1.2.0
         //Handles clearing of text when the user wants to enter a password into the Steam password textbox
-        private void Steam_Password_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void Steam_Password_GotFocus(object sender, RoutedEventArgs e)
         {
             //Clear out any text in the Steam password text field when the user makes it active by clicking on it
             TextBox textBox = (TextBox)sender;
             textBox.Text = string.Empty;
-            textBox.GotKeyboardFocus -= Steam_Password_GotKeyboardFocus;
-        }
-
-        //Added v1.2.0
-        //Handles clearing of text when the user wants to enter a password into the Steam password textbox
-        private void Steam_Password_GotMouseCapture(object sender, MouseEventArgs e)
-        {
-            //Clear out any text in the Steam password text field when the user makes it active by clicking on it
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = string.Empty;
-            textBox.GotMouseCapture -= Steam_Password_GotMouseCapture;
+            textBox.GotFocus -= Steam_Password_GotFocus;
         }
 
         #endregion

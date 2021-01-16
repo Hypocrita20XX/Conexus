@@ -40,7 +40,7 @@
         <!-- Required inputs -->
         <!-- Added "GotMouseCapture", "GotKeyboardFocus" in v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="1" Content="Collection URL" Margin="5" Background="Bisque" />
-        <TextBox  Grid.Column="3" Grid.Row="1" Name="URLLink" GotMouseCapture="URLLink_GotMouseCapture" GotKeyboardFocus="URLLink_GotKeyboardFocus" TextAlignment="Center" Margin="5" Background="LightGray"/>
+        <TextBox  Grid.Column="3" Grid.Row="1" Name="URLLink" GotMouseCapture="URLLink_GotFocus" GotKeyboardFocus="URLLink_GotFocus" TextAlignment="Center" Margin="5" Background="LightGray"/>
 
         <Label Grid.Column="1" Grid.Row="2" Content="SteamCMD Directory" Margin="5" Background="Bisque"/>
         <Button Grid.Column="3" Grid.Row="2" Name="SteamCMDDir" Content="Select Directory" Click="SteamCMDDir_Click" Margin="5" Background="LightGray"/>
@@ -50,10 +50,10 @@
 
         <!-- Added v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="5" Content="Steam Username" Margin="5" Background="Bisque"/>
-        <TextBox Grid.Column="3" Grid.Row="5" Name="Steam_Username" GotMouseCapture="Steam_Username_GotMouseCapture" GotKeyboardFocus="Steam_Username_GotKeyboardFocus"  TextAlignment="Center" Margin="5" Background="LightGray"/>
+        <TextBox Grid.Column="3" Grid.Row="5" Name="Steam_Username" GotMouseCapture="Steam_Username_GotFocus" GotKeyboardFocus="Steam_Username_GotFocus"  TextAlignment="Center" Margin="5" Background="LightGray"/>
 
         <Label Grid.Column="1" Grid.Row="6" Content="Steam Password" Margin="5" Background="Bisque"/>
-        <TextBox Grid.Column="3" Grid.Row="6" Name="Steam_Password" GotMouseCapture="Steam_Password_GotMouseCapture" GotKeyboardFocus="Steam_Password_GotKeyboardFocus" TextAlignment="Center" Margin="5" Background="LightGray"/>
+        <TextBox Grid.Column="3" Grid.Row="6" Name="Steam_Password" GotMouseCapture="Steam_Password_GotFocus" GotKeyboardFocus="Steam_Password_GotFocus" TextAlignment="Center" Margin="5" Background="LightGray"/>
 
 
         <!-- User options -->
