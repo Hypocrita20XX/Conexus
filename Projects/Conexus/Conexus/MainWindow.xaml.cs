@@ -65,7 +65,10 @@ namespace Conexus
     {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 15cb2a3... Code Refactor 1
 =======
 >>>>>>> parent of 15cb2a3... Code Refactor 1
         //Declarations
@@ -80,11 +83,14 @@ namespace Conexus
         bool steam;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         //For privacy, store the username and password internally, not displayed visually
         string steamUsername;
         string steamPassword;
 
 >>>>>>> parent of e26ee04... Implemented Login
+=======
+>>>>>>> parent of 15cb2a3... Code Refactor 1
 =======
 >>>>>>> parent of 15cb2a3... Code Refactor 1
         public MainWindow()
@@ -363,8 +369,11 @@ namespace Conexus
                 //Otherwise the user needs to download and create all relevant text files
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 else if (Variables.updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
 =======
+=======
+>>>>>>> parent of 15cb2a3... Code Refactor 1
 =======
 >>>>>>> parent of 15cb2a3... Code Refactor 1
                 else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
@@ -515,6 +524,7 @@ namespace Conexus
                 //Otherwise, we need to get the ID from this line
                 if (!line.Contains("*"))
 <<<<<<< HEAD
+<<<<<<< HEAD
                 {
                     //Remove everything up to ?id=, plus 4 to remove ?id= in the link
                     string id = line.Substring(line.IndexOf("?id=") + 4);
@@ -663,6 +673,8 @@ namespace Conexus
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
 >>>>>>> parent of e26ee04... Implemented Login
+=======
+>>>>>>> parent of 15cb2a3... Code Refactor 1
 =======
 >>>>>>> parent of 15cb2a3... Code Refactor 1
                 {
