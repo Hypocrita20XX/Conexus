@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Conexus.Core
 {
-    public class SteamProcesses
+    public static class SteamProcesses
     {
-        public void DownloadModsFromSteam()
+        public static void DownloadModsFromSteam()
         {
             //Stores the proper commands that will be passed to SteamCMD
             string cmdList = "";
@@ -34,14 +34,14 @@ namespace Conexus.Core
                 //Wait until SteamCMD finishes
                 process.WaitForExit();
                 //Move on to copying and renaming the mods
-                Variables.fileOps.RenameAndMoveMods("DOWNLOAD");
+                FileOperations.RenameAndMoveMods("DOWNLOAD");
             }
         }
 
-        public void UpdateModsFromSteam()
+        public static void UpdateModsFromSteam()
         {
             //Move all mods from the mods directory to the SteamCMD directory for updating.
-            Variables.fileOps.RenameAndMoveMods("UPDATE");
+            FileOperations.RenameAndMoveMods("UPDATE");
 
             //Stores the proper commands that will be passed to SteamCMD
             string cmdList = "";
@@ -62,7 +62,7 @@ namespace Conexus.Core
                 //Wait until SteamCMD finishes
                 process.WaitForExit();
                 //Move on to copying and renaming the mods
-                Variables.fileOps.RenameAndMoveMods("DOWNLOAD");
+                FileOperations.RenameAndMoveMods("DOWNLOAD");
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using Conexus.Core;
+﻿using Conexus;
+using Conexus.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace Conexus.Core
 {
-    public class FileOperations
+    public static class FileOperations
     {
+
+
         //Creates organized folders in the mods directory, then copies files from the SteaCMD directory to those folders
         //Requires that an operation be specified (DOWNLOAD or UPDATE)
-        public void RenameAndMoveMods(string DownloadOrUpdate)
+        public static void RenameAndMoveMods(string DownloadOrUpdate)
         {
             //Create source/destination path list variables
             string[] source = new string[Variables.appIDs.Count];
@@ -89,7 +92,7 @@ namespace Conexus.Core
 
         //A base function that will copy/rename any given folder(s)
         //Can be used recursively for multiple directories
-        public void CopyFolders(string source, string destination)
+        public static void CopyFolders(string source, string destination)
         {
             //Check if the directory exists, if not, create it
             if (!Directory.Exists(destination))
@@ -126,7 +129,7 @@ namespace Conexus.Core
         }
 
         //Utility function to write text to a file
-        public void WriteToFile(string[] text, string fileDir)
+        public static void WriteToFile(string[] text, string fileDir)
         {
             File.WriteAllLines(@fileDir, text);
         }

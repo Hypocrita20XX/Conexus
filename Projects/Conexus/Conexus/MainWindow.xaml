@@ -77,7 +77,7 @@
 
         <Rectangle Fill="Bisque" Grid.Column="1" Grid.Row="10" Margin="6,4"/>
 
-        <TextBlock  Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Name="Messages" Text="Welcome to Conexus!" TextAlignment="Center" Margin="5" Background="LightGray" FontStyle="Italic" FontSize="10"/> 
+        <TextBlock Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Name="Messages" Text="Welcome to Conexus!" TextAlignment="Center" Margin="5" Background="LightGray" FontStyle="Italic" FontSize="10"/> 
         
         
         <!-- Run whichever process the user wants -->

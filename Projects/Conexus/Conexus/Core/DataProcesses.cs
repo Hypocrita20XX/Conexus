@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Conexus.Core
 {
-    public class DataProcesses
+    public static class DataProcesses
     {
         //Download source HTML from a given Steam collection URL
-        public void DownloadHTML(string url, string fileDir)
+        public static void DownloadHTML(string url, string fileDir)
         {
             //If the _DD_TextFiles folder does not exist, create it
             if (!Directory.Exists(fileDir))
@@ -35,7 +35,7 @@ namespace Conexus.Core
         }
 
         //Go through the source line by line
-        public void IterateThroughHTML(string fileDir)
+        public static void IterateThroughHTML(string fileDir)
         {
             //Temp variable to store an individual line
             string line;
@@ -60,13 +60,13 @@ namespace Conexus.Core
             file.Close();
 
             //Write this information to a file
-            Variables.fileOps.WriteToFile(mods.ToArray(), fileDir + "\\Mods.txt");
+            FileOperations.WriteToFile(mods.ToArray(), fileDir + "\\Mods.txt");
             //Move on to parsing out the relevant info
             SeparateInfo(fileDir);
         }
 
         //Parses out all relevant info from the source's lines
-        public void SeparateInfo(string fileDir)
+        public static void SeparateInfo(string fileDir)
         {
             //Temp variable to store an individual line
             string line;
@@ -123,10 +123,10 @@ namespace Conexus.Core
             file.Close();
 
             //Write the modInfo to a text file
-            Variables.fileOps.WriteToFile(Variables.modInfo.ToArray(), @fileDir + "\\ModInfo.txt");
+            FileOperations.WriteToFile(Variables.modInfo.ToArray(), @fileDir + "\\ModInfo.txt");
         }
 
-        public void ParseFromList(string fileDir)
+        public static void ParseFromList(string fileDir)
         {
             //Examples:
             // > Format: https://steamcommunity.com/sharedfiles/filedetails/?id=1282438975
@@ -180,7 +180,7 @@ namespace Conexus.Core
 
             //Write the modInfo to a text file if the file doesn't exist
             if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                Variables.fileOps.WriteToFile(Variables.modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
+                FileOperations.WriteToFile(Variables.modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
 
             //Added v1.2.0
             //Close file, cleanup

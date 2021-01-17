@@ -134,7 +134,7 @@ namespace Conexus
 
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains Darkest.exe
-            if (Variables.verify.VerifyModDir(folderBrowser.SelectedPath))
+            if (Verification.VerifyModDir(folderBrowser.SelectedPath))
             {
                 //Set the settings variable to the one selected
                 UserSettings.Default.ModsDir = folderBrowser.SelectedPath;
@@ -168,7 +168,7 @@ namespace Conexus
 
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
-            if (Variables.verify.VerifySteamCMDDir(folderBrowser.SelectedPath))
+            if (Verification.VerifySteamCMDDir(folderBrowser.SelectedPath))
             {
                 //Set the settings variable to the one selected
                 UserSettings.Default.SteamCMDDir = folderBrowser.SelectedPath;
@@ -252,7 +252,7 @@ namespace Conexus
             if (Variables.steam)
             {
                 //Check the provided URL to make sure it's valid
-                if (Variables.verify.VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+                if (Verification.VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
                 {
                     //It is assumed that at this point, the user has entered a valid URL to the collection
                     if (URLLink.Text.Length > 0)
@@ -275,19 +275,19 @@ namespace Conexus
                     if (Variables.downloadMods)
                     {
                         //Create all necessary text files
-                        Variables.dataPrc.DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                        DataProcesses.DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
                         //Start downloading mods
-                       Variables.steamPrc.DownloadModsFromSteam();
+                       SteamProcesses.DownloadModsFromSteam();
                     }
 
                     //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
                     if (Variables.updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                        Variables.steamPrc.UpdateModsFromSteam();
+                        SteamProcesses.UpdateModsFromSteam();
                     //Otherwise the user needs to download and create all relevant text files
                     else if (Variables.updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                     {
-                        Variables.dataPrc.DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-                        Variables.steamPrc.UpdateModsFromSteam();
+                        DataProcesses.DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                        SteamProcesses.UpdateModsFromSteam();
                     }
                 }
                 //URL is not valid, don't do anything
@@ -301,19 +301,19 @@ namespace Conexus
                 if (Variables.downloadMods)
                 {
                     //Parse IDs from the user-populated list
-                    Variables.dataPrc.ParseFromList(UserSettings.Default.ModsDir);
+                    DataProcesses.ParseFromList(UserSettings.Default.ModsDir);
 
-                    Variables.steamPrc.DownloadModsFromSteam();
+                    SteamProcesses.DownloadModsFromSteam();
                 }
 
                 //If the user wants to update mods, send them through that chain
                 if (Variables.updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                    Variables.steamPrc.UpdateModsFromSteam();
+                    SteamProcesses.UpdateModsFromSteam();
                 //Otherwise the user needs to download and create all relevant text files
                 else if (Variables.updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                 {
-                    Variables.dataPrc.ParseFromList(UserSettings.Default.ModsDir);
-                    Variables.steamPrc.UpdateModsFromSteam();
+                    DataProcesses.ParseFromList(UserSettings.Default.ModsDir);
+                    SteamProcesses.UpdateModsFromSteam();
                 }
             }
         }
@@ -329,15 +329,15 @@ namespace Conexus
 
             //Check the length of the URL variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.CollectionURL.Length > 0)
-                Variables.main.URLLink.Text = UserSettings.Default.CollectionURL;
+                URLLink.Text = UserSettings.Default.CollectionURL;
 
             //Check the length of the SteamCMD variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.SteamCMDDir.Length > 0)
-                Variables.main.SteamCMDDir.Content = UserSettings.Default.SteamCMDDir;
+                SteamCMDDir.Content = UserSettings.Default.SteamCMDDir;
 
             //Check the length of the ModsDir variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.ModsDir.Length > 0)
-                Variables.main.ModDir.Content = UserSettings.Default.ModsDir;
+                ModDir.Content = UserSettings.Default.ModsDir;
 
             //Added v1.2.0
             //Ensure Steam username exists before checking its data
@@ -347,7 +347,7 @@ namespace Conexus
             //Added v1.2.0
             //Check the length of the username variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.SteamUsername.Length > 0)
-                Variables.main.SteamUsername.Password = UserSettings.Default.SteamUsername;
+                SteamUsername.Password = UserSettings.Default.SteamUsername;
 
             //Added v1.2.0
             //Ensure Steam password exists before checking its data
@@ -357,17 +357,17 @@ namespace Conexus
             //Added v1.2.0
             //Check the length of the password variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.SteamPassword.Length > 0)
-                Variables.main.SteamPassword.Password = UserSettings.Default.SteamPassword;
+                SteamPassword.Password = UserSettings.Default.SteamPassword;
 
             //Check the platform variable and set the platform combobox accordingly
             if (UserSettings.Default.Platform == "steam")
             {
-                Variables.main.cmbPlatform.SelectedIndex = 0;
+                cmbPlatform.SelectedIndex = 0;
                 Variables.steam = true;
             }
             else if (UserSettings.Default.Platform == "other")
             {
-                Variables.main.cmbPlatform.SelectedIndex = 1;
+                cmbPlatform.SelectedIndex = 1;
                 Variables.steam = false;
             }
 
@@ -438,29 +438,29 @@ namespace Conexus
         {
             //Check to ensure the URLLink content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.URLLink.Text.Length > 0)
+            if (URLLink.Text.Length > 0)
                 UserSettings.Default.CollectionURL = Variables.main.URLLink.Text;
 
             //Check to ensure the SteamCMDDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.SteamCMDDir.Content != null)
+            if (SteamCMDDir.Content != null)
                 UserSettings.Default.SteamCMDDir = Variables.main.SteamCMDDir.Content.ToString();
 
             //Check to ensure the ModDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.ModDir.Content != null)
+            if (ModDir.Content != null)
                 UserSettings.Default.ModsDir = Variables.main.ModDir.Content.ToString();
 
             //Added v1.2.0
             //Check to ensure the Steam username content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.SteamUsername.Password.Length > 0)
+            if (SteamUsername.Password.Length > 0)
                 UserSettings.Default.SteamUsername = Variables.main.SteamUsername.Password;
 
             //Added v1.2.0
             //Check to ensure the Steam password content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.SteamPassword.Password.Length > 0)
+            if (SteamPassword.Password.Length > 0)
                 UserSettings.Default.SteamPassword = Variables.main.SteamPassword.Password;
 
             //Save which platform the user has chosen
