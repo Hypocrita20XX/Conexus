@@ -64,12 +64,56 @@ namespace Conexus
 {
     public partial class MainWindow : Window
     {
+<<<<<<< HEAD
+=======
+        //Declarations
+        //Lists to store info related to the mods that will/are downloaded
+        List<string> modInfo;
+        List<string> appIDs;
+        //Bools to store the value of each combobox
+        bool downloadMods;
+        bool updateMods;
+
+        //Bool to store which method the user has selected
+        bool steam;
+
+        //For privacy, store the username and password internally, not displayed visually
+        string steamUsername;
+        string steamPassword;
+
+>>>>>>> parent of e26ee04... Implemented Login
         public MainWindow()
         {
             InitializeComponent();
             
             this.DataContext = this;
         }
+
+        #region TextBox Functionality
+
+        /*
+        //Added v1.2.0
+        //Handles clearing of text when the user wants to enter a URL into the URLLink textbox, mouse
+        private void URLLink_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //Clear out any text in the URLLink text field when the user makes it active by clicking on it
+            TextBox textBox = (TextBox)sender;
+            textBox.Text = string.Empty;
+            textBox.GotFocus -= URLLink_GotFocus;
+        }
+
+        //Added v1.2.0
+        //Handles clearing of text when the user wants to enter a password into the Steam password textbox
+        private void Steam_Password_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //Clear out any text in the Steam password text field when the user makes it active by clicking on it
+            TextBox textBox = (TextBox)sender;
+            textBox.Text = string.Empty;
+            textBox.GotFocus -= Steam_Password_GotFocus;
+        }
+        */
+
+        #endregion
 
         #region ComboBox Functionality
 
@@ -310,7 +354,304 @@ namespace Conexus
                 if (Variables.updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                     SteamProcesses.UpdateModsFromSteam();
                 //Otherwise the user needs to download and create all relevant text files
+<<<<<<< HEAD
                 else if (Variables.updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+=======
+                else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                {
+                    ParseFromList(UserSettings.Default.ModsDir);
+                    UpdateModsFromSteam();
+                }
+            }
+        }
+
+        //Download source HTML from a given Steam collection URL
+        void DownloadHTML(string url, string fileDir)
+        {
+            //If the _DD_TextFiles folder does not exist, create it
+            if (!Directory.Exists(fileDir))
+                Directory.CreateDirectory(fileDir);
+
+            //Overwrite whatever may be in ModInfo.txt, if it exists
+            if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                File.WriteAllText(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
+
+            //Create a new WebClient
+            WebClient webClient = new WebClient();
+            //Download the desired collection and save the file
+            webClient.DownloadFile(url, fileDir + "\\HTML.txt");
+            //Added v1.2.0
+            //Free up resources, cleanup
+            webClient.Dispose();
+            //Move on to parsing through the raw source
+            IterateThroughHTML(fileDir);
+        }
+
+        //Go through the source line by line
+        void IterateThroughHTML(string fileDir)
+        {
+            //Temp variable to store an individual line
+            string line;
+            //List of strings to store a line that houses all neccesary info for each mod
+            List<string> mods = new List<string>();
+            //Create a file reader and load the previously saved source file
+            StreamReader file = new StreamReader(@fileDir + "\\HTML.txt");
+
+            //Iterate through the file one line at a time
+            while((line = file.ReadLine()) != null)
+            {
+                //If a line contains "a href" and "workshopItemTitle," then this line contains mod information
+                if (line.Contains("a href") & line.Contains("workshopItemTitle"))
+                {
+                    //Add this line to the mods list
+                    mods.Add(line.Substring(line.IndexOf("<")));
+                }
+            }
+
+            //Added v1.2.0
+            //Close file, cleanup
+            file.Close();
+
+            //Write this information to a file
+            WriteToFile(mods.ToArray(), fileDir + "\\Mods.txt");
+            //Move on to parsing out the relevant info
+            SeparateInfo(fileDir);
+        }
+
+        //Parses out all relevant info from the source's lines
+        void SeparateInfo(string fileDir)
+        {
+            //Temp variable to store an individual line
+            string line;
+            //Stores the initial folder index
+            int folderIndex = 0;
+            //Stores the final folder index (with leading zeroes)
+            string folderIndex_S = "";
+            //Load the previously stored file for further refinement
+            StreamReader file = new StreamReader(@fileDir + "\\Mods.txt");
+
+            //Iterate through each line the file
+            while ((line = file.ReadLine()) != null)
+            {
+                //First pass, remove everything up to ?id=
+                string firstPass = line.Substring(line.IndexOf("?id="));
+                //Second pass, remove everything after </div>
+                string secondPass = firstPass.Substring(0, firstPass.IndexOf("</div>"));
+                //Strip the app id from the string and store that in its own variables
+                string id = secondPass.Substring(0, secondPass.IndexOf("><div") - 1);
+                //Remove remaining fluff from the id string
+                id = id.Substring(4);
+                //Strip the mod name from the string and store that in its own variable
+                string name = secondPass.Substring(secondPass.IndexOf("\"workshopItemTitle\">") + ("\"workshopItemTitle\">").Length);
+                //Remove any invalid characters in the mod name
+                name = Regex.Replace(name, @"['<''>'':''/''\''|''?''*']", "", RegexOptions.None);
+                
+                //Add leading zeroes to the folder index, two if the index is less than 10
+                if (folderIndex < 10)
+                    folderIndex_S = "00" + folderIndex.ToString();
+
+                //Add leading zeroes to the folder index, one if the index is more than 9 and less than 100
+                if (folderIndex > 9 & folderIndex < 100)
+                    folderIndex_S = "0" + folderIndex.ToString();
+
+                //If the index is greater than 100, no leading zeroes should be added
+                if (folderIndex > 100)
+                    folderIndex_S = folderIndex.ToString();
+
+                //Create the final name that will be used to identify the folder/mod
+                string final = folderIndex_S + "_" + id + "_" + name;
+
+                //Add the final name to the modInfo list
+                modInfo.Add(final);
+
+                //Add the app id to the appIDs list
+                appIDs.Add(id);
+
+                //Increment folderIndex
+                folderIndex++;
+            }
+
+            //Added v1.2.0
+            //Close file, cleanup
+            file.Close();
+
+            //Write the modInfo to a text file
+            WriteToFile(modInfo.ToArray(), @fileDir + "\\ModInfo.txt");
+        }
+
+        void ParseFromList(string fileDir)
+        {
+            //Examples:
+            // > Format: https://steamcommunity.com/sharedfiles/filedetails/?id=1282438975
+            // > Ignore: * 50% Stealth Chance in Veteran Quests
+
+            //Overwrite whatever may be in ModInfo.txt, if it exists
+            if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                File.WriteAllText(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
+
+            //Temp variable to store an individual line
+            string line;
+            //Stores the initial folder index
+            int folderIndex = 0;
+            //Stores the final folder index (with leading zeroes)
+            string folderIndex_S = "";
+            //Load the previously stored file for further refinement
+            StreamReader file = new StreamReader(@fileDir + "\\Links.txt");
+
+            //Iterate through each line the file
+            while ((line = file.ReadLine()) != null)
+            {
+                //If the line being looked at is a comment, marked by *, then skip this line
+                //Otherwise, we need to get the ID from this line
+                if (!line.Contains("*"))
+                {
+                    //Remove everything up to ?id=, plus 4 to remove ?id= in the link
+                    string id = line.Substring(line.IndexOf("?id=") + 4);
+
+                    //Add leading zeroes to the folder index, two if the index is less than 10
+                    if (folderIndex < 10)
+                        folderIndex_S = "00" + folderIndex.ToString();
+
+                    //Add leading zeroes to the folder index, one if the index is more than 9 and less than 100
+                    if (folderIndex > 9 & folderIndex < 100)
+                        folderIndex_S = "0" + folderIndex.ToString();
+
+                    //If the index is greater than 100, no leading zeroes should be added
+                    if (folderIndex > 100)
+                        folderIndex_S = folderIndex.ToString();
+
+                    //Add the final name to the modInfo list
+                    modInfo.Add(folderIndex_S + "_" + id);
+
+                    //Add this ID to the appIDs list
+                    appIDs.Add(id);
+
+                    //Increment folderIndex
+                    folderIndex++;
+                }
+            }
+
+            //Write the modInfo to a text file if the file doesn't exist
+            if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
+
+            //Added v1.2.0
+            //Close file, cleanup
+            file.Close();
+        }
+
+        void DownloadModsFromSteam()
+        {
+            //Stores the proper commands that will be passed to SteamCMD
+            string cmdList = "";
+
+            //Get a list of commands for each mod stored in a single string
+            for (int i =0; i < appIDs.Count; i++)
+                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
+
+            //Create a process that will contain all relevant SteamCMD commands for all mods
+            //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
+
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
+
+            //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
+            using (Process process = new Process())
+            {
+                //Set the commands for this process
+                process.StartInfo = processInfo;
+                //Start the process with the provided commands
+                process.Start();
+                //Wait until SteamCMD finishes
+                process.WaitForExit();
+                //Move on to copying and renaming the mods
+                //RenameAndMoveMods("DOWNLOAD");
+            }
+        }
+
+        void UpdateModsFromSteam()
+        {
+            //Move all mods from the mods directory to the SteamCMD directory for updating.
+            RenameAndMoveMods("UPDATE");
+
+            //Stores the proper commands that will be passed to SteamCMD
+            string cmdList = "";
+
+            //Get a list of commamds for each mod stored in a single string
+            for (int i = 0; i < appIDs.Count; i++)
+                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
+
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
+
+            //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
+            using (Process process = new Process())
+            {
+                //Set the commands for this process
+                process.StartInfo = processInfo;
+                //Start the commandline process
+                process.Start();
+                //Wait until SteamCMD finishes
+                process.WaitForExit();
+                //Move on to copying and renaming the mods
+                RenameAndMoveMods("DOWNLOAD");
+            }
+        }
+
+        //Creates organized folders in the mods directory, then copies files from the SteaCMD directory to those folders
+        //Requires that an operation be specified (DOWNLOAD or UPDATE)
+        void RenameAndMoveMods(string DownloadOrUpdate)
+        {
+            //Create source/destination path list variables
+            string[] source = new string[appIDs.Count];
+            string[] destination = new string[modInfo.Count];
+
+            //If the user has downloaded/Updated mods, copy all files/folders from the SteamCMD directory to the mod directory
+            if (DownloadOrUpdate == "DOWNLOAD")
+            {
+                //Get the proper path to copy from
+                for (int i = 0; i < appIDs.Count; i++)
+                    source[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]);
+
+                //Get the proper path that will be copied to
+                for (int i = 0; i < modInfo.Count; i++)
+                    destination[i] = Path.Combine(UserSettings.Default.ModsDir, modInfo[i]);
+
+                //Copy all folders/files from the SteamCMD directory to the mods directory
+                for (int i = 0; i < destination.Length; i++)
+                    CopyFolders(source[i], destination[i]);
+
+                //Check to ensure the last mod is in the destination directory
+                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
+                {
+                    //If so, delete all folders/files in the source destination
+                    for (int i = 0; i < appIDs.Count; i++)
+                    {
+                        if (Directory.Exists(source[i]))
+                        {
+                            //Delete the directory
+                            Directory.Delete(source[i], true);
+                        }
+                    }
+                }
+            }
+
+            //If the userwants to update mods, copy all files/folders from the mod directory to the SteamCMD directory
+            if (DownloadOrUpdate == "UPDATE")
+            {
+                //Get the proper path to copy from
+                for (int i = 0; i < appIDs.Count; i++)
+                    source[i] = Path.Combine(UserSettings.Default.ModsDir + "\\", modInfo[i]);
+
+                //Get the proper path that will be copied to
+                for (int i = 0; i < modInfo.Count; i++)
+                    destination[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]);
+
+                //Copy all folders/files from the SteamCMD directory to the mods directory
+                for (int i = 0; i < destination.Length; i++)
+                    CopyFolders(source[i], destination[i]);
+
+                //Check to ensure the last mod is in the destination directory
+                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
+>>>>>>> parent of e26ee04... Implemented Login
                 {
                     DataProcesses.ParseFromList(UserSettings.Default.ModsDir);
                     SteamProcesses.UpdateModsFromSteam();
