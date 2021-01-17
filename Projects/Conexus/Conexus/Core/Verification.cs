@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Conexus.Core
 {
-    public static class Verification
+    public class Verification
     {
         //Added v1.2.0
         //Goes through several verification steps to ensure a proper Steam collection URL has been entered
-        public static bool VerifyCollectionURL(string url, string fileDir)
+        public bool VerifyCollectionURL(string url, string fileDir)
         {
             /*
              * 
@@ -192,7 +192,7 @@ namespace Conexus.Core
 
         //Added v1.2.0
         //Goes through several verification steps to ensure that the given SteamCMD directory is valid, contains steamcmd.exe
-        public static bool VerifySteamCMDDir(string fileDir)
+        public bool VerifySteamCMDDir(string fileDir)
         {
             /*
              * 
@@ -211,7 +211,7 @@ namespace Conexus.Core
 
         //Added v1.2.0
         //Goes through several verification steps to ensure that the given mods directory is valid, contains Darkest.exe
-        public static bool VerifyModDir(string fileDir)
+        public bool VerifyModDir(string fileDir)
         {
             /*
              * 
