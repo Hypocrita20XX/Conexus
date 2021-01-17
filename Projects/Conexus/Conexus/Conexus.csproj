@@ -112,6 +112,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\DataProcesses.cs" />
+    <Compile Include="Core\FileOperations.cs" />
+    <Compile Include="Core\SteamProcesses.cs" />
+    <Compile Include="Core\Variables.cs" />
+    <Compile Include="Core\Verification.cs" />
     <Compile Include="UserSettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -179,5 +184,6 @@
   <ItemGroup>
     <Resource Include="Conexus.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
