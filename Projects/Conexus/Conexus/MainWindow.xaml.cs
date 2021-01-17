@@ -597,6 +597,10 @@ namespace Conexus
                         }
                     }
                 }
+
+                //Added v1.2.0
+                //Let the user know this process has finished
+                Messages.Text = "Downloading has finished.\n" + "Mods are now downloded, moved, and renamed.\n" + "You're ready to play!";
             }
 
             //If the userwants to update mods, copy all files/folders from the mod directory to the SteamCMD directory
@@ -627,10 +631,11 @@ namespace Conexus
                         }
                     }
                 }
-            }
 
-            //Indicate to the user that the desired process is finished
-            OrganizeMods.Content = "Process has finished";
+                //Added v1.2.0
+                //Let the user know this process has finished
+                Messages.Text = "Updating has finished.\n" + "Mods are now updated, moved, and renamed.\n" + "You're ready to play!";
+            }
         }
 
         //A base function that will copy/rename any given folder(s)
