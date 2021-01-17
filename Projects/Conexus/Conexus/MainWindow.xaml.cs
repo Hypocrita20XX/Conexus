@@ -44,7 +44,6 @@
 
 #region Using Statements
 
-using Conexus.Core;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
@@ -65,7 +64,10 @@ namespace Conexus
     public partial class MainWindow : Window
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 15cb2a3... Code Refactor 1
         //Declarations
         //Lists to store info related to the mods that will/are downloaded
         List<string> modInfo;
@@ -77,11 +79,14 @@ namespace Conexus
         //Bool to store which method the user has selected
         bool steam;
 
+<<<<<<< HEAD
         //For privacy, store the username and password internally, not displayed visually
         string steamUsername;
         string steamPassword;
 
 >>>>>>> parent of e26ee04... Implemented Login
+=======
+>>>>>>> parent of 15cb2a3... Code Refactor 1
         public MainWindow()
         {
             InitializeComponent();
@@ -117,7 +122,7 @@ namespace Conexus
 
         #region ComboBox Functionality
 
-        private void Mode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        void Mode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //Get the index of the selected item
             //0 = download
@@ -128,20 +133,20 @@ namespace Conexus
             if (i == 0)
             {
                 //Change local variables accordingly
-                Variables.downloadMods = true;
-                Variables.updateMods = false;
+                downloadMods = true;
+                updateMods = false;
             }
 
             //If the user wishes to update their existing mods
             if (i == 1)
             {
                 //Change local variables accordingly
-                Variables.downloadMods = false;
-                Variables.updateMods = true;
+                downloadMods = false;
+                updateMods = true;
             }
         }
 
-        private void Platform_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        void Platform_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //Get the index of the selected item
             //0 = steam
@@ -151,19 +156,19 @@ namespace Conexus
             //If the user is using Steam
             if (i == 0)
                 //Change local variables accordingly
-                Variables.steam = true;
+                steam = true;
 
             //If the user is using a list
             if (i == 1)
                 //Change local variables accordingly
-                Variables.steam = false;
+                steam = false;
         }
 
         #endregion
 
         #region Button Functionality
 
-        private void ModDir_Click(object sender, RoutedEventArgs e)
+        void ModDir_Click(object sender, RoutedEventArgs e)
         {
             //Create a new folder browser to allow easy navigation to the user's desired directory
             VistaFolderBrowserDialog folderBrowser = new VistaFolderBrowserDialog();
@@ -178,7 +183,7 @@ namespace Conexus
 
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains Darkest.exe
-            if (Variables.verify.VerifyModDir(folderBrowser.SelectedPath))
+            if (VerifyModDir(folderBrowser.SelectedPath))
             {
                 //Set the settings variable to the one selected
                 UserSettings.Default.ModsDir = folderBrowser.SelectedPath;
@@ -197,7 +202,7 @@ namespace Conexus
             }
         }
 
-        private void SteamCMDDir_Click(object sender, RoutedEventArgs e)
+        void SteamCMDDir_Click(object sender, RoutedEventArgs e)
         {
             //Create a new folder browser to allow easy navigation to the user's desired directory
             VistaFolderBrowserDialog folderBrowser = new VistaFolderBrowserDialog();
@@ -212,7 +217,7 @@ namespace Conexus
 
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
-            if (Variables.verify.VerifySteamCMDDir(folderBrowser.SelectedPath))
+            if (VerifySteamCMDDir(folderBrowser.SelectedPath))
             {
                 //Set the settings variable to the one selected
                 UserSettings.Default.SteamCMDDir = folderBrowser.SelectedPath;
@@ -237,7 +242,7 @@ namespace Conexus
 
         //Added v1.2.0
         //Reveals the username when the checkbox is checked
-        private void UsernameReveal_Checked(object sender, RoutedEventArgs e)
+        void UsernameReveal_Checked(object sender, RoutedEventArgs e)
         {
             //Assign the text in the textbox to the given password
             SteamUsername_TextBox.Text = SteamUsername.Password;
@@ -249,7 +254,7 @@ namespace Conexus
 
         //Added v1.2.0
         //Hides the username when the checkbox is unchecked
-        private void UsernameReveal_Unchecked(object sender, RoutedEventArgs e)
+        void UsernameReveal_Unchecked(object sender, RoutedEventArgs e)
         {
             //Assign the text in the password to what's in the text box
             SteamUsername.Password = SteamUsername_TextBox.Text;
@@ -261,7 +266,7 @@ namespace Conexus
 
         //Added v1.2.0
         //Reveals the password when the checkbox is unchecked
-        private void PasswordReveal_Checked(object sender, RoutedEventArgs e)
+        void PasswordReveal_Checked(object sender, RoutedEventArgs e)
         {
             //Assign the text in the textbox to the given password
             SteamPassword_TextBox.Text = SteamPassword.Password;
@@ -273,7 +278,7 @@ namespace Conexus
 
         //Added v1.2.0
         //Hides the password when the checkbox is unchecked
-        private void PasswordReveal_Unchecked(object sender, RoutedEventArgs e)
+        void PasswordReveal_Unchecked(object sender, RoutedEventArgs e)
         {
             //Assign the text in the password to what's in the text box
             SteamPassword.Password = SteamPassword_TextBox.Text;
@@ -285,18 +290,20 @@ namespace Conexus
 
         #endregion
 
+        #region Main Functionality 
+
         //Main workhorse function
-        private void OrganizeMods_Click(object sender, RoutedEventArgs e)
+        void OrganizeMods_Click(object sender, RoutedEventArgs e)
         {
             //If this directory is deleted or otherwise not found, it needs to be created, otherwise stuff will break
             if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
                 Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
 
             //If the user wants to use a Steam collection, ensure all functionality relates to that
-            if (Variables.steam)
+            if (steam)
             {
                 //Check the provided URL to make sure it's valid
-                if (Variables.verify.VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+                if (VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
                 {
                     //It is assumed that at this point, the user has entered a valid URL to the collection
                     if (URLLink.Text.Length > 0)
@@ -316,22 +323,22 @@ namespace Conexus
                     }
 
                     //If the user wants to download mods, send them through that chain
-                    if (Variables.downloadMods)
+                    if (downloadMods)
                     {
                         //Create all necessary text files
-                        Variables.dataPrc.DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                        DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
                         //Start downloading mods
-                       Variables.steamPrc.DownloadModsFromSteam();
+                        DownloadModsFromSteam();
                     }
 
                     //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
-                    if (Variables.updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                        Variables.steamPrc.UpdateModsFromSteam();
+                    if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                        UpdateModsFromSteam();
                     //Otherwise the user needs to download and create all relevant text files
-                    else if (Variables.updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                    else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                     {
-                        Variables.dataPrc.DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-                        Variables.steamPrc.UpdateModsFromSteam();
+                        DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                        UpdateModsFromSteam();
                     }
                 }
                 //URL is not valid, don't do anything
@@ -342,21 +349,24 @@ namespace Conexus
             else
             {
                 //If the user wants to download mods, send them through that chain
-                if (Variables.downloadMods)
+                if (downloadMods)
                 {
                     //Parse IDs from the user-populated list
-                    Variables.dataPrc.ParseFromList(UserSettings.Default.ModsDir);
+                    ParseFromList(UserSettings.Default.ModsDir);
 
-                    Variables.steamPrc.DownloadModsFromSteam();
+                    DownloadModsFromSteam();
                 }
 
                 //If the user wants to update mods, send them through that chain
-                if (Variables.updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                    Variables.steamPrc.UpdateModsFromSteam();
+                if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                    UpdateModsFromSteam();
                 //Otherwise the user needs to download and create all relevant text files
+<<<<<<< HEAD
 <<<<<<< HEAD
                 else if (Variables.updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
 =======
+=======
+>>>>>>> parent of 15cb2a3... Code Refactor 1
                 else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                 {
                     ParseFromList(UserSettings.Default.ModsDir);
@@ -504,6 +514,7 @@ namespace Conexus
                 //If the line being looked at is a comment, marked by *, then skip this line
                 //Otherwise, we need to get the ID from this line
                 if (!line.Contains("*"))
+<<<<<<< HEAD
                 {
                     //Remove everything up to ?id=, plus 4 to remove ?id= in the link
                     string id = line.Substring(line.IndexOf("?id=") + 4);
@@ -652,14 +663,450 @@ namespace Conexus
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
 >>>>>>> parent of e26ee04... Implemented Login
+=======
+>>>>>>> parent of 15cb2a3... Code Refactor 1
                 {
-                    Variables.dataPrc.ParseFromList(UserSettings.Default.ModsDir);
-                    Variables.steamPrc.UpdateModsFromSteam();
+                    //Remove everything up to ?id=, plus 4 to remove ?id= in the link
+                    string id = line.Substring(line.IndexOf("?id=") + 4);
+
+                    //Add leading zeroes to the folder index, two if the index is less than 10
+                    if (folderIndex < 10)
+                        folderIndex_S = "00" + folderIndex.ToString();
+
+                    //Add leading zeroes to the folder index, one if the index is more than 9 and less than 100
+                    if (folderIndex > 9 & folderIndex < 100)
+                        folderIndex_S = "0" + folderIndex.ToString();
+
+                    //If the index is greater than 100, no leading zeroes should be added
+                    if (folderIndex > 100)
+                        folderIndex_S = folderIndex.ToString();
+
+                    //Add the final name to the modInfo list
+                    modInfo.Add(folderIndex_S + "_" + id);
+
+                    //Add this ID to the appIDs list
+                    appIDs.Add(id);
+
+                    //Increment folderIndex
+                    folderIndex++;
                 }
+            }
+
+            //Write the modInfo to a text file if the file doesn't exist
+            if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
+
+            //Added v1.2.0
+            //Close file, cleanup
+            file.Close();
+        }
+
+        void DownloadModsFromSteam()
+        {
+            //Stores the proper commands that will be passed to SteamCMD
+            string cmdList = "";
+
+            //Get a list of commands for each mod stored in a single string
+            for (int i =0; i < appIDs.Count; i++)
+                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
+
+            //Create a process that will contain all relevant SteamCMD commands for all mods
+            //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
+
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
+
+            //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
+            using (Process process = new Process())
+            {
+                //Set the commands for this process
+                process.StartInfo = processInfo;
+                //Start the process with the provided commands
+                process.Start();
+                //Wait until SteamCMD finishes
+                process.WaitForExit();
+                //Move on to copying and renaming the mods
+                RenameAndMoveMods("DOWNLOAD");
             }
         }
 
-        #region Data Saving And Loading
+        void UpdateModsFromSteam()
+        {
+            //Move all mods from the mods directory to the SteamCMD directory for updating.
+            RenameAndMoveMods("UPDATE");
+
+            //Stores the proper commands that will be passed to SteamCMD
+            string cmdList = "";
+
+            //Get a list of commamds for each mod stored in a single string
+            for (int i = 0; i < appIDs.Count; i++)
+                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
+
+            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
+
+            //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
+            using (Process process = new Process())
+            {
+                //Set the commands for this process
+                process.StartInfo = processInfo;
+                //Start the commandline process
+                process.Start();
+                //Wait until SteamCMD finishes
+                process.WaitForExit();
+                //Move on to copying and renaming the mods
+                RenameAndMoveMods("DOWNLOAD");
+            }
+        }
+
+        //Creates organized folders in the mods directory, then copies files from the SteaCMD directory to those folders
+        //Requires that an operation be specified (DOWNLOAD or UPDATE)
+        void RenameAndMoveMods(string DownloadOrUpdate)
+        {
+            //Create source/destination path list variables
+            string[] source = new string[appIDs.Count];
+            string[] destination = new string[modInfo.Count];
+
+            //If the user has downloaded/Updated mods, copy all files/folders from the SteamCMD directory to the mod directory
+            if (DownloadOrUpdate == "DOWNLOAD")
+            {
+                //Get the proper path to copy from
+                for (int i = 0; i < appIDs.Count; i++)
+                    source[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]);
+
+                //Get the proper path that will be copied to
+                for (int i = 0; i < modInfo.Count; i++)
+                    destination[i] = Path.Combine(UserSettings.Default.ModsDir, modInfo[i]);
+
+                //Copy all folders/files from the SteamCMD directory to the mods directory
+                for (int i = 0; i < destination.Length; i++)
+                    CopyFolders(source[i], destination[i]);
+
+                //Check to ensure the last mod is in the destination directory
+                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
+                {
+                    //If so, delete all folders/files in the source destination
+                    for (int i = 0; i < appIDs.Count; i++)
+                    {
+                        if (Directory.Exists(source[i]))
+                        {
+                            //Delete the directory
+                            Directory.Delete(source[i], true);
+                        }
+                    }
+                }
+
+                //Added v1.2.0
+                //Let the user know this process has finished
+                Messages.Text = "Downloading has finished.\n" + "Mods are now downloded, moved, and renamed.\n" + "You're ready to play!";
+            }
+
+            //If the userwants to update mods, copy all files/folders from the mod directory to the SteamCMD directory
+            if (DownloadOrUpdate == "UPDATE")
+            {
+                //Get the proper path to copy from
+                for (int i = 0; i < appIDs.Count; i++)
+                    source[i] = Path.Combine(UserSettings.Default.ModsDir + "\\", modInfo[i]);
+
+                //Get the proper path that will be copied to
+                for (int i = 0; i < modInfo.Count; i++)
+                    destination[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]);
+
+                //Copy all folders/files from the SteamCMD directory to the mods directory
+                for (int i = 0; i < destination.Length; i++)
+                    CopyFolders(source[i], destination[i]);
+
+                //Check to ensure the last mod is in the destination directory
+                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
+                {
+                    //If so, delete all folders/files in the source destination
+                    for (int i = 0; i < appIDs.Count; i++)
+                    {
+                        if (Directory.Exists(source[i]))
+                        {
+                            //Delete the directory
+                            Directory.Delete(source[i], true);
+                        }
+                    }
+                }
+
+                //Added v1.2.0
+                //Let the user know this process has finished
+                Messages.Text = "Updating has finished.\n" + "Mods are now updated, moved, and renamed.\n" + "You're ready to play!";
+            }
+        }
+
+        //A base function that will copy/rename any given folder(s)
+        //Can be used recursively for multiple directories
+        void CopyFolders(string source, string destination)
+        {
+            //Check if the directory exists, if not, create it
+            if (!Directory.Exists(destination))
+                Directory.CreateDirectory(destination);
+
+            //Create an array of strings containing all files in the given source directory
+            string[] files = Directory.GetFiles(source);
+
+            //Iterate through these files and copy to the destination
+            foreach (string file in files)
+            {
+                //Get the name of the file
+                string name = Path.GetFileName(file);
+                //Get the destination for this file
+                string dest = Path.Combine(destination, name);
+                //Copy this file to the destination
+                File.Copy(file, dest, true);
+            }
+
+            //Create an array of strings containing any and all sub-directories
+            string[] folders = Directory.GetDirectories(source);
+
+            //Iterate through these sub-directories
+            foreach (string folder in folders)
+            {
+                //Get the name of the folder
+                string name = Path.GetFileName(folder);
+                //Get the destination for this folder
+                string dest = Path.Combine(destination, name);
+
+                //Recursively copy any files in this directory, any sub-directories, and all files therein
+                CopyFolders(folder, dest);
+            }
+        }
+
+        //Utility function to write text to a file
+        void WriteToFile(string[] text, string fileDir)
+        {
+            File.WriteAllLines(@fileDir, text);
+        }
+
+        #endregion
+
+        #region Verification Functionality
+
+        //Added v1.2.0
+        //Goes through several verification steps to ensure a proper Steam collection URL has been entered
+        bool VerifyCollectionURL(string url, string fileDir)
+        {
+            /*
+             * 
+             * URL verification is a bit tricky
+             * This is because Steam has a landing page with "valid" results, 
+             * as opposed to a 404 page, or similar.
+             * Because of this, the HTML contents of the given URL need to be downloaded
+             * so that we can be sure we have a valid collection URL.
+             * 
+             * This validation only tests for links that have somehow gotten messed up
+             * IE https://steamcommunity.com/workshop/filedetails/?id=2362884526 (valid) versus
+             * https://steamcommunity.com/workshop/filfadsfafaedetails/?id=2362884526 (invalid)
+             * 
+             * It does not test for something such as https://steamc431241134ommunity.com/workshop/filedetails/?id=2362884526
+             * which will not lead to a Steam site at all (in fact it leads to a completely invalid site)
+             * For this, we need another validation, which checks if the link is in any way valid
+             * 
+             * There also needs to be a check to ensure that the site is actually for Steam
+             * For instance someone accidently pastes a Youtube link instead of a Steam collection link.
+             * This check basically will search through a line or two of the HTML code
+             * and compare it to a known good Steam site
+             * 
+             * Order of validation:
+             * 1.) Check for any valid link
+             * 2.) Check to make sure it's a Steam site
+             * 3.) Check to make sure it leads to a collection
+             * 
+             */
+
+            //Create a new WebClient
+            WebClient webClient = new WebClient();
+
+            //Assume the URL is valid unless an exception occurs
+            bool validURL = true;
+
+            //Attempt to download the HTML from the provided URL
+            try
+            {
+                //Download the desired collection and save the file
+                webClient.DownloadFile(url, fileDir + "\\HTML.txt");
+            }
+            //Not a valid URL
+            catch (WebException)
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "Not a valid URL: " + url;
+                //Flag this URL as invalid
+                validURL = false;
+            }
+            //No URL at all, or something else that was unexpected
+            catch (ArgumentException)
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "Not a valid URL: " + url;
+                //Flag this URL as invalid
+                validURL = false;
+            }
+            //I don't know why this triggers, but it does, and it's not for valid reasons
+            catch (NotSupportedException)
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "Not a valid URL: " + url;
+                //Flag this URL as invalid
+                validURL = false;
+            }
+            //URL is too long
+            catch (PathTooLongException)
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "URL is too long (more than 260 characters)";
+                //Flag this URL as invalid
+                validURL = false;
+            }
+
+            //If the link is valid, leads to an actual site, we need to check for a valid Steam site
+            if (validURL)
+            {
+                //Download the desired collection and save the file
+                webClient.DownloadFile(url, fileDir + "\\HTML.txt");
+
+                /*
+                 * Now we need to check to see if this is a valid Steam site
+                 * 
+                 * We need something to compare to though, to do this
+                 * 
+                 * A valid Steam site has various tells, 
+                 * most important of which is that it will contain links that start with https://steamcommunity-a.akamaihd.net
+                 * These links start on line 8 on several Steam sites I looked like, but start on line 12 in a collection
+                 * Because of this slight discrepency, we need to look at a range of lines
+                 * Let's say we start at line 0,up to 50 (as this is zero-based, we'll stop at 49)
+                 * We shouldn't go further than is needed though, as this will affect overall performance
+                 * 
+                 * While we're doing this check, we'll also look for the next verification's tell, "Steam Workshop: Darkest Dungeon"
+                 * Both checks use the same iteration process and should be combined for performance reasons
+                 * Because of this, we'll go further than the previous 50 lines, to 100 (stopping at 99)
+                 * The HTML I looked at contained this tell on line 71, but we need to be sure
+                 * 
+                 */
+
+                //Temp variable to store an individual line
+                string line;
+                //List of strings to store all ines in a given range
+                List<string> lines = new List<string>();
+                //Create a file reader and load the saved HTML file
+                StreamReader file = new StreamReader(@fileDir + "\\HTML.txt");
+
+                //Keeps track of line count
+                int lineCount = 0;
+
+                //Stores the result of the verification check for a valid Steam link
+                bool isValidSteam = false;
+                //Stores the result of the verification check for a valid Steam collection link
+                bool isValidCollection = false;
+
+                //Iterate through the given file up to line 100, line by line
+                while ((line = file.ReadLine()) != null && lineCount < 100)
+                {
+                    //Check 2
+                    //If we find a line that contains "https://steamcommunity-a.akamaihd.net", we can safely say this is a Steam link
+                    if (line.Contains("steamcommunity-a.akamaihd.net"))
+                        isValidSteam = true;
+
+                    //If we find a line that contains "Steam Workshop: Darkest Dungeon", we can say this is a Steam Collection link
+                    if (line.Contains("Steam Workshop: Darkest Dungeon"))
+                        isValidCollection = true;
+
+                    //Increment lineCount
+                    lineCount++;
+                }
+
+                //If these checks fail, this is not a valid Steam collection link and the user needs to know that
+                if (!isValidSteam && !isValidCollection || isValidSteam && !isValidCollection)
+                {
+                    //Clear URLLink Text
+                    URLLink.Text = string.Empty;
+                    //Provide a message to the user
+                    URLLink.Watermark = "Not a valid URL: " + url;
+
+                    //Cleanup
+                    webClient.Dispose();
+                    file.Close();
+
+                    return false;
+                }
+                else
+                {
+                    //Cleanup
+                    webClient.Dispose();
+                    file.Close();
+
+                    return true;
+                }
+            }
+            //Otherwise this is not a valid link and the user needs to know that
+            else
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "Not a valid URL: " + url;
+
+                //Cleanup
+                webClient.Dispose();
+
+                return false;
+            }
+        }
+
+        //Added v1.2.0
+        //Goes through several verification steps to ensure that the given SteamCMD directory is valid, contains steamcmd.exe
+        bool VerifySteamCMDDir(string fileDir)
+        {
+            /*
+             * 
+             * This verification check is fairly straightforward: we check the given directory and see if we can find steamcmd.exe
+             * Steamcmd.exe is thankfully located in the root directory, which is what the user is asked to find
+             * so we can assume that if it's not in the given directory, the given directory is not valid
+             * 
+             */
+
+            //Verify if this directory contains steamcmd.exe
+            if (File.Exists(fileDir + "\\steamcmd.exe"))
+                return true;
+            else
+                return false;
+        }
+
+        //Added v1.2.0
+        //Goes through several verification steps to ensure that the given mods directory is valid, contains Darkest.exe
+        bool VerifyModDir(string fileDir)
+        {
+            /*
+             * 
+             * This verification check is fairly straightforward: we check the given directory and see if we can find Darkest.exe
+             * Unlike steamcmd.exe, this is located in a different folder DarkestDungeon\_windows
+             * So we first need to navigate to the root directory, then to _windows and check for the exe
+             * 
+             */
+
+            //Temp string to store the root directory
+            string dirRoot = fileDir.Substring(0, fileDir.Length - 5);
+            //Temp string to store the _windows directory
+            string win = dirRoot + "\\_windows";
+
+            //Verify if this directory contains steamcmd.exe
+            if (File.Exists(win + "\\Darkest.exe"))
+                return true;
+            else
+                return false;
+        }
+
+        #endregion
+
+        #region Data Saving Functionality
 
         //Called when the UI window has loaded, used to set proper info in the UI from the settings file
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -670,15 +1117,15 @@ namespace Conexus
 
             //Check the length of the URL variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.CollectionURL.Length > 0)
-                Variables.main.URLLink.Text = UserSettings.Default.CollectionURL;
+                URLLink.Text = UserSettings.Default.CollectionURL;
 
             //Check the length of the SteamCMD variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.SteamCMDDir.Length > 0)
-                Variables.main.SteamCMDDir.Content = UserSettings.Default.SteamCMDDir;
+                SteamCMDDir.Content = UserSettings.Default.SteamCMDDir;
 
             //Check the length of the ModsDir variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.ModsDir.Length > 0)
-                Variables.main.ModDir.Content = UserSettings.Default.ModsDir;
+                ModDir.Content = UserSettings.Default.ModsDir;
 
             //Added v1.2.0
             //Ensure Steam username exists before checking its data
@@ -688,7 +1135,7 @@ namespace Conexus
             //Added v1.2.0
             //Check the length of the username variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.SteamUsername.Length > 0)
-                Variables.main.SteamUsername.Password = UserSettings.Default.SteamUsername;
+                SteamUsername.Password = UserSettings.Default.SteamUsername;
 
             //Added v1.2.0
             //Ensure Steam password exists before checking its data
@@ -698,18 +1145,18 @@ namespace Conexus
             //Added v1.2.0
             //Check the length of the password variable in the settings file, if so, set it to the UI variable
             if (UserSettings.Default.SteamPassword.Length > 0)
-                Variables.main.SteamPassword.Password = UserSettings.Default.SteamPassword;
+                SteamPassword.Password = UserSettings.Default.SteamPassword;
 
             //Check the platform variable and set the platform combobox accordingly
             if (UserSettings.Default.Platform == "steam")
             {
-                Variables.main.cmbPlatform.SelectedIndex = 0;
-                Variables.steam = true;
+                cmbPlatform.SelectedIndex = 0;
+                steam = true;
             }
             else if (UserSettings.Default.Platform == "other")
             {
-                Variables.main.cmbPlatform.SelectedIndex = 1;
-                Variables.steam = false;
+                cmbPlatform.SelectedIndex = 1;
+                steam = false;
             }
 
             //Make sure that Links.txt exists
@@ -720,8 +1167,8 @@ namespace Conexus
             if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
             {
                 //Instantiate the lists
-                Variables.modInfo = new List<string>();
-                Variables.appIDs = new List<string>();
+                modInfo = new List<string>();
+                appIDs = new List<string>();
 
                 //Temp variable to store an individual line
                 string line;
@@ -729,20 +1176,20 @@ namespace Conexus
                 //Create a file reader and load the previously saved ModInfo file
                 StreamReader file = new StreamReader(@UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt");
 
-                if (Variables.steam)
+                if (steam)
                 {
                     //Iterate through the file one line at a time
                     while ((line = file.ReadLine()) != null)
                     {
                         //Information in the file can be added as-is to the modInfo list
-                        Variables.modInfo.Add(line);
+                        modInfo.Add(line);
                         //On the other hand, info specific to the app ID needs extracted
                         //Strip off the index of the folder name, store it
                         line = line.Substring(4);
                         //Strip off the ID, store it
                         line = line.Substring(0, line.IndexOf("_"));
                         //Now store that ID in the appIDs list
-                        Variables.appIDs.Add(line);
+                        appIDs.Add(line);
                     }
                 }
                 else
@@ -751,22 +1198,22 @@ namespace Conexus
                     while ((line = file.ReadLine()) != null)
                     {
                         //Information in the file can be added as-is to the modInfo list
-                        Variables.modInfo.Add(line);
+                        modInfo.Add(line);
                         //On the other hand, info specific to the app ID needs extracted
                         //Strip off the index of the folder name, store it
                         line = line.Substring(4);
                         //Strip off the ID, store it
                         //line = line.Substring(0, line.IndexOf("_"));
                         //Now store that ID in the appIDs list
-                        Variables.appIDs.Add(line);
+                        appIDs.Add(line);
                     }
                 }
             }
             else
             {
                 //if the modInfo file does not exist, instantiate the lists with no data
-                Variables.modInfo = new List<string>();
-                Variables.appIDs = new List<string>();
+                modInfo = new List<string>();
+                appIDs = new List<string>();
             }
 
             if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
@@ -779,33 +1226,33 @@ namespace Conexus
         {
             //Check to ensure the URLLink content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.URLLink.Text.Length > 0)
-                UserSettings.Default.CollectionURL = Variables.main.URLLink.Text;
+            if (URLLink.Text.Length > 0)
+                UserSettings.Default.CollectionURL = URLLink.Text;
 
             //Check to ensure the SteamCMDDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.SteamCMDDir.Content != null)
-                UserSettings.Default.SteamCMDDir = Variables.main.SteamCMDDir.Content.ToString();
+            if (SteamCMDDir.Content != null)
+                UserSettings.Default.SteamCMDDir = SteamCMDDir.Content.ToString();
 
             //Check to ensure the ModDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.ModDir.Content != null)
-                UserSettings.Default.ModsDir = Variables.main.ModDir.Content.ToString();
+            if (ModDir.Content != null)
+                UserSettings.Default.ModsDir = ModDir.Content.ToString();
 
             //Added v1.2.0
             //Check to ensure the Steam username content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.SteamUsername.Password.Length > 0)
-                UserSettings.Default.SteamUsername = Variables.main.SteamUsername.Password;
+            if (SteamUsername.Password.Length > 0)
+                UserSettings.Default.SteamUsername = SteamUsername.Password;
 
             //Added v1.2.0
             //Check to ensure the Steam password content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (Variables.main.SteamPassword.Password.Length > 0)
-                UserSettings.Default.SteamPassword = Variables.main.SteamPassword.Password;
+            if (SteamPassword.Password.Length > 0)
+                UserSettings.Default.SteamPassword = SteamPassword.Password;
 
             //Save which platform the user has chosen
-            if (Variables.steam)
+            if (steam)
                 UserSettings.Default.Platform = "steam";
             else
                 UserSettings.Default.Platform = "other";
@@ -818,6 +1265,8 @@ namespace Conexus
             //Save all data to the settings file
             UserSettings.Default.Save();
         }
+
+
 
         #endregion
     }
