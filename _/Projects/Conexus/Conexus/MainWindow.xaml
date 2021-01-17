@@ -52,13 +52,13 @@
 
         <!-- Added v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="5" Content="Steam Username" Margin="5" Background="Bisque"/>
-        <xctk:WatermarkPasswordBox Watermark="Enter Username" Grid.Column="3" Grid.Row="5" Name="SteamUsername" Margin="5" Background="LightGray"/>
+        <PasswordBox Grid.Column="3" Grid.Row="5" Name="SteamUsername" Margin="5" Background="LightGray"/>
         <TextBox Grid.Column="3" Grid.Row="5" Name="SteamUsername_TextBox" Visibility="Collapsed" Margin="5" Background="LightGray"/>
         <CheckBox Grid.Column="4" Grid.Row="5" Name="UsernameReveal" Unchecked="UsernameReveal_Unchecked" Checked="UsernameReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="LightGray"/>
 
         <!-- Added v1.2.0 -->
         <Label Grid.Column="1" Grid.Row="6" Content="Steam Password" Margin="5" Background="Bisque"/>
-        <xctk:WatermarkPasswordBox Watermark="Enter Password" Grid.Column="3" Grid.Row="6" Name="SteamPassword" Margin="5" Background="LightGray"/>
+        <PasswordBox Grid.Column="3" Grid.Row="6" Name="SteamPassword" Margin="5" Background="LightGray"/>
         <TextBox Grid.Column="3" Grid.Row="6" Name="SteamPassword_TextBox" Visibility="Collapsed" Margin="5" Background="LightGray"/>
         <CheckBox Grid.Column="4" Grid.Row="6" Name="PasswordReveal" Unchecked="PasswordReveal_Unchecked" Checked="PasswordReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="LightGray"/>
 
@@ -77,9 +77,8 @@
 
         <Rectangle Fill="Bisque" Grid.Column="1" Grid.Row="10" Margin="6,4"/>
 
-        <!-- Not yet implemented, will be where progress and error messages show up eventually
-        <TextBlock  Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Name="Messages" TextAlignment="Center" Margin="5" Background="LightGray"/> 
-        -->
+        <TextBlock  Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Name="Messages" Text="Welcome to Conexus!" TextAlignment="Center" Margin="5" Background="LightGray" FontStyle="Italic" FontSize="10"/> 
+        
         
         <!-- Run whichever process the user wants -->
         <Button Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="12" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#ffc2c2"/>
