@@ -264,6 +264,22 @@ namespace Conexus
             if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
                 Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
 
+            //Added v1.2.0
+            //Disable input during operation
+            URLLink.IsEnabled = false;
+            SteamCMDDir.IsEnabled = false;
+            ModDir.IsEnabled = false;
+            SteamUsername.IsEnabled = false;
+            SteamUsername_TextBox.IsEnabled = false;
+            UsernameReveal.IsEnabled = false;
+            SteamPassword.IsEnabled = false;
+            SteamPassword_TextBox.IsEnabled = false;
+            cmbMode.IsEnabled = false;
+            cmbPlatform.IsEnabled = false;
+            PasswordReveal.IsEnabled = false;
+            OrganizeMods.IsEnabled = false;
+
+
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
             {
@@ -288,6 +304,21 @@ namespace Conexus
                         //Added v1.2.0
                         //Provide feedback
                         ShowMessage("Invalild URL! Process has stopped");
+
+                        //Added v1.2.0
+                        //Enable input after operation
+                        URLLink.IsEnabled = true;
+                        SteamCMDDir.IsEnabled = true;
+                        ModDir.IsEnabled = true;
+                        SteamUsername.IsEnabled = true;
+                        SteamUsername_TextBox.IsEnabled = true;
+                        UsernameReveal.IsEnabled = true;
+                        SteamPassword.IsEnabled = true;
+                        SteamPassword_TextBox.IsEnabled = true;
+                        cmbMode.IsEnabled = true;
+                        cmbPlatform.IsEnabled = true;
+                        PasswordReveal.IsEnabled = true;
+                        OrganizeMods.IsEnabled = true;
 
                         //Exit out of this function
                         return;
@@ -347,7 +378,24 @@ namespace Conexus
                 }
                 //URL is not valid, don't do anything
                 else
+                {
+                    //Added v1.2.0
+                    //Enable input after operation
+                    URLLink.IsEnabled = true;
+                    SteamCMDDir.IsEnabled = true;
+                    ModDir.IsEnabled = true;
+                    SteamUsername.IsEnabled = true;
+                    SteamUsername_TextBox.IsEnabled = true;
+                    UsernameReveal.IsEnabled = true;
+                    SteamPassword.IsEnabled = true;
+                    SteamPassword_TextBox.IsEnabled = true;
+                    cmbMode.IsEnabled = true;
+                    cmbPlatform.IsEnabled = true;
+                    PasswordReveal.IsEnabled = true;
+                    OrganizeMods.IsEnabled = true;
+
                     return;
+                }
             }
             //Otherwise, the user wants to use a list of URLs
             else
@@ -399,6 +447,21 @@ namespace Conexus
                     await UpdateModsFromSteamAsync();
                 }
             }
+
+            //Added v1.2.0
+            //Enable input after operation
+            URLLink.IsEnabled = true;
+            SteamCMDDir.IsEnabled = true;
+            ModDir.IsEnabled = true;
+            SteamUsername.IsEnabled = true;
+            SteamUsername_TextBox.IsEnabled = true;
+            UsernameReveal.IsEnabled = true;
+            SteamPassword.IsEnabled = true;
+            SteamPassword_TextBox.IsEnabled = true;
+            cmbMode.IsEnabled = true;
+            cmbPlatform.IsEnabled = true;
+            PasswordReveal.IsEnabled = true;
+            OrganizeMods.IsEnabled = true;
         }
 
         //Changed v1.2.0, to async
@@ -634,6 +697,10 @@ namespace Conexus
                 ShowMessage("Adding command to list: " + " +\"workshop_download_item 262060 " + appIDs[i] + "\" ");
             }
 
+            //Added v1.2.0
+            //Provide feedback
+            ShowMessage("SteamCMD will take over now");
+
             //Create a process that will contain all relevant SteamCMD commands for all mods
             ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
 
@@ -642,11 +709,11 @@ namespace Conexus
             {
                 //Set the commands for this process
                 process.StartInfo = processInfo;
-                //Changed v1.2.0, to async
                 //Start the process with the provided commands
                 await Task.Run(() => process.Start());
+                //Changed v1.2.0, to async
                 //Wait until SteamCMD finishes
-                process.WaitForExit();
+                await Task.Run(() => process.WaitForExit());
                 //Move on to copying and renaming the mods
                 await RenameAndMoveModsAsync("DOWNLOAD");
             }
@@ -673,6 +740,10 @@ namespace Conexus
                 ShowMessage("Adding command to list: " + " +\"workshop_download_item 262060 " + appIDs[i] + "\" ");
             }
 
+            //Added v1.2.0
+            //Provide feedback
+            ShowMessage("SteamCMD will take over now");
+
             //Create a process that will contain all relevant SteamCMD commands for all mods
             ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
 
@@ -684,8 +755,9 @@ namespace Conexus
                 //Changed v1.2.0, to async
                 //Start the commandline process
                 await Task.Run(() => process.Start());
+                //Changed v1.2.0, to async
                 //Wait until SteamCMD finishes
-                process.WaitForExit();
+                await Task.Run(() => process.WaitForExit());
                 //Move on to copying and renaming the mods
                 await RenameAndMoveModsAsync("DOWNLOAD");
             }
@@ -703,41 +775,42 @@ namespace Conexus
             //If the user has downloaded/updated mods, copy all files/folders from the SteamCMD directory to the mod directory
             if (DownloadOrUpdate == "DOWNLOAD")
             {
+                //Added v1.2.0
+                //Provide feedback
+                ShowMessage("Acquiring paths to copy from");
+
                 //Get the proper path to copy from
                 for (int i = 0; i < appIDs.Count; i++)
                 {
                     //Changed v1.2.0, to async
                     await Task.Run(() => source[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
-
-                    //Added v1.2.0
-                    //Provide feedback
-                    //ShowMessage("Mod will be copied from: " + source[i]);
                 }
 
+                //Added v1.2.0
+                //Provide feedback
+                ShowMessage("Acquiring paths to copy to");
 
                 //Get the proper path that will be copied to
                 for (int i = 0; i < modInfo.Count; i++)
                 {
                     //Changed v1.2.0, to async
                     await Task.Run(() => destination[i] = Path.Combine(UserSettings.Default.ModsDir, modInfo[i]));
-
-                    //Added v1.2.0
-                    //Provide feedback
-                    //ShowMessage("Mod will be copied to: " + destination[i]);
                 }
 
-
+                //Added v1.2.0
+                //Provide feedback
+                ShowMessage("Copying files, please wait");
 
                 //Copy all folders/files from the SteamCMD directory to the mods directory
                 for (int i = 0; i < destination.Length; i++)
                 {
                     //Changed v1.2.0, to async
                     await CopyFoldersAsync(source[i], destination[i]);
-
-                    //Added v1.2.0
-                    //Provide feedback
-                    ShowMessage("Mod has been copied from " + source[i] + " to " + destination[i]);
                 }
+
+                //Added v1.2.0
+                //Provide feedback
+                ShowMessage("Files copied, deleting originals");
 
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
@@ -750,53 +823,54 @@ namespace Conexus
                             //Changed v1.2.0, to async
                             //Delete the directory
                             await Task.Run(() => Directory.Delete(source[i], true));
-
-                            //Added v1.2.0
-                            //Provide feedback
-                            ShowMessage(source[i] + " deleted");
                         }
                     }
+
+                    //Added v1.2.0
+                    //Provide feedback
+                    ShowMessage("Original copies deleted");
                 }
             }
 
             //If the userwants to update mods, copy all files/folders from the mod directory to the SteamCMD directory
             if (DownloadOrUpdate == "UPDATE")
             {
+                //Added v1.2.0
+                //Provide feedback
+                ShowMessage("Acquiring paths to copy from");
+
                 //Get the proper path to copy from
                 for (int i = 0; i < appIDs.Count; i++)
                 {
                     //Changed v1.2.0, to async
                     await Task.Run(() => source[i] = Path.Combine(UserSettings.Default.ModsDir + "\\", modInfo[i]));
-
-                    //Added v1.2.0
-                    //Provide feedback
-                    //ShowMessage("Mod will be copied from: " + source[i]);
                 }
 
+                //Added v1.2.0
+                //Provide feedback
+                ShowMessage("Acquiring paths to copy to");
 
                 //Get the proper path that will be copied to
                 for (int i = 0; i < modInfo.Count; i++)
                 {
                     //Changed v1.2.0, to async
                     await Task.Run(() => destination[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
-                 
-                    //Added v1.2.0
-                    //Provide feedback
-                    //ShowMessage("Mod will be copied to: " + destination[i]);
                 }
 
+                //Added v1.2.0
+                //Provide feedback
+                ShowMessage("Copying files, please wait");
 
                 //Copy all folders/files from the SteamCMD directory to the mods directory
                 for (int i = 0; i < destination.Length; i++)
                 {
                     //Changed v1.2.0, to async
                     await CopyFoldersAsync(source[i], destination[i]);
-
-                    //Added v1.2.0
-                    //Provide feedback
-                    ShowMessage("Mod has been copied from " + source[i] + " to " + destination[i]);
                 }
 
+                //Added v1.2.0
+                //Provide feedback
+                ShowMessage("Files copied, deleting originals");
 
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
@@ -815,6 +889,10 @@ namespace Conexus
                             ShowMessage(source[i] + " deleted");
                         }
                     }
+
+                    //Added v1.2.0
+                    //Provide feedback
+                    ShowMessage("Original copies deleted");
                 }
             }
 
