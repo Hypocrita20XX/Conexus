@@ -52,6 +52,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -73,6 +74,8 @@ namespace Conexus
 
         //Bool to store which method the user has selected
         bool steam;
+
+        int lineCount = 0;
 
         public MainWindow()
         {
@@ -254,7 +257,7 @@ namespace Conexus
         #region Main Functionality 
 
         //Main workhorse function
-        void OrganizeMods_Click(object sender, RoutedEventArgs e)
+        async void OrganizeMods_Click(object sender, RoutedEventArgs e)
         {
             //If this directory is deleted or otherwise not found, it needs to be created, otherwise stuff will break
             if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
@@ -278,7 +281,8 @@ namespace Conexus
                     else
                     {
                         //Provide a clear reason for aborting the process
-                        OrganizeMods.Content = "Invalid URL, process has now stopped.";
+                        Messages.Text = "Invalid URL, process has now stopped.";
+                        //OrganizeMods.Content = "Invalid URL, process has now stopped.";
                         //Exit out of this function
                         return;
                     }
@@ -287,9 +291,10 @@ namespace Conexus
                     if (downloadMods)
                     {
                         //Create all necessary text files
-                        DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                        //DownloadHTML(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+                        await DownloadHTMLAsync(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
                         //Start downloading mods
-                        DownloadModsFromSteam();
+                        //DownloadModsFromSteam();
                     }
 
                     //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
@@ -352,6 +357,33 @@ namespace Conexus
             IterateThroughHTML(fileDir);
         }
 
+        //Added v1.2.0
+        //Async version of DownloadHTML
+        async Task DownloadHTMLAsync(string url, string fileDir)
+        {
+            //If the _DD_TextFiles folder does not exist, create it
+            if (!Directory.Exists(fileDir))
+                Directory.CreateDirectory(fileDir);
+
+            //Overwrite whatever may be in ModInfo.txt, if it exists
+            if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                File.WriteAllText(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
+
+            //Create a new WebClient
+            WebClient webClient = new WebClient();
+            //Download the desired collection and save the file
+            await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
+            //Added v1.2.0
+            //Free up resources, cleanup
+            webClient.Dispose();
+
+            //Added v1.2.0
+            ShowMessage("Source HTML downloaded successfully");
+
+            //Move on to parsing through the raw source
+            await IterateThroughHTMLAsync(fileDir);
+        }
+
         //Go through the source line by line
         void IterateThroughHTML(string fileDir)
         {
@@ -372,6 +404,44 @@ namespace Conexus
                     mods.Add(line.Substring(line.IndexOf("<")));
                 }
             }
+
+            //Added v1.2.0
+            //Close file, cleanup
+            file.Close();
+
+            //Write this information to a file
+            WriteToFile(mods.ToArray(), fileDir + "\\Mods.txt");
+            //Move on to parsing out the relevant info
+            SeparateInfo(fileDir);
+        }
+
+        //Added v.1.2.0
+        //Async version of IterateThroughHTML
+        async Task IterateThroughHTMLAsync(string fileDir)
+        {
+            //Temp variable to store an individual line
+            string line;
+            //List of strings to store a line that houses all neccesary info for each mod
+            List<string> mods = new List<string>();
+            //Create a file reader and load the previously saved source file
+            StreamReader file = new StreamReader(@fileDir + "\\HTML.txt");
+
+            //Iterate through the file one line at a time
+            while ((line = file.ReadLine()) != null)
+            {
+                //If a line contains "a href" and "workshopItemTitle," then this line contains mod information
+                if (line.Contains("a href") & line.Contains("workshopItemTitle"))
+                {
+                    //Add this line to the mods list
+                    await Task.Run(() => mods.Add(line.Substring(line.IndexOf("<"))));
+
+                    //Added v1.2.0
+                    ShowMessage("Found mod info:" + line.Substring(line.IndexOf("<")));
+                }
+            }
+
+            //Added v1.2.0
+            ShowMessage("Finished search for mod info in provided collection URL");
 
             //Added v1.2.0
             //Close file, cleanup
@@ -432,9 +502,15 @@ namespace Conexus
                 //Add the app id to the appIDs list
                 appIDs.Add(id);
 
+                //Added v1.2.0
+                ShowMessage("Found mod info: " + final);
+
                 //Increment folderIndex
                 folderIndex++;
             }
+
+            //Added v1.2.0
+            ShowMessage("Finished finalizing each mods' information");
 
             //Added v1.2.0
             //Close file, cleanup
@@ -630,7 +706,8 @@ namespace Conexus
             }
 
             //Indicate to the user that the desired process is finished
-            OrganizeMods.Content = "Process has finished";
+            //***
+            //OrganizeMods.Content = "Process has finished";
         }
 
         //A base function that will copy/rename any given folder(s)
@@ -675,6 +752,19 @@ namespace Conexus
         void WriteToFile(string[] text, string fileDir)
         {
             File.WriteAllLines(@fileDir, text);
+        }
+
+        //Added v1.2.0
+        //Utility function to handle messages
+        void ShowMessage(string msg)
+        {
+            //Added v1.2.0
+            //Show desired message with appropriate line count
+            Messages.Text += lineCount.ToString() + ":  " + msg + "\n";
+            //Increment lineCount
+            lineCount++;
+            //Scroll to the end of the scroll viewer
+            MessageScrollViewer.ScrollToEnd();
         }
 
         #endregion
@@ -852,6 +942,209 @@ namespace Conexus
                 URLLink.Text = string.Empty;
                 //Provide a message to the user
                 URLLink.Watermark = "Not a valid URL: " + url;
+
+                //Cleanup
+                webClient.Dispose();
+
+                return false;
+            }
+        }
+
+        //Added v1.2.0
+        //Async version of VerifyCollectionURL
+        async Task<bool> VerifyCollectionURLAsync(string url, string fileDir)
+        {
+            /*
+             * 
+             * URL verification is a bit tricky
+             * This is because Steam has a landing page with "valid" results, 
+             * as opposed to a 404 page, or similar.
+             * Because of this, the HTML contents of the given URL need to be downloaded
+             * so that we can be sure we have a valid collection URL.
+             * 
+             * This validation only tests for links that have somehow gotten messed up
+             * IE https://steamcommunity.com/workshop/filedetails/?id=2362884526 (valid) versus
+             * https://steamcommunity.com/workshop/filfadsfafaedetails/?id=2362884526 (invalid)
+             * 
+             * It does not test for something such as https://steamc431241134ommunity.com/workshop/filedetails/?id=2362884526
+             * which will not lead to a Steam site at all (in fact it leads to a completely invalid site)
+             * For this, we need another validation, which checks if the link is in any way valid
+             * 
+             * There also needs to be a check to ensure that the site is actually for Steam
+             * For instance someone accidently pastes a Youtube link instead of a Steam collection link.
+             * This check basically will search through a line or two of the HTML code
+             * and compare it to a known good Steam site
+             * 
+             * Order of validation:
+             * 1.) Check for any valid link
+             * 2.) Check to make sure it's a Steam site
+             * 3.) Check to make sure it leads to a collection
+             * 
+             */
+
+            //Create a new WebClient
+            WebClient webClient = new WebClient();
+
+            //Assume the URL is valid unless an exception occurs
+            bool validURL = true;
+
+            //Attempt to download the HTML from the provided URL
+            try
+            {
+                //Download the desired collection and save the file
+                await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
+            }
+            //Not a valid URL
+            catch (WebException)
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "Not a valid URL: " + url;
+                //Flag this URL as invalid
+                validURL = false;
+                //Provide additional logging
+                ShowMessage("Provided URL is not valid!");
+            }
+            //No URL at all, or something else that was unexpected
+            catch (ArgumentException)
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "Not a valid URL: " + url;
+                //Flag this URL as invalid
+                validURL = false;
+
+                //Provide additional logging
+                ShowMessage("Provided URL is not valid or does not exist!");
+            }
+            //I don't know why this triggers, but it does, and it's not for valid reasons
+            catch (NotSupportedException)
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "Not a valid URL: " + url;
+                //Flag this URL as invalid
+                validURL = false;
+                //Provide additional logging
+                ShowMessage("Provided URL is not valid!");
+            }
+            //URL is too long
+            catch (PathTooLongException)
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "URL is too long (more than 260 characters)";
+                //Flag this URL as invalid
+                validURL = false;
+                //Provide additional logging
+                ShowMessage("Provided URL is too long!");
+            }
+
+            //If the link is valid, leads to an actual site, we need to check for a valid Steam site
+            if (validURL)
+            {
+                //Download the desired collection and save the file
+                await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
+
+                /*
+                 * Now we need to check to see if this is a valid Steam site
+                 * 
+                 * We need something to compare to though, to do this
+                 * 
+                 * A valid Steam site has various tells, 
+                 * most important of which is that it will contain links that start with https://steamcommunity-a.akamaihd.net
+                 * These links start on line 8 on several Steam sites I looked like, but start on line 12 in a collection
+                 * Because of this slight discrepency, we need to look at a range of lines
+                 * Let's say we start at line 0,up to 50 (as this is zero-based, we'll stop at 49)
+                 * We shouldn't go further than is needed though, as this will affect overall performance
+                 * 
+                 * While we're doing this check, we'll also look for the next verification's tell, "Steam Workshop: Darkest Dungeon"
+                 * Both checks use the same iteration process and should be combined for performance reasons
+                 * Because of this, we'll go further than the previous 50 lines, to 100 (stopping at 99)
+                 * The HTML I looked at contained this tell on line 71, but we need to be sure
+                 * 
+                 */
+
+                //Temp variable to store an individual line
+                string line;
+                //List of strings to store all ines in a given range
+                List<string> lines = new List<string>();
+                //Create a file reader and load the saved HTML file
+                StreamReader file = new StreamReader(@fileDir + "\\HTML.txt");
+
+                //Keeps track of line count
+                int lineCount = 0;
+
+                //Stores the result of the verification check for a valid Steam link
+                bool isValidSteam = false;
+                //Stores the result of the verification check for a valid Steam collection link
+                bool isValidCollection = false;
+
+                //Async
+                List<Task> listOfTasks = new List<Task>();
+
+                //Iterate through the given file up to line 100, line by line
+                while ((line = file.ReadLine()) != null && lineCount < 100)
+                {
+                    //Check 2
+                    //If we find a line that contains "https://steamcommunity-a.akamaihd.net", we can safely say this is a Steam link
+                    if (line.Contains("steamcommunity-a.akamaihd.net"))
+                        isValidSteam = true;
+
+                    //If we find a line that contains "Steam Workshop: Darkest Dungeon", we can say this is a Steam Collection link
+                    if (line.Contains("Steam Workshop: Darkest Dungeon"))
+                        isValidCollection = true;
+
+                    //Increment lineCount
+                    lineCount++;
+
+                    //Provide feeback
+                    ShowMessage("Searching through " + line + " for a valid Steam collection link");
+                }
+
+                //If these checks fail, this is not a valid Steam collection link and the user needs to know that
+                if (!isValidSteam && !isValidCollection || isValidSteam && !isValidCollection)
+                {
+                    //Clear URLLink Text
+                    URLLink.Text = string.Empty;
+                    //Provide a message to the user
+                    URLLink.Watermark = "Not a valid URL: " + url;
+
+                    //Cleanup
+                    webClient.Dispose();
+                    file.Close();
+
+                    //Provide feedback
+                    ShowMessage("No Steam collection link found, please check the link provided!");
+
+                    return false;
+                }
+                else
+                {
+                    //Cleanup
+                    webClient.Dispose();
+                    file.Close();
+
+                    //Provide feedback
+                    ShowMessage("A valid Steam collection link has been found");
+
+                    return true;
+                }
+            }
+            //Otherwise this is not a valid link and the user needs to know that
+            else
+            {
+                //Clear URLLink Text
+                URLLink.Text = string.Empty;
+                //Provide a message to the user
+                URLLink.Watermark = "Not a valid URL: " + url;
+
+                //Provide feedback
+                ShowMessage("No valid Steam collection link found, please check the link provided!");
 
                 //Cleanup
                 webClient.Dispose();

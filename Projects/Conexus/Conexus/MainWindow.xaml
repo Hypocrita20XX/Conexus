@@ -77,10 +77,11 @@
 
         <Rectangle Fill="Bisque" Grid.Column="1" Grid.Row="10" Margin="6,4"/>
 
-        <!-- Not yet implemented, will be where progress and error messages show up eventually
-        <TextBlock  Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Name="Messages" TextAlignment="Center" Margin="5" Background="LightGray"/> 
-        -->
-        
+        <!-- Added v1.2.0 -->
+        <ScrollViewer x:Name="MessageScrollViewer" Grid.Column="3" Grid.Row="8" Grid.ColumnSpan="2" Grid.RowSpan="2" HorizontalScrollBarVisibility="Disabled" Opacity="0.75" Margin="0,5" Width="385" Height="54">
+            <TextBlock  Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Name="Messages" TextAlignment="Left" Background="LightGray" Margin="5,0" TextWrapping="Wrap" FontStyle="Italic" FontSize="10" Width="375"/>
+        </ScrollViewer>
+
         <!-- Run whichever process the user wants -->
         <Button Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="12" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#ffc2c2"/>
     </Grid>

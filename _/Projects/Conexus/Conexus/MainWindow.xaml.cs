@@ -63,14 +63,6 @@ namespace Conexus
 {
     public partial class MainWindow : Window
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> parent of 15cb2a3... Code Refactor 1
-=======
->>>>>>> parent of 15cb2a3... Code Refactor 1
         //Declarations
         //Lists to store info related to the mods that will/are downloaded
         List<string> modInfo;
@@ -82,49 +74,12 @@ namespace Conexus
         //Bool to store which method the user has selected
         bool steam;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        //For privacy, store the username and password internally, not displayed visually
-        string steamUsername;
-        string steamPassword;
-
->>>>>>> parent of e26ee04... Implemented Login
-=======
->>>>>>> parent of 15cb2a3... Code Refactor 1
-=======
->>>>>>> parent of 15cb2a3... Code Refactor 1
         public MainWindow()
         {
             InitializeComponent();
             
             this.DataContext = this;
         }
-
-        #region TextBox Functionality
-
-        /*
-        //Added v1.2.0
-        //Handles clearing of text when the user wants to enter a URL into the URLLink textbox, mouse
-        private void URLLink_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //Clear out any text in the URLLink text field when the user makes it active by clicking on it
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = string.Empty;
-            textBox.GotFocus -= URLLink_GotFocus;
-        }
-
-        //Added v1.2.0
-        //Handles clearing of text when the user wants to enter a password into the Steam password textbox
-        private void Steam_Password_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //Clear out any text in the Steam password text field when the user makes it active by clicking on it
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = string.Empty;
-            textBox.GotFocus -= Steam_Password_GotFocus;
-        }
-        */
-
-        #endregion
 
         #region ComboBox Functionality
 
@@ -323,7 +278,8 @@ namespace Conexus
                     else
                     {
                         //Provide a clear reason for aborting the process
-                        OrganizeMods.Content = "Invalid URL, process has now stopped.";
+                        //***
+                        //OrganizeMods.Content = "Invalid URL, process has now stopped.";
                         //Exit out of this function
                         return;
                     }
@@ -367,15 +323,6 @@ namespace Conexus
                 if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                     UpdateModsFromSteam();
                 //Otherwise the user needs to download and create all relevant text files
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-                else if (Variables.updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-=======
-=======
->>>>>>> parent of 15cb2a3... Code Refactor 1
-=======
->>>>>>> parent of 15cb2a3... Code Refactor 1
                 else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                 {
                     ParseFromList(UserSettings.Default.ModsDir);
@@ -523,160 +470,6 @@ namespace Conexus
                 //If the line being looked at is a comment, marked by *, then skip this line
                 //Otherwise, we need to get the ID from this line
                 if (!line.Contains("*"))
-<<<<<<< HEAD
-<<<<<<< HEAD
-                {
-                    //Remove everything up to ?id=, plus 4 to remove ?id= in the link
-                    string id = line.Substring(line.IndexOf("?id=") + 4);
-
-                    //Add leading zeroes to the folder index, two if the index is less than 10
-                    if (folderIndex < 10)
-                        folderIndex_S = "00" + folderIndex.ToString();
-
-                    //Add leading zeroes to the folder index, one if the index is more than 9 and less than 100
-                    if (folderIndex > 9 & folderIndex < 100)
-                        folderIndex_S = "0" + folderIndex.ToString();
-
-                    //If the index is greater than 100, no leading zeroes should be added
-                    if (folderIndex > 100)
-                        folderIndex_S = folderIndex.ToString();
-
-                    //Add the final name to the modInfo list
-                    modInfo.Add(folderIndex_S + "_" + id);
-
-                    //Add this ID to the appIDs list
-                    appIDs.Add(id);
-
-                    //Increment folderIndex
-                    folderIndex++;
-                }
-            }
-
-            //Write the modInfo to a text file if the file doesn't exist
-            if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
-
-            //Added v1.2.0
-            //Close file, cleanup
-            file.Close();
-        }
-
-        void DownloadModsFromSteam()
-        {
-            //Stores the proper commands that will be passed to SteamCMD
-            string cmdList = "";
-
-            //Get a list of commands for each mod stored in a single string
-            for (int i =0; i < appIDs.Count; i++)
-                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
-
-            //Create a process that will contain all relevant SteamCMD commands for all mods
-            //ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", "+login " + UserSettings.Default.SteamUsername + " " + UserSettings.Default.SteamPassword + " " + cmdList + "+quit");
-
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
-
-            //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
-            using (Process process = new Process())
-            {
-                //Set the commands for this process
-                process.StartInfo = processInfo;
-                //Start the process with the provided commands
-                process.Start();
-                //Wait until SteamCMD finishes
-                process.WaitForExit();
-                //Move on to copying and renaming the mods
-                //RenameAndMoveMods("DOWNLOAD");
-            }
-        }
-
-        void UpdateModsFromSteam()
-        {
-            //Move all mods from the mods directory to the SteamCMD directory for updating.
-            RenameAndMoveMods("UPDATE");
-
-            //Stores the proper commands that will be passed to SteamCMD
-            string cmdList = "";
-
-            //Get a list of commamds for each mod stored in a single string
-            for (int i = 0; i < appIDs.Count; i++)
-                cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ";
-
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login anonymous " + cmdList + "+quit");
-
-            //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
-            using (Process process = new Process())
-            {
-                //Set the commands for this process
-                process.StartInfo = processInfo;
-                //Start the commandline process
-                process.Start();
-                //Wait until SteamCMD finishes
-                process.WaitForExit();
-                //Move on to copying and renaming the mods
-                RenameAndMoveMods("DOWNLOAD");
-            }
-        }
-
-        //Creates organized folders in the mods directory, then copies files from the SteaCMD directory to those folders
-        //Requires that an operation be specified (DOWNLOAD or UPDATE)
-        void RenameAndMoveMods(string DownloadOrUpdate)
-        {
-            //Create source/destination path list variables
-            string[] source = new string[appIDs.Count];
-            string[] destination = new string[modInfo.Count];
-
-            //If the user has downloaded/Updated mods, copy all files/folders from the SteamCMD directory to the mod directory
-            if (DownloadOrUpdate == "DOWNLOAD")
-            {
-                //Get the proper path to copy from
-                for (int i = 0; i < appIDs.Count; i++)
-                    source[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]);
-
-                //Get the proper path that will be copied to
-                for (int i = 0; i < modInfo.Count; i++)
-                    destination[i] = Path.Combine(UserSettings.Default.ModsDir, modInfo[i]);
-
-                //Copy all folders/files from the SteamCMD directory to the mods directory
-                for (int i = 0; i < destination.Length; i++)
-                    CopyFolders(source[i], destination[i]);
-
-                //Check to ensure the last mod is in the destination directory
-                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
-                {
-                    //If so, delete all folders/files in the source destination
-                    for (int i = 0; i < appIDs.Count; i++)
-                    {
-                        if (Directory.Exists(source[i]))
-                        {
-                            //Delete the directory
-                            Directory.Delete(source[i], true);
-                        }
-                    }
-                }
-            }
-
-            //If the userwants to update mods, copy all files/folders from the mod directory to the SteamCMD directory
-            if (DownloadOrUpdate == "UPDATE")
-            {
-                //Get the proper path to copy from
-                for (int i = 0; i < appIDs.Count; i++)
-                    source[i] = Path.Combine(UserSettings.Default.ModsDir + "\\", modInfo[i]);
-
-                //Get the proper path that will be copied to
-                for (int i = 0; i < modInfo.Count; i++)
-                    destination[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]);
-
-                //Copy all folders/files from the SteamCMD directory to the mods directory
-                for (int i = 0; i < destination.Length; i++)
-                    CopyFolders(source[i], destination[i]);
-
-                //Check to ensure the last mod is in the destination directory
-                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
->>>>>>> parent of e26ee04... Implemented Login
-=======
->>>>>>> parent of 15cb2a3... Code Refactor 1
-=======
->>>>>>> parent of 15cb2a3... Code Refactor 1
                 {
                     //Remove everything up to ?id=, plus 4 to remove ?id= in the link
                     string id = line.Substring(line.IndexOf("?id=") + 4);
@@ -805,10 +598,6 @@ namespace Conexus
                         }
                     }
                 }
-
-                //Added v1.2.0
-                //Let the user know this process has finished
-                Messages.Text = "Downloading has finished.\n" + "Mods are now downloded, moved, and renamed.\n" + "You're ready to play!";
             }
 
             //If the userwants to update mods, copy all files/folders from the mod directory to the SteamCMD directory
@@ -839,11 +628,11 @@ namespace Conexus
                         }
                     }
                 }
-
-                //Added v1.2.0
-                //Let the user know this process has finished
-                Messages.Text = "Updating has finished.\n" + "Mods are now updated, moved, and renamed.\n" + "You're ready to play!";
             }
+
+            //Indicate to the user that the desired process is finished
+            //***
+            //OrganizeMods.Content = "Process has finished";
         }
 
         //A base function that will copy/rename any given folder(s)
