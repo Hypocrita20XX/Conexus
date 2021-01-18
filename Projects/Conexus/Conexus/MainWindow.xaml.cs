@@ -952,7 +952,7 @@ namespace Conexus
 
                 //Added v1.2.0
                 //Provide feedback
-                ShowMessage(folder + " has been copied to " + dest);
+                //ShowMessage(folder + " has been copied to " + dest);
             }
         }
 
@@ -1386,8 +1386,10 @@ namespace Conexus
             UserSettings.Default.Save();
 
             //Added v1.2.0
+            //Create a properly formatted date/time by removing any invalid characters in the mod name
+            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
             //Save logs to file
-            WriteToFile(log.ToArray(), ModDir.Content + "\\_DD_TextFiles\\Log_" + DateTime.Now);
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_DD_TextFiles\\Logs\\" + dateTime + ".txt");
         }
 
 
