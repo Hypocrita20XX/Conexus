@@ -711,7 +711,7 @@ namespace Conexus
 
                     //Added v1.2.0
                     //Provide feedback
-                    ShowMessage("Mod will be copied from: " + source[i]);
+                    //ShowMessage("Mod will be copied from: " + source[i]);
                 }
 
 
@@ -723,7 +723,7 @@ namespace Conexus
 
                     //Added v1.2.0
                     //Provide feedback
-                    ShowMessage("Mod will be copied to: " + destination[i]);
+                    //ShowMessage("Mod will be copied to: " + destination[i]);
                 }
 
 
@@ -770,7 +770,7 @@ namespace Conexus
 
                     //Added v1.2.0
                     //Provide feedback
-                    ShowMessage("Mod will be copied from: " + source[i]);
+                    //ShowMessage("Mod will be copied from: " + source[i]);
                 }
 
 
@@ -782,7 +782,7 @@ namespace Conexus
                  
                     //Added v1.2.0
                     //Provide feedback
-                    ShowMessage("Mod will be copied to: " + destination[i]);
+                    //ShowMessage("Mod will be copied to: " + destination[i]);
                 }
 
 
