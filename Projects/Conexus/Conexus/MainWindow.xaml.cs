@@ -353,35 +353,21 @@ namespace Conexus
                         await DownloadModsFromSteamAsync();
                     }
 
+                    //Changed v1.2.0, to simplify if statement after implementing mod list addition support
                     //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
-                    if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                    if (updateMods)
                     {
+                        //Added v1.2.0
+                        //Provide feedback
+                        ShowMessage("Mod info will now be updated");
+
+                        //Added v1.2.0
+                        //Force update the mod info text files to account for any additions in the collection
+                        await DownloadHTMLAsync(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+
                         //Added v1.2.0
                         //Provide feedback
                         ShowMessage("Mods will now be updated");
-
-                        //Added v1.2.0
-                        //TESTING
-                        //See if we can accomedate additions with this small change
-                        //If so, we can simplify the if statement and remove the one after this
-                        await DownloadHTMLAsync(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-
-                        //Changed v1.2.0, to async
-                        await UpdateModsFromSteamAsync();
-                    }
-                    //Otherwise the user needs to download and create all relevant text files
-                    else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                    {
-                        //Added v1.2.0
-                        //Provide Feedback
-                        ShowMessage("Mod info missing! Downloading now");
-
-                        //Changed v1.2.0, to async
-                        await DownloadHTMLAsync(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
-
-                        //Added v1.2.0
-                        //Provide feedback
-                        ShowMessage("Mod info downloaded, updating will now start");
 
                         //Changed v1.2.0, to async
                         await UpdateModsFromSteamAsync();
