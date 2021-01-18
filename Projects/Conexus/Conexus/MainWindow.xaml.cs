@@ -937,6 +937,14 @@ namespace Conexus
             if (!Directory.Exists(destination))
                 Directory.CreateDirectory(destination);
 
+            //Added v1.2.0
+            //Ok this is a really lazy way to do this, but it works, so I don't care
+            //To allow for easy additions to a collection, we make sure the mods have a folder
+            //Prior to this, the HTML functions are processed, so to avoid crashes,
+            //we just create an empty dummy folder
+            if (!Directory.Exists(source))
+                Directory.CreateDirectory(source);
+
             //Create an array of strings containing all files in the given source directory
             string[] files = Directory.GetFiles(source);
 
