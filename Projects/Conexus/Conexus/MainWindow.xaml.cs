@@ -75,7 +75,12 @@ namespace Conexus
         //Bool to store which method the user has selected
         bool steam;
 
+        //Added v1.2.0
+        //Keeps track of the line count in the log
         int lineCount = 0;
+        //Stores all logs in a list, for later storage in a text file
+        List<string> log = new List<string>();
+
 
         public MainWindow()
         {
@@ -462,6 +467,10 @@ namespace Conexus
             cmbPlatform.IsEnabled = true;
             PasswordReveal.IsEnabled = true;
             OrganizeMods.IsEnabled = true;
+
+            //Added v1.2.0
+            //Provide feedback
+            ShowMessage("Selected process has finished successfully");
         }
 
         //Changed v1.2.0, to async
@@ -960,6 +969,8 @@ namespace Conexus
             //Added v1.2.0
             //Show desired message with appropriate line count
             Messages.Text += lineCount.ToString() + ":  " + msg + "\n";
+            //Save this message to the log list
+            log.Add(lineCount.ToString() + ":  " + msg + "\n");
             //Increment lineCount
             lineCount++;
             //Scroll to the end of the scroll viewer
@@ -1373,6 +1384,10 @@ namespace Conexus
         {
             //Save all data to the settings file
             UserSettings.Default.Save();
+
+            //Added v1.2.0
+            //Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_DD_TextFiles\\Log_" + DateTime.Now);
         }
 
 

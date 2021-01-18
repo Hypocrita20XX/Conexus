@@ -47,7 +47,7 @@
         <Label Grid.Column="1" Grid.Row="2" Content="SteamCMD Directory" Margin="5" Background="Bisque"/>
         <Button Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="2" Name="SteamCMDDir" Content="Select Directory" Click="SteamCMDDir_Click" Margin="5" Background="LightGray"/>
 
-        <Label Grid.Column="1" Grid.Row="3" Content="Mod Directory" Margin="5" Background="Bisque"/>
+        <Label Grid.Column="1" Grid.Row="3" Content="Mods Directory" Margin="5" Background="Bisque"/>
         <Button Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="3" Name="ModDir" Content="Select Directory" Click="ModDir_Click" Margin="5" Background="LightGray"/>
 
         <!-- Added v1.2.0 -->
