@@ -360,6 +360,12 @@ namespace Conexus
                         //Provide feedback
                         ShowMessage("Mods will now be updated");
 
+                        //Added v1.2.0
+                        //TESTING
+                        //See if we can accomedate additions with this small change
+                        //If so, we can simplify the if statement and remove the one after this
+                        await DownloadHTMLAsync(UserSettings.Default.CollectionURL, UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+
                         //Changed v1.2.0, to async
                         await UpdateModsFromSteamAsync();
                     }
@@ -815,6 +821,10 @@ namespace Conexus
                 {
                     //Changed v1.2.0, to async
                     await CopyFoldersAsync(source[i], destination[i]);
+
+                    //Added v1.2.0
+                    //Provide feedback
+                    ShowMessage("Files copied from " + source[i] + " to " + destination[i]);
                 }
 
                 //Added v1.2.0
@@ -832,6 +842,10 @@ namespace Conexus
                             //Changed v1.2.0, to async
                             //Delete the directory
                             await Task.Run(() => Directory.Delete(source[i], true));
+
+                            //Added v1.2.0
+                            //Provide feedback
+                            ShowMessage(source[i] + " deleted");
                         }
                     }
 
@@ -875,6 +889,10 @@ namespace Conexus
                 {
                     //Changed v1.2.0, to async
                     await CopyFoldersAsync(source[i], destination[i]);
+
+                    //Added v1.2.0
+                    //Provide feedback
+                    ShowMessage("Files copied from " + source[i] + " to " + destination[i]);
                 }
 
                 //Added v1.2.0
@@ -949,10 +967,6 @@ namespace Conexus
                 //Changed v1.2.0, to async
                 //Recursively copy any files in this directory, any sub-directories, and all files therein
                 await CopyFoldersAsync(folder, dest);
-
-                //Added v1.2.0
-                //Provide feedback
-                //ShowMessage(folder + " has been copied to " + dest);
             }
         }
 
@@ -970,7 +984,7 @@ namespace Conexus
             //Show desired message with appropriate line count
             Messages.Text += lineCount.ToString() + ":  " + msg + "\n";
             //Save this message to the log list
-            log.Add(lineCount.ToString() + ":  " + msg + "\n");
+            log.Add(lineCount.ToString() + ":  " + msg);
             //Increment lineCount
             lineCount++;
             //Scroll to the end of the scroll viewer
@@ -1115,6 +1129,9 @@ namespace Conexus
                 //Stores the result of the verification check for a valid Steam collection link
                 bool isValidCollection = false;
 
+                //Provide feeback
+                ShowMessage("Searching for valid Steam collection links");
+
                 //Iterate through the given file up to line 100, line by line
                 while ((line = file.ReadLine()) != null && lineCount < 100)
                 {
@@ -1129,10 +1146,10 @@ namespace Conexus
 
                     //Increment lineCount
                     lineCount++;
-
-                    //Provide feeback
-                    ShowMessage("Searching through " + line + " for a valid Steam collection link");
                 }
+
+                //Provide feeback
+                ShowMessage("Search complete");
 
                 //If these checks fail, this is not a valid Steam collection link and the user needs to know that
                 if (!isValidSteam && !isValidCollection || isValidSteam && !isValidCollection)
@@ -1296,6 +1313,7 @@ namespace Conexus
                 //Create a file reader and load the previously saved ModInfo file
                 StreamReader file = new StreamReader(@UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt");
 
+                /*
                 if (steam)
                 {
                     //Iterate through the file one line at a time
@@ -1328,6 +1346,7 @@ namespace Conexus
                         appIDs.Add(line);
                     }
                 }
+                */
             }
             else
             {
@@ -1386,6 +1405,9 @@ namespace Conexus
             UserSettings.Default.Save();
 
             //Added v1.2.0
+            //Ensure the Logs folder exists
+            if (!Directory.Exists(ModDir.Content + "\\_DD_TextFiles\\Logs"))
+                Directory.CreateDirectory(ModDir.Content + "\\_DD_TextFiles\\Logs");
             //Create a properly formatted date/time by removing any invalid characters in the mod name
             string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
             //Save logs to file
