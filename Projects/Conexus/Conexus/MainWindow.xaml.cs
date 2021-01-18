@@ -267,7 +267,7 @@ namespace Conexus
             if (steam)
             {
                 //Check the provided URL to make sure it's valid
-                if (VerifyCollectionURL(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+                if (await VerifyCollectionURLAsync(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
                 {
                     //It is assumed that at this point, the user has entered a valid URL to the collection
                     if (URLLink.Text.Length > 0)
@@ -1083,9 +1083,6 @@ namespace Conexus
                 bool isValidSteam = false;
                 //Stores the result of the verification check for a valid Steam collection link
                 bool isValidCollection = false;
-
-                //Async
-                List<Task> listOfTasks = new List<Task>();
 
                 //Iterate through the given file up to line 100, line by line
                 while ((line = file.ReadLine()) != null && lineCount < 100)
