@@ -924,10 +924,6 @@ namespace Conexus
                 //Changed v1.2.0, to async
                 //Copy this file to the destination
                 await Task.Run(() => File.Copy(file, dest, true));
-
-                //Added v1.2.0
-                //Provide feedback
-                ShowMessage(file + " has been copied to " + dest);
             }
 
             //Create an array of strings containing any and all sub-directories
