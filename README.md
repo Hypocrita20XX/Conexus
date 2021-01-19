@@ -7,7 +7,7 @@
 *If you've modded Darkest Dungeon for any length of time, you've more than likely discovered that the in-game UI breaks after an unknown  amount of mods are loaded in.*  
 
 **Enter Conexus...** </br>
-![Conexus GUI](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Conexus__1_1_0__UI.png)</br>
+![Conexus GUI](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Conexus__1_2_0_UI.png)</br>
 
 *With the help of a straightforward GUI, Conexus will anaylze your Steam collection, download or update those mods (you can do both!) and then move those folders to the correct location with names that you can understand, and that the game will read in the exact order your Steam collection is in.*</br>
 *Updating your mods with Conexus is just as easy. Just let him know you want to update, and he'll move your mods to the proper location, update them, and move them back for you, all with the same user-friendly names.*</br>
