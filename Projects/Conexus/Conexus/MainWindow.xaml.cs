@@ -416,29 +416,20 @@ namespace Conexus
                     await DownloadModsFromSteamAsync();
                 }
 
+                //Changed v1.2.0, to simplify if statement after implementing mod list addition support
                 //If the user wants to update mods, send them through that chain
-                if (updateMods && File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+                if (updateMods)
                 {
                     //Added v1.2.0
                     //Provide feedback
-                    ShowMessage("Mods will now be updated");
-
-                    //Changed v1.2.0, to async
-                    await UpdateModsFromSteamAsync();
-                }
-                //Otherwise the user needs to download and create all relevant text files
-                else if (updateMods && !File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                {
-                    //Added v1.2.0
-                    //Provide feedback
-                    ShowMessage("Mod info missing! Obtaining now");
+                    ShowMessage("Mod info will now be updated");
 
                     //Changed v1.2.0, to async
                     await ParseFromListAsync(UserSettings.Default.ModsDir);
 
                     //Added v1.2.0
                     //Provide feedback
-                    ShowMessage("Info has been obtained, mods will now be updated");
+                    ShowMessage("Mods will now be updated");
 
                     //Changed v1.2.0, to async
                     await UpdateModsFromSteamAsync();
@@ -621,6 +612,12 @@ namespace Conexus
             if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                 File.WriteAllText(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
 
+            //Added v1.2.0
+            //TEST
+            //Reset lists
+            modInfo.Clear();
+            appIDs.Clear();
+
             //Temp variable to store an individual line
             string line;
             //Stores the initial folder index
@@ -672,8 +669,9 @@ namespace Conexus
             ShowMessage("Finished processing mod info in Links file");
 
             //Write the modInfo to a text file if the file doesn't exist
-            if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
+            //if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                 WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
+
 
             //Added v1.2.0
             //Close file, cleanup
@@ -820,6 +818,7 @@ namespace Conexus
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
                 {
+                    /*
                     //If so, delete all folders/files in the source destination
                     for (int i = 0; i < appIDs.Count; i++)
                     {
@@ -834,6 +833,42 @@ namespace Conexus
                             ShowMessage(source[i] + " deleted");
                         }
                     }
+                    */
+
+                    /*
+                    //Added v1.2.0
+                    //Hopefully more reliable directory deletion
+                    DirectoryInfo dirInfo = new DirectoryInfo(@UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\");
+
+                    foreach (var dir in dirInfo.EnumerateDirectories())
+                    {
+                        //if (dir.Name != "_DD_TextFiles" || dir.Name != "_Logs")
+                        //{
+                            await Task.Run(() => Directory.Delete(dir.FullName, true));
+
+                            //Provide feedback
+                            ShowMessage(dir.FullName + " deleted");
+                        //}
+                    }
+                    */
+
+                    //Added v1.2.0
+                    //Hopefully more reliable directory deletion
+                    DirectoryInfo dirInfo = new DirectoryInfo(@UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\");
+
+                    foreach (var dir in Directory.GetDirectories(@UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\"))
+                    {
+                        if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
+                        {
+                            await Task.Run(() => Directory.Delete(dir, true));
+
+                            //Provide feedback
+                            ShowMessage(dir + " deleted");
+                        }
+                    }
+
+
+
 
                     //Added v1.2.0
                     //Provide feedback
@@ -888,6 +923,7 @@ namespace Conexus
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
                 {
+                    /*
                     //If so, delete all folders/files in the source destination
                     for (int i = 0; i < appIDs.Count; i++)
                     {
@@ -900,6 +936,23 @@ namespace Conexus
                             //Added v1.2.0
                             //Provide feedback
                             ShowMessage(source[i] + " deleted");
+                        }
+                    }
+                    */
+
+
+                    //Added v1.2.0
+                    //Hopefully more reliable directory deletion
+                    DirectoryInfo dirInfo = new DirectoryInfo(@UserSettings.Default.ModsDir);
+
+                    foreach (var dir in Directory.GetDirectories(@UserSettings.Default.ModsDir))
+                    {
+                        if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
+                        {
+                            await Task.Run(() => Directory.Delete(dir, true));
+
+                            //Provide feedback
+                            ShowMessage(dir + " deleted");
                         }
                     }
 
@@ -1307,7 +1360,6 @@ namespace Conexus
                 //Create a file reader and load the previously saved ModInfo file
                 StreamReader file = new StreamReader(@UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt");
 
-                /*
                 if (steam)
                 {
                     //Iterate through the file one line at a time
@@ -1340,7 +1392,6 @@ namespace Conexus
                         appIDs.Add(line);
                     }
                 }
-                */
             }
             else
             {
@@ -1400,15 +1451,14 @@ namespace Conexus
 
             //Added v1.2.0
             //Ensure the Logs folder exists
-            if (!Directory.Exists(ModDir.Content + "\\_DD_TextFiles\\Logs"))
-                Directory.CreateDirectory(ModDir.Content + "\\_DD_TextFiles\\Logs");
+            if (!Directory.Exists(ModDir.Content + "\\_Logs"))
+                Directory.CreateDirectory(ModDir.Content + "\\_Logs");
+
             //Create a properly formatted date/time by removing any invalid characters in the mod name
             string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
             //Save logs to file
-            WriteToFile(log.ToArray(), ModDir.Content + "\\_DD_TextFiles\\Logs\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
-
-
 
         #endregion
     }
