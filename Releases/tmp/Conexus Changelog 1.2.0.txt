@@ -16,7 +16,7 @@ Conexus Changelog 1.2.0
 > Added asynchronous operation for most functions (resulting in a responsive UI)
 > Added message box (thanks to async) and a ton of message logs during operation
 > Because of the new logging system, operation may be a bit slower (but hopefully not by much)
-> Messages are saved to a text file, Log_<Date/Time>, in DarkestDungeon\mods\_DD_TextFiles
+> Messages are saved to a text file, Log_<Date/Time>, in DarkestDungeon\mods\_Logs
 
 > Added very basic, untested exception handling, so when Conexus crashes, check the logs and send them to me
 
@@ -26,6 +26,8 @@ Conexus Changelog 1.2.0
 
 
 > Updated header summary to further explain functionality of Conexus
-> Updated header summar to include credit to Extended WPF Toolkit and DaisyTian-MSFT (for password reveal functionality)
+> Updated header summary to include credit to Extended WPF Toolkit and DaisyTian-MSFT (for password reveal functionality)
 > Started using version tags in comments to better differentiate when something was added
 > Disabled window resizing, so Conexus is always the same size
+
+> Updated quickstart guide

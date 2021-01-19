@@ -49,9 +49,10 @@ Update from a list of links:
 
 
 Important notes:
-> With version 1.2.0 of Conexus, you will need your Steam Credentials to use Conexus
-> Starting with version 1.2.0, Conexus has a message window that will show you what he's working on and when
-> There is now also logging as of v1.2.0, located in DarkestDungeon\mods\_Logs, any errors that happen should end up here, hopefully.
+> New, for v1.2.0: you will need your Steam Credentials to use Conexus.
+> New, for v1.2.0: Conexus has a message window that will show you what he's working on and when.
+> New, for v1.2.0: logging, located in DarkestDungeon\mods\_Logs, any errors that happen should end up there, hopefully.
+> New, for v1.2.0: mods can be added or removed with either method, just run Conexus in update mode.
 > If you're using the list of links method, please keep in mind that the result will not include
   the mod's name (005_123123123 as opposed to 005_123123123_Awesome Mod Name when using the Steam collection method)
 > If, for any reason, you need to switch modes after using Conexus 
