@@ -100,6 +100,16 @@ namespace Conexus
         {
             ShowMessage("WARNING: exception occured! " + (e.ExceptionObject as Exception).Message);
             ShowMessage("WARNING: Please post your logs on Github! https://github.com/Hypocrita20XX/Conexus/issues");
+
+            //If an exception does happen, I'm assuming Conexus will crash, so here's this just in case
+            //Ensure the Logs folder exists
+            if (!Directory.Exists(ModDir.Content + "\\_Logs"))
+                Directory.CreateDirectory(ModDir.Content + "\\_Logs");
+
+            //Create a properly formatted date/time by removing any invalid characters in the mod name
+            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+            //Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
 
