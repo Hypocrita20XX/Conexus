@@ -85,9 +85,23 @@ namespace Conexus
         public MainWindow()
         {
             InitializeComponent();
-            
+
+            //Added v1.2.0
+            //Very basic, unstead exception handling
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
             this.DataContext = this;
         }
+
+
+        //Added v1.2.0
+        //Very basic, untested exception handling
+        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            ShowMessage("WARNING: exception occured! " + (e.ExceptionObject as Exception).Message);
+            ShowMessage("WARNING: Please post your logs on Github! https://github.com/Hypocrita20XX/Conexus/issues");
+        }
+
 
         #region ComboBox Functionality
 
