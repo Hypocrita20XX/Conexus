@@ -66,8 +66,8 @@ namespace Conexus
     {
         //Declarations
         //Lists to store info related to the mods that will/are downloaded
-        List<string> modInfo;
-        List<string> appIDs;
+        List<string> modInfo = new List<string>();
+        List<string> appIDs = new List<string>();
         //Bools to store the value of each combobox
         bool downloadMods;
         bool updateMods;
@@ -464,6 +464,13 @@ namespace Conexus
             if (!Directory.Exists(fileDir))
                 Directory.CreateDirectory(fileDir);
 
+            //Added v1.2.0
+            //Reset lists
+            if (modInfo.Count > 0)
+                modInfo.Clear();
+            if (appIDs.Count > 0)
+                appIDs.Clear();
+
             //Overwrite whatever may be in ModInfo.txt, if it exists
             if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
                 File.WriteAllText(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
@@ -613,10 +620,11 @@ namespace Conexus
                 File.WriteAllText(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
 
             //Added v1.2.0
-            //TEST
             //Reset lists
-            modInfo.Clear();
-            appIDs.Clear();
+            if (modInfo.Count > 0)
+                modInfo.Clear();
+            if (appIDs.Count > 0)
+                appIDs.Clear();
 
             //Temp variable to store an individual line
             string line;
@@ -818,40 +826,6 @@ namespace Conexus
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
                 {
-                    /*
-                    //If so, delete all folders/files in the source destination
-                    for (int i = 0; i < appIDs.Count; i++)
-                    {
-                        if (Directory.Exists(source[i]))
-                        {
-                            //Changed v1.2.0, to async
-                            //Delete the directory
-                            await Task.Run(() => Directory.Delete(source[i], true));
-
-                            //Added v1.2.0
-                            //Provide feedback
-                            ShowMessage(source[i] + " deleted");
-                        }
-                    }
-                    */
-
-                    /*
-                    //Added v1.2.0
-                    //Hopefully more reliable directory deletion
-                    DirectoryInfo dirInfo = new DirectoryInfo(@UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\");
-
-                    foreach (var dir in dirInfo.EnumerateDirectories())
-                    {
-                        //if (dir.Name != "_DD_TextFiles" || dir.Name != "_Logs")
-                        //{
-                            await Task.Run(() => Directory.Delete(dir.FullName, true));
-
-                            //Provide feedback
-                            ShowMessage(dir.FullName + " deleted");
-                        //}
-                    }
-                    */
-
                     //Added v1.2.0
                     //Hopefully more reliable directory deletion
                     DirectoryInfo dirInfo = new DirectoryInfo(@UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\");
@@ -866,9 +840,6 @@ namespace Conexus
                             ShowMessage(dir + " deleted");
                         }
                     }
-
-
-
 
                     //Added v1.2.0
                     //Provide feedback
@@ -923,24 +894,6 @@ namespace Conexus
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
                 {
-                    /*
-                    //If so, delete all folders/files in the source destination
-                    for (int i = 0; i < appIDs.Count; i++)
-                    {
-                        if (Directory.Exists(source[i]))
-                        {
-                            //Changed v1.2.0, to async
-                            //Delete the directory
-                            await Task.Run(() => Directory.Delete(source[i], true));
-
-                            //Added v1.2.0
-                            //Provide feedback
-                            ShowMessage(source[i] + " deleted");
-                        }
-                    }
-                    */
-
-
                     //Added v1.2.0
                     //Hopefully more reliable directory deletion
                     DirectoryInfo dirInfo = new DirectoryInfo(@UserSettings.Default.ModsDir);
@@ -1347,6 +1300,7 @@ namespace Conexus
             if (!File.Exists(UserSettings.Default.ModsDir + "\\Links.txt"))
                 File.Create(UserSettings.Default.ModsDir + "\\Links.txt").Dispose();
 
+            /*
             //Initialize modInfo and appIDs lists based on the existence of the appropriate text files
             if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
             {
@@ -1399,6 +1353,7 @@ namespace Conexus
                 modInfo = new List<string>();
                 appIDs = new List<string>();
             }
+            */
 
             if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
                 Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
