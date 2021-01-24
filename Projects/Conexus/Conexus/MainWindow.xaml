@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Conexus"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Conexus" Height="465" Width="425" ResizeMode="NoResize"
+        Title="Conexus (v1.2.1)" Height="465" Width="425" ResizeMode="NoResize"
         Name="Conexus"
         Icon="Conexus.ico"
         Loaded="Window_Loaded"
