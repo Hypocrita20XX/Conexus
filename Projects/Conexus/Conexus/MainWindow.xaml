@@ -84,8 +84,8 @@
 
         <!-- Added v1.2.0 -->
         <!-- Rearanged in v1.2.1 -->
-        <ScrollViewer x:Name="MessageScrollViewer" Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,5" HorizontalScrollBarVisibility="Disabled" Width="385" Height="100">
-            <TextBlock Name="Messages" TextAlignment="Left" Background="LightGray" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" FontSize="10" Width="360"/>
+        <ScrollViewer x:Name="MessageScrollViewer" Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,5" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Width="385" Height="100">
+            <TextBlock Name="Messages" TextAlignment="Left" Background="LightGray" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" FontSize="10" Width="375"/>
         </ScrollViewer>
 
         <!-- Added v1.2.1 -->
