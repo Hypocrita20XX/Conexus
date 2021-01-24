@@ -1416,5 +1416,33 @@ namespace Conexus
         }
 
         #endregion
+
+        //Added v1.2.1
+        //Opens a link to Conexus on Nexus Mods
+        void URL_Nexus_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.nexusmods.com/darkestdungeon/mods/858?");
+        }
+
+        //Added v1.2.1
+        //Opens a link to Conexus on Github
+        private void URL_Github_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus");
+        }
+
+        //Added v1.2.1
+        //Opens a link to the wiki on Github
+        private void URL_Wiki_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/wiki");
+        }
+
+        //Added v1.2.1
+        //Opens a link to the issue tracker on Github
+        private void URL_Issue_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/issues");
+        }
     }
 }
