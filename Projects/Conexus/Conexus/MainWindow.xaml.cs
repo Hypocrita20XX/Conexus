@@ -367,6 +367,10 @@ namespace Conexus
                     //If the user wants to download mods, send them through that chain
                     if (downloadMods)
                     {
+                        //Added v1.2.1
+                        //Log info relating to what the user wants to do
+                        ShowMessage("INFO: User is downloading mods");
+
                         //Added v1.2.0
                         //Provide feedback
                         ShowMessage("Mod info will now be obtained from the collection link");
@@ -392,6 +396,10 @@ namespace Conexus
                     //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
                     if (updateMods)
                     {
+                        //Added v1.2.1
+                        //Log info relating to what the user wants to do
+                        ShowMessage("INFO: User is updating mods");
+
                         //Added v1.2.0
                         //Provide feedback
                         ShowMessage("Mod info will now be updated");

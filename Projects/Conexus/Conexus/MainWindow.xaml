@@ -96,7 +96,9 @@
 
         <!-- Added v1.2.0 -->
         <!-- Rearanged in v1.2.1 -->
-        <ScrollViewer x:Name="MessageScrollViewer" Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,5" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Width="385" Height="100">
+        <Image Source="/Resources/Logo.png" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="11" Margin="10" Opacity="0.35"/>
+
+        <ScrollViewer x:Name="MessageScrollViewer" Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="4" HorizontalAlignment="Left" Opacity="0.75" Margin="0,5" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Width="385" Height="100">
             <TextBlock Name="Messages" TextAlignment="Left" Background="#7da9b6" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" FontSize="10" Width="375"/>
         </ScrollViewer>
 
