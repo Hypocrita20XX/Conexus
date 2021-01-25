@@ -205,6 +205,34 @@ namespace Conexus
             }
         }
 
+        //Added v1.2.1
+        //Opens a link to Conexus on Nexus Mods
+        void URL_Nexus_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.nexusmods.com/darkestdungeon/mods/858?");
+        }
+
+        //Added v1.2.1
+        //Opens a link to Conexus on Github
+        private void URL_Github_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus");
+        }
+
+        //Added v1.2.1
+        //Opens a link to the wiki on Github
+        private void URL_Wiki_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/wiki");
+        }
+
+        //Added v1.2.1
+        //Opens a link to the issue tracker on Github
+        private void URL_Issue_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/issues");
+        }
+
         #endregion
 
         #region Checkbox Functionality
@@ -284,10 +312,17 @@ namespace Conexus
             PasswordReveal.IsEnabled = false;
             OrganizeMods.IsEnabled = false;
 
+            //Added v1.2.1
+            //Log info relating to what the user wants to do
+            ShowMessage("INFO: Using " + System.Environment.OSVersion);
 
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
             {
+                //Added v1.2.1
+                //Log info relating to what the user wants to do
+                ShowMessage("INFO: Using a Steam collection");
+
                 //Changed v1.2.0, to async
                 //Check the provided URL to make sure it's valid
                 if (await VerifyCollectionURLAsync(URLLink.Text, UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
@@ -304,7 +339,7 @@ namespace Conexus
                     else
                     {
                         //Provide a clear reason for aborting the process
-                        Messages.Text = "Invalid URL, process has now stopped.";
+                        ShowMessage("Invalid URL, process has now stopped.");
 
                         //Added v1.2.0
                         //Provide feedback
@@ -397,6 +432,10 @@ namespace Conexus
             //Otherwise, the user wants to use a list of URLs
             else
             {
+                //Added v1.2.1
+                //Log info relating to what the user wants to do
+                ShowMessage("INFO: Using a list of links");
+
                 //If the user wants to download mods, send them through that chain
                 if (downloadMods)
                 {
@@ -1416,33 +1455,5 @@ namespace Conexus
         }
 
         #endregion
-
-        //Added v1.2.1
-        //Opens a link to Conexus on Nexus Mods
-        void URL_Nexus_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://www.nexusmods.com/darkestdungeon/mods/858?");
-        }
-
-        //Added v1.2.1
-        //Opens a link to Conexus on Github
-        private void URL_Github_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus");
-        }
-
-        //Added v1.2.1
-        //Opens a link to the wiki on Github
-        private void URL_Wiki_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/wiki");
-        }
-
-        //Added v1.2.1
-        //Opens a link to the issue tracker on Github
-        private void URL_Issue_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/issues");
-        }
     }
 }
