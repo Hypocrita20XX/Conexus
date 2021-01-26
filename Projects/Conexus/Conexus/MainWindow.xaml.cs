@@ -1318,12 +1318,24 @@ namespace Conexus
                 if (logTmp.Count > 0)
                 {
                     //Show desired message with appropriate line count
-                    Messages.Text += logTmp;
-                    //Save this message to the log list
-                    log.Add(Regex.Replace(DateTime.Now.ToString(), @"['\n']", "", RegexOptions.None));
+                    //Messages.Text += logTmp;
+                    
+                    for (int i = 0; i < logTmp.Count; i++)
+                    {
+                        //Show desired message with appropriate line count
+                        Messages.Text += logTmp[i];
+                        //Save this message to the log list
+                        log.Add(logTmp[i].Substring(0, logTmp[i].Length - 2));
+                    }
 
                     //Clear out logTmp
                     logTmp.Clear();
+
+                    //Add the current message to the textblock and list
+                    //Show desired message with appropriate line count
+                    Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
+                    //Save this message to the log list
+                    log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
 
                     //Scroll to the end of the scroll viewer
                     MessageScrollViewer.ScrollToEnd();
