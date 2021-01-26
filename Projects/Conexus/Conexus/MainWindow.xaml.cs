@@ -1665,7 +1665,7 @@ namespace Conexus
 
         //Changed v1.2.2, added logging/log saving
         //Called when the UI window has loaded, used to set proper info in the UI from the settings file
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Changed v1.2.2, combined statements
             //Ensure user.settings exists before checking its data
@@ -1800,47 +1800,88 @@ namespace Conexus
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
+        //Changed v1.2.2, added logging/log saving
         //Called right after the user indicates they want to close the program (through the use of the "X" button)
         //Used to ensure all proper data is set to their corrosponding variables in the settings file
-        private void Window_Closing(object sender, EventArgs e)
+        void Window_Closing(object sender, EventArgs e)
         {
             //Check to ensure the URLLink content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (URLLink.Text.Length > 0)
+            {
                 UserSettings.Default.CollectionURL = URLLink.Text;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Chosen collection URL saved");
+            }
 
             //Check to ensure the SteamCMDDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (SteamCMDDir.Content != null)
+            {
                 UserSettings.Default.SteamCMDDir = SteamCMDDir.Content.ToString();
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Chosen SteamCMD directory saved");
+            }
 
             //Check to ensure the ModDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (ModDir.Content != null)
+            {
                 UserSettings.Default.ModsDir = ModDir.Content.ToString();
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Chosen mods directory saved");
+            }
 
             //Added v1.2.0
             //Check to ensure the Steam username content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (SteamUsername.Password.Length > 0)
+            {
                 UserSettings.Default.SteamUsername = SteamUsername.Password;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Chosen Steam username saved");
+            }
 
             //Added v1.2.0
             //Check to ensure the Steam password content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (SteamPassword.Password.Length > 0)
+            {
                 UserSettings.Default.SteamPassword = SteamPassword.Password;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Chosen Steam password saved");
+            }
 
             //Save which platform the user has chosen
             if (steam)
+            {
                 UserSettings.Default.Platform = "steam";
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Chosen method (Steam collection) saved");
+            }
             else
+            {
                 UserSettings.Default.Platform = "other";
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Chosen method (list of links) saved");
+            }
+
+            //Added v1.2.2
+            //Save log to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
+        //Changed v1.2.2, added logging
         //Final call that happens right after the window starts to close
         //Used to save all relevant data to the settings file
-        private void Window_Closed(object sender, EventArgs e)
+        void Window_Closed(object sender, EventArgs e)
         {
             //Save all data to the settings file
             UserSettings.Default.Save();
@@ -1848,10 +1889,21 @@ namespace Conexus
             //Added v1.2.0
             //Ensure the Logs folder exists
             if (!Directory.Exists(ModDir.Content + "\\_Logs"))
+            {
+                //Added v1.2.2
+                ShowMessage("WARN: _Logs folder is missing! Creating now");
+
                 Directory.CreateDirectory(ModDir.Content + "\\_Logs");
+            }
 
             //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+
+            //Added v1.2.2
+            ShowMessage("PROC: All user data has been saved!");
+
+            //Added v1.2.2
+            ShowMessage("INFO: Conexus will close now");
         }
 
         #endregion
