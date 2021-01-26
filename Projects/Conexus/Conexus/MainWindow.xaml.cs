@@ -1287,7 +1287,8 @@ namespace Conexus
         }
 
         //Added v1.2.0
-        //Changed v1.2.2, overall formatting
+        //Changed v1.2.2, overall formatting, functionality to handle unitialized textblock so I can use this everywhere 
+        //without interspersing with random temp variables
         //Utility function to handle messages
         void ShowMessage(string msg)
         {
