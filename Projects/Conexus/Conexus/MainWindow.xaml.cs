@@ -2141,8 +2141,6 @@ namespace Conexus
 
             //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
-
-
         }
 
         #endregion
