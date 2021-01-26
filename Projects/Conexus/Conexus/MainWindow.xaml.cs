@@ -844,8 +844,9 @@ namespace Conexus
                     await Task.Run(() => mods.Add(line.Substring(line.IndexOf("<"))));
 
                     //Added v1.2.0
+                    //Changed v1.2.2, formatting
                     //Provide feedback
-                    ShowMessage("Found mod info:" + line.Substring(line.IndexOf("<")));
+                    ShowMessage("PROC: Found mod info: " + line.Substring(line.IndexOf("<")));
                 }
             }
 
@@ -1387,13 +1388,7 @@ namespace Conexus
         {
             //Check if the directory exists, if not, create it
             if (!Directory.Exists(destination))
-            {
-                //Added v1.2.2
-                //Provide feedback
-                ShowMessage("PROC: " + destination + " does not exist, creating now");
-
                 Directory.CreateDirectory(destination);
-            }
 
             //Added v1.2.0
             //Ok this is a really lazy way to do this, but it works, so I don't care
