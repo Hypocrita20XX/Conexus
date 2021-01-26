@@ -1319,6 +1319,7 @@ namespace Conexus
         #region Verification Functionality
 
         //Added v1.2.0
+        //Changed v1.2.2, added logging
         //Goes through several verification steps to ensure a proper Steam collection URL has been entered
         async Task<bool> VerifyCollectionURLAsync(string url, string fileDir)
         {
@@ -1359,8 +1360,12 @@ namespace Conexus
             //Attempt to download the HTML from the provided URL
             try
             {
+                //Added v1.2.2
+                ShowMessage("INFO: Attempting to download HTML from given collection URL");
                 //Download the desired collection and save the file
                 await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
+                //Added v1.2.2
+                ShowMessage("INFO: Successfully downloaded HTML");
             }
             //Not a valid URL
             catch (WebException)
@@ -1368,11 +1373,12 @@ namespace Conexus
                 //Clear URLLink Text
                 URLLink.Text = string.Empty;
                 //Provide a message to the user
-                URLLink.Watermark = "Not a valid URL: " + url;
+                //URLLink.Watermark = "Not a valid URL: " + url;
                 //Flag this URL as invalid
                 validURL = false;
+                //Changed v1.2.2, better formatting
                 //Provide additional logging
-                ShowMessage("Provided URL is not valid!");
+                ShowMessage("WARN: Provided URL is not valid!");
             }
             //No URL at all, or something else that was unexpected
             catch (ArgumentException)
@@ -1380,12 +1386,12 @@ namespace Conexus
                 //Clear URLLink Text
                 URLLink.Text = string.Empty;
                 //Provide a message to the user
-                URLLink.Watermark = "Not a valid URL: " + url;
+                //URLLink.Watermark = "Not a valid URL: " + url;
                 //Flag this URL as invalid
                 validURL = false;
-
+                //Changed v1.2.2, better formatting
                 //Provide additional logging
-                ShowMessage("Provided URL is not valid or does not exist!");
+                ShowMessage("WARN: Provided URL is not valid or does not exist!");
             }
             //I don't know why this triggers, but it does, and it's not for valid reasons
             catch (NotSupportedException)
@@ -1396,8 +1402,9 @@ namespace Conexus
                 URLLink.Watermark = "Not a valid URL: " + url;
                 //Flag this URL as invalid
                 validURL = false;
+                //Changed v1.2.2, better formatting
                 //Provide additional logging
-                ShowMessage("Provided URL is not valid!");
+                ShowMessage("WARN: Provided URL is not valid!");
             }
             //URL is too long
             catch (PathTooLongException)
@@ -1405,11 +1412,18 @@ namespace Conexus
                 //Clear URLLink Text
                 URLLink.Text = string.Empty;
                 //Provide a message to the user
-                URLLink.Watermark = "URL is too long (more than 260 characters)";
+                //URLLink.Watermark = "URL is too long (more than 260 characters)";
                 //Flag this URL as invalid
                 validURL = false;
+                //Changed v1.2.2, better formatting
                 //Provide additional logging
-                ShowMessage("Provided URL is too long!");
+                ShowMessage("WARN: Provided URL is too long! (Greater than 260 characters)");
+            }
+            finally
+            {
+                //Added v1.2.2
+                //Save log to file
+                WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
             }
 
             //If the link is valid, leads to an actual site, we need to check for a valid Steam site
