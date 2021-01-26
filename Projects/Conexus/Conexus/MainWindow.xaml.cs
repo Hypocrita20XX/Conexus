@@ -376,8 +376,7 @@ namespace Conexus
                         ShowMessage("ERROR: Invalild URL! Process has stopped");
 
                         //Added v1.2.2
-                        //Save log just in case
-                        //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
+                        //Save log to file
                         WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
 
                         //Added v1.2.0
@@ -473,8 +472,7 @@ namespace Conexus
                     ShowMessage("ERROR: Invalid URL!");
 
                     //Added v1.2.2
-                    //Save log just in case
-                    //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
+                    //Save log to file
                     WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
 
                     return;
@@ -779,8 +777,7 @@ namespace Conexus
             file.Close();
 
             //Added v1.2.2
-            //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
+            //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -824,8 +821,7 @@ namespace Conexus
             }
 
             //Added v1.2.2
-            //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
+            //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -873,8 +869,7 @@ namespace Conexus
             }
 
             //Added v1.2.2
-            //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
+            //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -1028,8 +1023,7 @@ namespace Conexus
             ShowMessage("Mods have now been moved and renamed, originals have been deleted");
 
             //Added v1.2.2
-            //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
+            //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -1083,8 +1077,7 @@ namespace Conexus
             }
 
             //Added v1.2.2
-            //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
+            //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -1099,12 +1092,24 @@ namespace Conexus
         void ShowMessage(string msg)
         {
             //Added v1.2.0
-            //Changed v1.2.2, now includes current date and time for each message, and better formatting
-            string dt = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+            //Changed v1.2.2, now with date/time and better formatting
+            //Because I insist on proper formatting, here's a series of if statements
+            //whose only job is to add leading zeroes
+            string lcStr;
+            //If lineCount is less than 10, add two leading zeroes
+            if (lineCount < 10)
+                lcStr = "00" + lineCount.ToString();
+            //If lineCount is less than 100 and greater than 9, add one leading zero
+            else if (lineCount < 100 && lineCount > 9)
+                lcStr = "0" + lineCount.ToString();
+            //If lineCount is greater than 100, no leading zeroes are needed
+            else if (lineCount > 100)
+                lcStr = lineCount.ToString();
+
             //Show desired message with appropriate line count
-            Messages.Text += "[" + lineCount.ToString() + "] " + "[" + dt + "] " + msg + "\n";
+            Messages.Text += "[" + lineCount.ToString() + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
             //Save this message to the log list
-            log.Add("[" + lineCount.ToString() + "] " + "[" + dt + "] " + msg);
+            log.Add("[" + lineCount.ToString() + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
             //Increment lineCount
             lineCount++;
             //Scroll to the end of the scroll viewer
@@ -1474,7 +1479,7 @@ namespace Conexus
             if (!Directory.Exists(ModDir.Content + "\\_Logs"))
                 Directory.CreateDirectory(ModDir.Content + "\\_Logs");
 
-            //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
+            //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
