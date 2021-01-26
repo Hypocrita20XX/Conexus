@@ -1332,6 +1332,7 @@ namespace Conexus
                     //Clear out logTmp
                     logTmp.Clear();
 
+                    //This specific part of the program will only hit once, so we can safely do this twice without issue
                     //Add the current message to the textblock and list
                     //Show desired message with appropriate line count
                     Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
@@ -1365,7 +1366,6 @@ namespace Conexus
                 //Increment lineCount
                 lineCount++;
             }
-
         }
 
         #endregion
@@ -1770,7 +1770,7 @@ namespace Conexus
                 steam = true;
 
                 //Added v1.2.2
-                ShowMessage("VERIFY: ");
+                ShowMessage("VERIFY: Saved preferred method found: Steam collection");
             }
             else if (UserSettings.Default.Platform == "other")
             {
@@ -1778,7 +1778,7 @@ namespace Conexus
                 steam = false;
 
                 //Added v1.2.2
-                ShowMessage("VERIFY: ");
+                ShowMessage("VERIFY: Saved preferred method found: list of links");
             }
 
             //Make sure that Links.txt exists
@@ -1787,12 +1787,12 @@ namespace Conexus
                 File.Create(UserSettings.Default.ModsDir + "\\Links.txt").Dispose();
 
                 //Added v1.2.2
-                ShowMessage("VERIFY: ");
+                ShowMessage("VERIFY: Links.txt not found, creating file");
             }
             else
             {
                 //Added v1.2.2
-                ShowMessage("VERIFY: ");
+                ShowMessage("VERIFY: Links.txt found");
             }
 
             //Added v1.2.2
