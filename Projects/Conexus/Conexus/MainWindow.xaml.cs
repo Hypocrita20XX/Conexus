@@ -75,11 +75,14 @@ namespace Conexus
         //Bool to store which method the user has selected
         bool steam;
 
+        //Added v1.2.2
+        //Create a global dateTime for this session
         string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
 
         //Added v1.2.0
+        //Changed v1.2.2, so that it's not zero-based (better for most to understand)
         //Keeps track of the line count in the log
-        int lineCount = 0;
+        int lineCount = 1;
         //Stores all logs in a list, for later storage in a text file
         List<string> log = new List<string>();
 
@@ -1089,8 +1092,9 @@ namespace Conexus
         void ShowMessage(string msg)
         {
             //Added v1.2.0
+            //Changed v1.2.2, now includes current date and time for each message, and better formatting
             //Show desired message with appropriate line count
-            Messages.Text += lineCount.ToString() + ":  " + msg + "\n";
+            Messages.Text += "[" + lineCount.ToString() + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
             //Save this message to the log list
             log.Add(lineCount.ToString() + ":  " + msg);
             //Increment lineCount
