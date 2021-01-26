@@ -113,9 +113,10 @@ namespace Conexus
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
-
         #region ComboBox Functionality
 
+        //Changed v1.2.2, added logging
+        //Handles mode selection
         void Mode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //Get the index of the selected item
@@ -152,6 +153,8 @@ namespace Conexus
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
+        //Changed v1.2.2, added logging
+        //Handles method (ex platform) selection
         void Platform_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //Get the index of the selected item
@@ -203,6 +206,10 @@ namespace Conexus
             //Set the content of the button to what the user has selected
             ModDir.Content = folderBrowser.SelectedPath;
 
+            //Added v1.2.2
+            //Log info relating to what the user wants to do
+            ShowMessage("INPUT: Mods directory set to \"" + ModDir.Content + "\"");
+
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains Darkest.exe
             if (VerifyModDir(folderBrowser.SelectedPath))
@@ -211,17 +218,25 @@ namespace Conexus
                 UserSettings.Default.ModsDir = folderBrowser.SelectedPath;
                 //Save this setting
                 UserSettings.Default.Save();
+
+                //Added v1.2.2
+                //Log info relating to what the user wants to do
+                ShowMessage("VERIFY: Mods directory is valid and has been saved to config file");
             }
             //If the given path is invalid, let the user know why
             else
             {
                 //If the given path contains any info, provide that with the error message
                 if (folderBrowser.SelectedPath.Length > 0)
-                    ModDir.Content = "Invalid mods location: " + folderBrowser.SelectedPath;
+                    ShowMessage("ERROR: Invalid mods location: " + folderBrowser.SelectedPath + "!");
                 //If the given path is blank, provide that information
                 else
-                    ModDir.Content = "Invalid mods Location: no path given";
+                    ShowMessage("ERROR: Invalid mods Location: no path given!");
             }
+
+            //Added v1.2.2
+            //Save log to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         void SteamCMDDir_Click(object sender, RoutedEventArgs e)
@@ -237,6 +252,10 @@ namespace Conexus
             //Set the content of the button to what the user has selected
             SteamCMDDir.Content = folderBrowser.SelectedPath;
 
+            //Added v1.2.2
+            //Log info relating to what the user wants to do
+            ShowMessage("INPUT: SteamCMD directory set to \"" + SteamCMDDir.Content + "\"");
+
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
             if (VerifySteamCMDDir(folderBrowser.SelectedPath))
@@ -245,45 +264,175 @@ namespace Conexus
                 UserSettings.Default.SteamCMDDir = folderBrowser.SelectedPath;
                 //Save this setting
                 UserSettings.Default.Save();
+
+                //Added v1.2.2
+                //Log info relating to what the user wants to do
+                ShowMessage("VERIFY: Mods directory is valid and has been saved to config file");
             }
             //If the given path is invalid, let the user know why
             else
             {
                 //If the given path contains any info, provide that with the error message
                 if (folderBrowser.SelectedPath.Length > 0)
-                    SteamCMDDir.Content = "Invalid SteamCMD location: " + folderBrowser.SelectedPath;
+                    ShowMessage("ERROR: Invalid SteamCMD location: " + folderBrowser.SelectedPath + "!");
                 //If the given path is blank, provide that information
                 else
-                    SteamCMDDir.Content = "Invalid SteamCMD location: no path given";
+                    ShowMessage("ERROR: Invalid SteamCMD location: no path given!");
+            }
+
+            //Added v1.2.2
+            //Save log to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+        }
+
+        //Added v1.2.1
+        //Changed v1.2.2, added exception handling
+        //Opens a link to Conexus on Nexus Mods
+        void URL_Nexus_Click(object sender, RoutedEventArgs e)
+        {
+            //Attempt to open a link in the user's default browser
+            try
+            {
+                //Let user know what's happening
+                ShowMessage("INFO: Attempting to open link to Conexus on Nexus Mods");
+                //Attempt to open link
+                System.Diagnostics.Process.Start("https://www.nexusmods.com/darkestdungeon/mods/858?");
+                //Let user know what happened
+                ShowMessage("INFO: Link successfully opened");
+            }
+            //Exception for no default browser
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                //Let user know what happened
+                if (noBrowser.ErrorCode == -2147467259)
+                    ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
+            }
+            //Unspecified exception
+            catch (System.Exception other)
+            {
+                //Let user know what happened
+                ShowMessage("ERROR: Unspecified exception! " + other.Message);
+            }
+            //Save log file no matter what happens
+            finally
+            {
+                //Added v1.2.2
+                //Save log to file
+                WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
             }
         }
 
         //Added v1.2.1
-        //Opens a link to Conexus on Nexus Mods
-        void URL_Nexus_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://www.nexusmods.com/darkestdungeon/mods/858?");
-        }
-
-        //Added v1.2.1
+        //Changed v1.2.2, added exception handling
         //Opens a link to Conexus on Github
-        private void URL_Github_Click(object sender, RoutedEventArgs e)
+        void URL_Github_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus");
+            //Attempt to open a link in the user's default browser
+            try
+            {
+                //Let user know what's happening
+                ShowMessage("INFO: Attempting to open link to Conexus' Github repository");
+                //Attempt to open link
+                System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus");
+                //Let user know what happened
+                ShowMessage("INFO: Link successfully opened");
+            }
+            //Exception for no default browser
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                //Let user know what happened
+                if (noBrowser.ErrorCode == -2147467259)
+                    ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
+            }
+            //Unspecified exception
+            catch (System.Exception other)
+            {
+                //Let user know what happened
+                ShowMessage("ERROR: Unspecified exception! " + other.Message);
+            }
+            //Save log file no matter what happens
+            finally
+            {
+                //Added v1.2.2
+                //Save log to file
+                WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+            }
         }
 
         //Added v1.2.1
+        //Changed v1.2.2, added exception handling
         //Opens a link to the wiki on Github
-        private void URL_Wiki_Click(object sender, RoutedEventArgs e)
+        void URL_Wiki_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/wiki");
+            //Attempt to open a link in the user's default browser
+            try
+            {
+                //Let user know what's happening
+                ShowMessage("INFO: Attempting to open link to Conexus' Github wiki");
+                //Attempt to open link
+                System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/wiki");
+                //Let user know what happened
+                ShowMessage("INFO: Link successfully opened");
+            }
+            //Exception for no default browser
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                //Let user know what happened
+                if (noBrowser.ErrorCode == -2147467259)
+                    ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
+            }
+            //Unspecified exception
+            catch (System.Exception other)
+            {
+                //Let user know what happened
+                ShowMessage("ERROR: Unspecified exception! " + other.Message);
+            }
+            //Save log file no matter what happens
+            finally
+            {
+                //Added v1.2.2
+                //Save log to file
+                WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+            }
         }
 
         //Added v1.2.1
+        //Changed v1.2.2, added exception handling
         //Opens a link to the issue tracker on Github
-        private void URL_Issue_Click(object sender, RoutedEventArgs e)
+        void URL_Issue_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/issues");
+           
+
+            //Attempt to open a link in the user's default browser
+            try
+            {
+                //Let user know what's happening
+                ShowMessage("INFO: Attempting to open link to Conexus' Github issue tracker");
+                //Attempt to open link
+                System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/issues");
+                //Let user know what happened
+                ShowMessage("INFO: Link successfully opened");
+            }
+            //Exception for no default browser
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                //Let user know what happened
+                if (noBrowser.ErrorCode == -2147467259)
+                    ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
+            }
+            //Unspecified exception
+            catch (System.Exception other)
+            {
+                //Let user know what happened
+                ShowMessage("ERROR: Unspecified exception! " + other.Message);
+            }
+            //Save log file no matter what happens
+            finally
+            {
+                //Added v1.2.2
+                //Save log to file
+                WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+            }
         }
 
         #endregion
