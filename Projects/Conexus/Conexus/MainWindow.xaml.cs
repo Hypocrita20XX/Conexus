@@ -129,6 +129,10 @@ namespace Conexus
                 //Change local variables accordingly
                 downloadMods = true;
                 updateMods = false;
+
+                //Added v1.2.2
+                //Log info relating to what the user wants to do
+                ShowMessage("INPUT: Mode switched to \"Download Mods\"");
             }
 
             //If the user wishes to update their existing mods
@@ -137,7 +141,15 @@ namespace Conexus
                 //Change local variables accordingly
                 downloadMods = false;
                 updateMods = true;
+
+                //Added v1.2.2
+                //Log info relating to what the user wants to do
+                ShowMessage("INPUT: Mode switched to \"Update Mods\"");
             }
+
+            //Added v1.2.2
+            //Save log to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         void Platform_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -149,13 +161,29 @@ namespace Conexus
 
             //If the user is using Steam
             if (i == 0)
+            {
                 //Change local variables accordingly
                 steam = true;
 
+                //Added v1.2.2
+                //Log info relating to what the user wants to do
+                ShowMessage("INPUT: Method switched to \"Steam Collection\"");
+            }
+
             //If the user is using a list
             if (i == 1)
+            {
                 //Change local variables accordingly
                 steam = false;
+
+                //Added v1.2.2
+                //Log info relating to what the user wants to do
+                ShowMessage("INPUT: Method switched to \"List\"");
+            }
+
+            //Added v1.2.2
+            //Save log to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         #endregion
@@ -348,6 +376,10 @@ namespace Conexus
             else
                 ShowMessage("WARN: Potentially using unsupported OS!");
 
+            //Added v1.2.2
+            //Save log to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
             {
@@ -366,6 +398,14 @@ namespace Conexus
                         UserSettings.Default.CollectionURL = URLLink.Text;
                         //Save this setting
                         UserSettings.Default.Save();
+
+                        //Added v1.2.2
+                        //Log info relating to what the user wants to do
+                        ShowMessage("PROC: Collection URL has been saved");
+
+                        //Added v1.2.2
+                        //Save log to file
+                        WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
                     }
                     //Otherwise we need to quit and provide an error message
                     else
@@ -407,7 +447,7 @@ namespace Conexus
 
                         //Added v1.2.0
                         //Provide feedback
-                        ShowMessage("Mod info will now be obtained from the collection link");
+                        ShowMessage("PROC: Mod info will now be obtained from the collection link");
 
                         //Changed v1.2.0, to async
                         //Create all necessary text files
@@ -415,15 +455,19 @@ namespace Conexus
 
                         //Added v1.2.0
                         //Provide feedback
-                        ShowMessage("HTML has been downloaded and processed");
+                        ShowMessage("PROC: HTML has been downloaded and processed");
 
                         //Added v1.2.0
                         //Provide feedback
-                        ShowMessage("Mods will now be downloaded");
+                        ShowMessage("PROC: Mods will now be downloaded");
 
                         //Changed v1.2.0, to async
                         //Start downloading mods
                         await DownloadModsFromSteamAsync();
+
+                        //Added v1.2.2
+                        //Save log to file
+                        WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
                     }
 
                     //Changed v1.2.0, to simplify if statement after implementing mod list addition support
