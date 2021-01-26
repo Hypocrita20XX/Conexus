@@ -1663,141 +1663,164 @@ namespace Conexus
 
         #region Data Saving Functionality
 
-        //Changed v1.2.2, added logging/log saving
+        //Changed v1.2.2, added logging/log saving, exception handling in case userdata is corrupt
         //Called when the UI window has loaded, used to set proper info in the UI from the settings file
         void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Changed v1.2.2, combined statements
-            //Ensure user.settings exists before checking its data
-            if (UserSettings.Default.CollectionURL.Length <= 0 ||UserSettings.Default.CollectionURL == null)
-            {
-                UserSettings.Default.CollectionURL = "";
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: No saved collection URL");
-            }
-
-            //Changed v1.2.2, combined statements
-            //Check the length of the URL variable in the settings file, if so, set it to the UI variable
-            if (UserSettings.Default.CollectionURL.Length > 0 || UserSettings.Default.CollectionURL != null)
-            {
-                URLLink.Text = UserSettings.Default.CollectionURL;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Now showing the saved URL on the UI");
-            }
-
-            //Check the length of the SteamCMD variable in the settings file, if so, set it to the UI variable
-            if (UserSettings.Default.SteamCMDDir.Length > 0)
-            {
-                SteamCMDDir.Content = UserSettings.Default.SteamCMDDir;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Saved SteamCMD directory found, now showing on the UI");
-            }
-            else
-            {
-                //Added v1.2.2
-                SteamCMDDir.Content = "Select SteamCMD Directory";
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: No saved SteamCMD directory found");
-            }
-
-            //Check the length of the ModsDir variable in the settings file, if so, set it to the UI variable
-            if (UserSettings.Default.ModsDir.Length > 0)
-            {
-                ModDir.Content = UserSettings.Default.ModsDir;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Saved mods directory found, now showing on the UI");
-            }
-            else
-            {
-                //Added v1.2.2
-                ModDir.Content = "Select Mods Directory";
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: No saved mods directory found");
-            }
-
-            //Added v1.2.0
-            //Ensure Steam username exists before checking its data
-            if (UserSettings.Default.SteamUsername.Length <= 0 || UserSettings.Default.SteamUsername == null)
-            {
-                UserSettings.Default.SteamUsername = "";
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: No saved Steam username found");
-            }
-
-            //Added v1.2.0
-            //Changed v1.2.2, combined statements
-            //Check the length of the username variable in the settings file, if so, set it to the UI variable
-            if (UserSettings.Default.SteamUsername.Length > 0 || UserSettings.Default.SteamUsername != null)
-            {
-                SteamUsername.Password = UserSettings.Default.SteamUsername;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Saved Steam username found, now showing (obscured) on the UI");
-            }
-
-            //Added v1.2.0
-            //Changed v1.2.2, combined statements
-            //Ensure Steam password exists before checking its data
-            if (UserSettings.Default.SteamPassword.Length <= 0 || UserSettings.Default.SteamPassword == null)
-            {
-                UserSettings.Default.SteamPassword = "";
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: No saved Steam password found");
-            }
-
-            //Added v1.2.0
-            //Check the length of the password variable in the settings file, if so, set it to the UI variable
-            if (UserSettings.Default.SteamPassword.Length > 0 || UserSettings.Default.SteamPassword != null)
-            {
-                SteamPassword.Password = UserSettings.Default.SteamPassword;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Saved Steam password found, now showing (obscured) on the UI");
-            }
-
-            //Check the platform variable and set the platform combobox accordingly
-            if (UserSettings.Default.Platform == "steam")
-            {
-                cmbPlatform.SelectedIndex = 0;
-                steam = true;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Saved preferred method found: Steam collection");
-            }
-            else if (UserSettings.Default.Platform == "other")
-            {
-                cmbPlatform.SelectedIndex = 1;
-                steam = false;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Saved preferred method found: list of links");
-            }
-
-            //Make sure that Links.txt exists
-            if (!File.Exists(UserSettings.Default.ModsDir + "\\Links.txt"))
-            {
-                File.Create(UserSettings.Default.ModsDir + "\\Links.txt").Dispose();
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Links.txt not found, creating file");
-            }
-            else
-            {
-                //Added v1.2.2
-                ShowMessage("VERIFY: Links.txt found");
-            }
-
             //Added v1.2.2
-            //Save log to file
-            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+            try
+            {
+                //Changed v1.2.2, combined statements
+                //Ensure user.settings exists before checking its data
+                if (UserSettings.Default.CollectionURL.Length <= 0 || UserSettings.Default.CollectionURL == null)
+                {
+                    UserSettings.Default.CollectionURL = "";
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: No saved collection URL");
+                }
+
+                //Changed v1.2.2, combined statements
+                //Check the length of the URL variable in the settings file, if so, set it to the UI variable
+                if (UserSettings.Default.CollectionURL.Length > 0 || UserSettings.Default.CollectionURL != null)
+                {
+                    URLLink.Text = UserSettings.Default.CollectionURL;
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Now showing the saved URL on the UI");
+                }
+
+                //Check the length of the SteamCMD variable in the settings file, if so, set it to the UI variable
+                if (UserSettings.Default.SteamCMDDir.Length > 0)
+                {
+                    SteamCMDDir.Content = UserSettings.Default.SteamCMDDir;
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Saved SteamCMD directory found, now showing on the UI");
+                }
+                else
+                {
+                    //Added v1.2.2
+                    SteamCMDDir.Content = "Select SteamCMD Directory";
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: No saved SteamCMD directory found");
+                }
+
+                //Check the length of the ModsDir variable in the settings file, if so, set it to the UI variable
+                if (UserSettings.Default.ModsDir.Length > 0)
+                {
+                    ModDir.Content = UserSettings.Default.ModsDir;
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Saved mods directory found, now showing on the UI");
+                }
+                else
+                {
+                    //Added v1.2.2
+                    ModDir.Content = "Select Mods Directory";
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: No saved mods directory found");
+                }
+
+                //Added v1.2.0
+                //Ensure Steam username exists before checking its data
+                if (UserSettings.Default.SteamUsername.Length <= 0 || UserSettings.Default.SteamUsername == null)
+                {
+                    UserSettings.Default.SteamUsername = "";
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: No saved Steam username found");
+                }
+
+                //Added v1.2.0
+                //Changed v1.2.2, combined statements
+                //Check the length of the username variable in the settings file, if so, set it to the UI variable
+                if (UserSettings.Default.SteamUsername.Length > 0 || UserSettings.Default.SteamUsername != null)
+                {
+                    SteamUsername.Password = UserSettings.Default.SteamUsername;
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Saved Steam username found, now showing (obscured) on the UI");
+                }
+
+                //Added v1.2.0
+                //Changed v1.2.2, combined statements
+                //Ensure Steam password exists before checking its data
+                if (UserSettings.Default.SteamPassword.Length <= 0 || UserSettings.Default.SteamPassword == null)
+                {
+                    UserSettings.Default.SteamPassword = "";
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: No saved Steam password found");
+                }
+
+                //Added v1.2.0
+                //Check the length of the password variable in the settings file, if so, set it to the UI variable
+                if (UserSettings.Default.SteamPassword.Length > 0 || UserSettings.Default.SteamPassword != null)
+                {
+                    SteamPassword.Password = UserSettings.Default.SteamPassword;
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Saved Steam password found, now showing (obscured) on the UI");
+                }
+
+                //Check the platform variable and set the platform combobox accordingly
+                if (UserSettings.Default.Platform == "steam")
+                {
+                    cmbPlatform.SelectedIndex = 0;
+                    steam = true;
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Saved preferred method found: Steam collection");
+                }
+                else if (UserSettings.Default.Platform == "other")
+                {
+                    cmbPlatform.SelectedIndex = 1;
+                    steam = false;
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Saved preferred method found: list of links");
+                }
+
+                //Make sure that Links.txt exists
+                if (!File.Exists(UserSettings.Default.ModsDir + "\\Links.txt"))
+                {
+                    File.Create(UserSettings.Default.ModsDir + "\\Links.txt").Dispose();
+
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Links.txt not found, creating file");
+                }
+                else
+                {
+                    //Added v1.2.2
+                    ShowMessage("VERIFY: Links.txt found");
+                }
+            }
+            //This shouldn't happen too often, hopefully
+            catch (System.Configuration.ConfigurationErrorsException)
+            {
+                //Added v1.2.2
+                ShowMessage("ERROR: User data corrupted!");
+
+                //User data is corrupted, and honestly trying to fix it is asking too much for the small amount of data
+                //So instead, let's delete it and restart Conexus
+                UserSettings.Default.Reset();
+
+                //Provide feedback
+                ShowMessage("PROC: User data has been deleted");
+
+                //Provide feedback
+                ShowMessage("INFO: Conexus is now reset to his default state");
+            }
+            finally
+            {
+                //Added v1.2.2
+                //Save log to file
+                WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+            }
+            
         }
 
         //Changed v1.2.2, added logging/log saving
