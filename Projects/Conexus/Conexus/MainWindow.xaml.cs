@@ -2111,6 +2111,12 @@ namespace Conexus
             }
 
             //Added v1.2.2
+            ShowMessage("PROC: All user data has been saved!");
+
+            //Added v1.2.2
+            ShowMessage("INFO: Conexus will close now");
+
+            //Added v1.2.2
             //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
@@ -2136,11 +2142,7 @@ namespace Conexus
             //Save log to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
 
-            //Added v1.2.2
-            ShowMessage("PROC: All user data has been saved!");
 
-            //Added v1.2.2
-            ShowMessage("INFO: Conexus will close now");
         }
 
         #endregion
