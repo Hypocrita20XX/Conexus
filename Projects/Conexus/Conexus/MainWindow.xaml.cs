@@ -193,6 +193,8 @@ namespace Conexus
 
         #region Button Functionality
 
+        //Changed v1.2.2, added logging
+        //Provides functionality to allow the user to select the mods directory
         void ModDir_Click(object sender, RoutedEventArgs e)
         {
             //Create a new folder browser to allow easy navigation to the user's desired directory
@@ -228,10 +230,10 @@ namespace Conexus
             {
                 //If the given path contains any info, provide that with the error message
                 if (folderBrowser.SelectedPath.Length > 0)
-                    ShowMessage("ERROR: Invalid mods location: " + folderBrowser.SelectedPath + "!");
+                    ShowMessage("WARN: Invalid mods location: " + folderBrowser.SelectedPath + "!");
                 //If the given path is blank, provide that information
                 else
-                    ShowMessage("ERROR: Invalid mods Location: no path given!");
+                    ShowMessage("WARN: Invalid mods Location: no path given!");
             }
 
             //Added v1.2.2
@@ -239,6 +241,8 @@ namespace Conexus
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
+        //Changed v1.2.2, added logging
+        //Provides functionality to allow the user to select the SteamCMD directory
         void SteamCMDDir_Click(object sender, RoutedEventArgs e)
         {
             //Create a new folder browser to allow easy navigation to the user's desired directory
@@ -274,10 +278,10 @@ namespace Conexus
             {
                 //If the given path contains any info, provide that with the error message
                 if (folderBrowser.SelectedPath.Length > 0)
-                    ShowMessage("ERROR: Invalid SteamCMD location: " + folderBrowser.SelectedPath + "!");
+                    ShowMessage("WARN: Invalid SteamCMD location: " + folderBrowser.SelectedPath + "!");
                 //If the given path is blank, provide that information
                 else
-                    ShowMessage("ERROR: Invalid SteamCMD location: no path given!");
+                    ShowMessage("WARN: Invalid SteamCMD location: no path given!");
             }
 
             //Added v1.2.2
@@ -401,8 +405,6 @@ namespace Conexus
         //Opens a link to the issue tracker on Github
         void URL_Issue_Click(object sender, RoutedEventArgs e)
         {
-           
-
             //Attempt to open a link in the user's default browser
             try
             {
