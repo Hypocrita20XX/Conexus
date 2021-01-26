@@ -1453,20 +1453,40 @@ namespace Conexus
         //Utility function to handle messages
         void ShowMessage(string msg)
         {
-            //Added v1.2.0
-            //Changed v1.2.2, now with date/time and better formatting
+            //Added v1.2.2
             //Because I insist on proper formatting, here's a series of if statements
             //whose only job is to add leading zeroes
+            //Yes, we're going up to a million lines
+            //No, no sane person should ever reach this
+            //I'm doing it anyway
+
+            //Create a temporary string
             string lcStr = "";
-            //If lineCount is less than 10, add two leading zeroes
+            //If lineCount is less than 10, add six leading zeroes
             if (lineCount < 10)
+                lcStr = "00000" + lineCount.ToString();
+            //If lineCount is less than 100 and greater than/equal to 10, add five leading zeros
+            else if (lineCount < 100 && lineCount >= 10)
+                lcStr = "00000" + lineCount.ToString();
+            //If lineCount is less than 1000 and greater than/equal to 100, add four leading zeroes
+            else if (lineCount < 1000 && lineCount >= 100)
+                lcStr = "0000" + lineCount.ToString();
+            //If lineCount is less than 10000 and greater than/equal to than 1000, add three leading zeroes
+            else if (lineCount < 10000 && lineCount >= 1000)
+                lcStr = "000" + lineCount.ToString();
+            //If lineCount is less than 100000 and greater than/equal to than 10000, add two leading zeroes
+            else if (lineCount < 100000 && lineCount >= 10000)
                 lcStr = "00" + lineCount.ToString();
-            //If lineCount is less than 100 and greater than 9, add one leading zero
-            else if (lineCount < 100 && lineCount > 9)
+            //If lineCount is less than 1000000 and greater than/equal to than 100000, add one leading zero
+            else if (lineCount < 1000000 && lineCount >= 100000)
                 lcStr = "0" + lineCount.ToString();
-            //If lineCount is greater than 100, no leading zeroes are needed
-            else if (lineCount > 100)
+            //If lineCount is greater than 1000000, no leading zeroes are needed
+            else if (lineCount >= 1000000)
+            {
+                //Seriously, how?
+                ShowMessage("If by some miracle, Conexus is still working AT OVER A MILLION LINES, let me know. Wow. Also, HOW DID YOU GET THIS MANY LINES? (And here I thought I like mods.)");
                 lcStr = lineCount.ToString();
+            }
             //If it's somehow something else, no leading zeroes
             else
                 lcStr = lineCount.ToString();
