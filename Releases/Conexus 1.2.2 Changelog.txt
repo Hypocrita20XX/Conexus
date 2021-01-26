@@ -1,0 +1,5 @@
+Conexus 1.2.2 Changlog
+- Log saved more often, to hopefully catch any possible breaks
+
+- Fixed odd creation of "_DD_TextFiles" folder outside of game's root directory
+- Fixed odd creation of "Select Mods Directory" folder in Conexus' root directory

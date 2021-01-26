@@ -1463,7 +1463,7 @@ namespace Conexus
                 Directory.CreateDirectory(ModDir.Content + "\\_Logs");
 
             //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
-            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + ".txt");
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         #endregion
