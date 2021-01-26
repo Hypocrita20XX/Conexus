@@ -86,6 +86,8 @@ namespace Conexus
         //Stores all logs in a list, for later storage in a text file
         List<string> log = new List<string>();
 
+        //Added v1.2.2
+        //Test
         List<string> logTmp = new List<string>();
 
         public MainWindow()
@@ -135,7 +137,7 @@ namespace Conexus
 
                 //Added v1.2.2
                 //Log info relating to what the user wants to do
-                //ShowMessage("INPUT: Mode switched to \"Download Mods\"");
+                ShowMessage("INPUT: Mode switched to \"Download Mods\"");
             }
 
             //If the user wishes to update their existing mods
@@ -147,7 +149,7 @@ namespace Conexus
 
                 //Added v1.2.2
                 //Log info relating to what the user wants to do
-                //ShowMessage("INPUT: Mode switched to \"Update Mods\"");
+                ShowMessage("INPUT: Mode switched to \"Update Mods\"");
             }
 
             //Added v1.2.2
@@ -172,7 +174,7 @@ namespace Conexus
 
                 //Added v1.2.2
                 //Log info relating to what the user wants to do
-                //ShowMessage("INPUT: Method switched to \"Steam Collection\"");
+                ShowMessage("INPUT: Method switched to \"Steam Collection\"");
             }
 
             //If the user is using a list
@@ -183,7 +185,7 @@ namespace Conexus
 
                 //Added v1.2.2
                 //Log info relating to what the user wants to do
-                //ShowMessage("INPUT: Method switched to \"List\"");
+                ShowMessage("INPUT: Method switched to \"List\"");
             }
 
             //Added v1.2.2
@@ -212,7 +214,7 @@ namespace Conexus
 
             //Added v1.2.2
             //Log info relating to what the user wants to do
-            //ShowMessage("INPUT: Mods directory set to \"" + ModDir.Content + "\"");
+            ShowMessage("INPUT: Mods directory set to \"" + ModDir.Content + "\"");
 
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains Darkest.exe
@@ -225,17 +227,17 @@ namespace Conexus
 
                 //Added v1.2.2
                 //Log info relating to what the user wants to do
-                //ShowMessage("VERIFY: Mods directory is valid and has been saved to config file");
+                ShowMessage("VERIFY: Mods directory is valid and has been saved to config file");
             }
             //If the given path is invalid, let the user know why
             else
             {
                 //If the given path contains any info, provide that with the error message
                 if (folderBrowser.SelectedPath.Length > 0)
-                    //ShowMessage("WARN: Invalid mods location: " + folderBrowser.SelectedPath + "!");
+                    ShowMessage("WARN: Invalid mods location: " + folderBrowser.SelectedPath + "!");
                 //If the given path is blank, provide that information
                 else
-                    //ShowMessage("WARN: Invalid mods Location: no path given!");
+                    ShowMessage("WARN: Invalid mods Location: no path given!");
             }
 
             //Added v1.2.2
@@ -260,7 +262,7 @@ namespace Conexus
 
             //Added v1.2.2
             //Log info relating to what the user wants to do
-            //ShowMessage("INPUT: SteamCMD directory set to \"" + SteamCMDDir.Content + "\"");
+            ShowMessage("INPUT: SteamCMD directory set to \"" + SteamCMDDir.Content + "\"");
 
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
@@ -273,17 +275,17 @@ namespace Conexus
 
                 //Added v1.2.2
                 //Log info relating to what the user wants to do
-                //ShowMessage("VERIFY: Mods directory is valid and has been saved to config file");
+                ShowMessage("VERIFY: Mods directory is valid and has been saved to config file");
             }
             //If the given path is invalid, let the user know why
             else
             {
                 //If the given path contains any info, provide that with the error message
                 if (folderBrowser.SelectedPath.Length > 0)
-                    //ShowMessage("WARN: Invalid SteamCMD location: " + folderBrowser.SelectedPath + "!");
+                    ShowMessage("WARN: Invalid SteamCMD location: " + folderBrowser.SelectedPath + "!");
                 //If the given path is blank, provide that information
                 else
-                    //ShowMessage("WARN: Invalid SteamCMD location: no path given!");
+                    ShowMessage("WARN: Invalid SteamCMD location: no path given!");
             }
 
             //Added v1.2.2
@@ -300,24 +302,24 @@ namespace Conexus
             try
             {
                 //Let user know what's happening
-                //ShowMessage("INFO: Attempting to open link to Conexus on Nexus Mods");
+                ShowMessage("INFO: Attempting to open link to Conexus on Nexus Mods");
                 //Attempt to open link
                 System.Diagnostics.Process.Start("https://www.nexusmods.com/darkestdungeon/mods/858?");
                 //Let user know what happened
-                //ShowMessage("INFO: Link successfully opened");
+                ShowMessage("INFO: Link successfully opened");
             }
             //Exception for no default browser
             catch (System.ComponentModel.Win32Exception noBrowser)
             {
                 //Let user know what happened
                 if (noBrowser.ErrorCode == -2147467259)
-                    //ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
+                    ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
             }
             //Unspecified exception
             catch (System.Exception other)
             {
                 //Let user know what happened
-                //ShowMessage("ERROR: Unspecified exception! " + other.Message);
+                ShowMessage("ERROR: Unspecified exception! " + other.Message);
             }
             //Save log file no matter what happens
             finally
@@ -337,24 +339,24 @@ namespace Conexus
             try
             {
                 //Let user know what's happening
-                //ShowMessage("INFO: Attempting to open link to Conexus' Github repository");
+                ShowMessage("INFO: Attempting to open link to Conexus' Github repository");
                 //Attempt to open link
                 System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus");
                 //Let user know what happened
-                //ShowMessage("INFO: Link successfully opened");
+                ShowMessage("INFO: Link successfully opened");
             }
             //Exception for no default browser
             catch (System.ComponentModel.Win32Exception noBrowser)
             {
                 //Let user know what happened
                 if (noBrowser.ErrorCode == -2147467259)
-                    //ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
+                    ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
             }
             //Unspecified exception
             catch (System.Exception other)
             {
                 //Let user know what happened
-                //ShowMessage("ERROR: Unspecified exception! " + other.Message);
+                ShowMessage("ERROR: Unspecified exception! " + other.Message);
             }
             //Save log file no matter what happens
             finally
@@ -374,24 +376,24 @@ namespace Conexus
             try
             {
                 //Let user know what's happening
-                //ShowMessage("INFO: Attempting to open link to Conexus' Github wiki");
+                ShowMessage("INFO: Attempting to open link to Conexus' Github wiki");
                 //Attempt to open link
                 System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/wiki");
                 //Let user know what happened
-                //ShowMessage("INFO: Link successfully opened");
+                ShowMessage("INFO: Link successfully opened");
             }
             //Exception for no default browser
             catch (System.ComponentModel.Win32Exception noBrowser)
             {
                 //Let user know what happened
                 if (noBrowser.ErrorCode == -2147467259)
-                    //ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
+                    ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
             }
             //Unspecified exception
             catch (System.Exception other)
             {
                 //Let user know what happened
-                //ShowMessage("ERROR: Unspecified exception! " + other.Message);
+                ShowMessage("ERROR: Unspecified exception! " + other.Message);
             }
             //Save log file no matter what happens
             finally
@@ -411,24 +413,24 @@ namespace Conexus
             try
             {
                 //Let user know what's happening
-                //ShowMessage("INFO: Attempting to open link to Conexus' Github issue tracker");
+                ShowMessage("INFO: Attempting to open link to Conexus' Github issue tracker");
                 //Attempt to open link
                 System.Diagnostics.Process.Start("https://github.com/Hypocrita20XX/Conexus/issues");
                 //Let user know what happened
-                //ShowMessage("INFO: Link successfully opened");
+                ShowMessage("INFO: Link successfully opened");
             }
             //Exception for no default browser
             catch (System.ComponentModel.Win32Exception noBrowser)
             {
                 //Let user know what happened
                 if (noBrowser.ErrorCode == -2147467259)
-                    //ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
+                    ShowMessage("ERROR: No default browser found! " + noBrowser.Message);
             }
             //Unspecified exception
             catch (System.Exception other)
             {
                 //Let user know what happened
-                //ShowMessage("ERROR: Unspecified exception! " + other.Message);
+                ShowMessage("ERROR: Unspecified exception! " + other.Message);
             }
             //Save log file no matter what happens
             finally
@@ -1307,16 +1309,50 @@ namespace Conexus
             else
                 lcStr = lineCount.ToString();
 
-            //Show desired message with appropriate line count
-            Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
-            //Save this message to the log list
-            log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
+            //Added v1.2.2
+            try
+            {
+                //Added v1.2.2
+                //If logTmp is not empty, then messages were added before the textblock was initiated
+                //and those messages should be added now to the textblock
+                if (logTmp.Count > 0)
+                {
+                    //Show desired message with appropriate line count
+                    Messages.Text += logTmp;
+                    //Save this message to the log list
+                    log.Add(Regex.Replace(DateTime.Now.ToString(), @"['\n']", "", RegexOptions.None));
 
-            //Increment lineCount
-            lineCount++;
+                    //Clear out logTmp
+                    logTmp.Clear();
 
-            //Scroll to the end of the scroll viewer
-            MessageScrollViewer.ScrollToEnd();
+                    //Scroll to the end of the scroll viewer
+                    MessageScrollViewer.ScrollToEnd();
+                }
+                //If logTmp is empty, then the textblock should be initiated, and we can proceed as normal
+                //However logTmp could also be empty because the textblock is not initiated, 
+                //which is fine because then an exception happens and the message won't be lost
+                else
+                {
+                    //Show desired message with appropriate line count
+                    Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
+                    //Save this message to the log list
+                    log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
+
+                    //Scroll to the end of the scroll viewer
+                    MessageScrollViewer.ScrollToEnd();
+                }
+            }
+            catch (NullReferenceException)
+            {
+                //Messages textblock has not initiated yet, so we need to store the messages until it is
+                logTmp.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\'' | '' ? '' * '' ']", "_", RegexOptions.None) + "] " + msg + "\n");
+            }
+            finally
+            {
+                //Increment lineCount
+                lineCount++;
+            }
+
         }
 
         #endregion
@@ -1625,7 +1661,7 @@ namespace Conexus
                 UserSettings.Default.CollectionURL = "";
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: No saved collection URL");
+                ShowMessage("VERIFY: No saved collection URL");
             }
 
             //Changed v1.2.2, combined statements
@@ -1635,7 +1671,7 @@ namespace Conexus
                 URLLink.Text = UserSettings.Default.CollectionURL;
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: Now showing the saved URL on the UI");
+                ShowMessage("VERIFY: Now showing the saved URL on the UI");
             }
 
             //Check the length of the SteamCMD variable in the settings file, if so, set it to the UI variable
@@ -1644,7 +1680,7 @@ namespace Conexus
                 SteamCMDDir.Content = UserSettings.Default.SteamCMDDir;
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: Saved SteamCMD directory found, now showing on the UI");
+                ShowMessage("VERIFY: Saved SteamCMD directory found, now showing on the UI");
             }
             else
             {
@@ -1652,7 +1688,7 @@ namespace Conexus
                 SteamCMDDir.Content = "Select SteamCMD Directory";
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: No saved SteamCMD directory found");
+                ShowMessage("VERIFY: No saved SteamCMD directory found");
             }
 
             //Check the length of the ModsDir variable in the settings file, if so, set it to the UI variable
@@ -1661,7 +1697,7 @@ namespace Conexus
                 ModDir.Content = UserSettings.Default.ModsDir;
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: Saved mods directory found, now showing on the UI");
+                ShowMessage("VERIFY: Saved mods directory found, now showing on the UI");
             }
             else
             {
@@ -1669,7 +1705,7 @@ namespace Conexus
                 ModDir.Content = "Select Mods Directory";
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: No saved mods directory found");
+                ShowMessage("VERIFY: No saved mods directory found");
             }
 
             //Added v1.2.0
@@ -1679,7 +1715,7 @@ namespace Conexus
                 UserSettings.Default.SteamUsername = "";
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: No saved Steam username found");
+                ShowMessage("VERIFY: No saved Steam username found");
             }
 
             //Added v1.2.0
@@ -1690,7 +1726,7 @@ namespace Conexus
                 SteamUsername.Password = UserSettings.Default.SteamUsername;
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: Saved Steam username found, now showing (obscured) on the UI");
+                ShowMessage("VERIFY: Saved Steam username found, now showing (obscured) on the UI");
             }
 
             //Added v1.2.0
@@ -1701,7 +1737,7 @@ namespace Conexus
                 UserSettings.Default.SteamPassword = "";
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: No saved Steam password found");
+                ShowMessage("VERIFY: No saved Steam password found");
             }
 
             //Added v1.2.0
@@ -1711,7 +1747,7 @@ namespace Conexus
                 SteamPassword.Password = UserSettings.Default.SteamPassword;
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: Saved Steam password found, now showing (obscured) on the UI");
+                ShowMessage("VERIFY: Saved Steam password found, now showing (obscured) on the UI");
             }
 
             //Check the platform variable and set the platform combobox accordingly
@@ -1721,7 +1757,7 @@ namespace Conexus
                 steam = true;
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: ");
+                ShowMessage("VERIFY: ");
             }
             else if (UserSettings.Default.Platform == "other")
             {
@@ -1729,7 +1765,7 @@ namespace Conexus
                 steam = false;
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: ");
+                ShowMessage("VERIFY: ");
             }
 
             //Make sure that Links.txt exists
@@ -1738,17 +1774,17 @@ namespace Conexus
                 File.Create(UserSettings.Default.ModsDir + "\\Links.txt").Dispose();
 
                 //Added v1.2.2
-                logTmp.Add("VERIFY: ");
+                ShowMessage("VERIFY: ");
             }
             else
             {
                 //Added v1.2.2
-                logTmp.Add("VERIFY: ");
+                ShowMessage("VERIFY: ");
             }
 
             //Added v1.2.2
             //Save log to file
-            //WriteToFile(logTmp.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         //Called right after the user indicates they want to close the program (through the use of the "X" button)
