@@ -81,13 +81,33 @@ namespace Conexus
         //Stores all logs in a list, for later storage in a text file
         List<string> log = new List<string>();
 
-
         public MainWindow()
         {
             InitializeComponent();
-            
+
+            //Added v1.2.0? (Missing from source, not sure if in final build for v1.20 and v1.2.1)
+            //Very basic, unstead exception handling
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
             this.DataContext = this;
         }
+
+        //Added v1.2.0? (Missing from source, not sure if in final build for v1.20 and v1.2.1)
+        //Very basic, untested exception handling
+        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            ShowMessage("WARNING: exception occured! " + (e.ExceptionObject as Exception).Message);
+            ShowMessage("WARNING: Please post your logs on Github! https://github.com/Hypocrita20XX/Conexus/issues");
+
+            //If an exception does happen, I'm assuming Conexus will crash, so here's this just in case
+            //Ensure the Logs folder exists
+            if (!Directory.Exists(ModDir.Content + "\\_Logs"))
+                Directory.CreateDirectory(ModDir.Content + "\\_Logs");
+
+            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + ".txt");
+        }
+
 
         #region ComboBox Functionality
 
@@ -338,12 +358,15 @@ namespace Conexus
                     //Otherwise we need to quit and provide an error message
                     else
                     {
-                        //Provide a clear reason for aborting the process
-                        ShowMessage("Invalid URL, process has now stopped.");
-
                         //Added v1.2.0
+                        //Channged v1.2.2
                         //Provide feedback
-                        ShowMessage("Invalild URL! Process has stopped");
+                        ShowMessage("ERROR: Invalild URL! Process has stopped");
+
+                        //Added v1.2.2
+                        //Save log just in case
+                        //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
+                        WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + ".txt");
 
                         //Added v1.2.0
                         //Enable input after operation
@@ -434,6 +457,14 @@ namespace Conexus
                     PasswordReveal.IsEnabled = true;
                     OrganizeMods.IsEnabled = true;
 
+                    //Added v1.2.2
+                    ShowMessage("ERROR: Invalid URL!");
+
+                    //Added v1.2.2
+                    //Save log just in case
+                    //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
+                    WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + ".txt");
+
                     return;
                 }
             }
@@ -501,6 +532,13 @@ namespace Conexus
             //Added v1.2.0
             //Provide feedback
             ShowMessage("Selected process has finished successfully");
+
+            //Added v1.2.2
+            //Save log just in case
+            //Create a properly formatted date/time by removing any invalid characters in the mod name
+            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+            //Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         //Changed v1.2.0, to async
@@ -723,14 +761,19 @@ namespace Conexus
             //Provide feedback
             ShowMessage("Finished processing mod info in Links file");
 
-            //Write the modInfo to a text file if the file doesn't exist
-            //if (!File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-                WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
-
+            //Write the modInfo to a text file
+            WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
 
             //Added v1.2.0
             //Close file, cleanup
             file.Close();
+
+            //Added v1.2.2
+            //Save log just in case
+            //Create a properly formatted date/time by removing any invalid characters in the mod name
+            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+            //Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         //Changed v1.2.0, to async
@@ -771,6 +814,13 @@ namespace Conexus
                 //Move on to copying and renaming the mods
                 await RenameAndMoveModsAsync("DOWNLOAD");
             }
+
+            //Added v1.2.2
+            //Save log just in case
+            //Create a properly formatted date/time by removing any invalid characters in the mod name
+            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+            //Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         //Changed v1.2.0, to async
@@ -815,6 +865,13 @@ namespace Conexus
                 //Move on to copying and renaming the mods
                 await RenameAndMoveModsAsync("DOWNLOAD");
             }
+
+            //Added v1.2.2
+            //Save log just in case
+            //Create a properly formatted date/time by removing any invalid characters in the mod name
+            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+            //Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         //Changed v1.2.0, to async
@@ -965,6 +1022,13 @@ namespace Conexus
             //Added v1.2.0
             //Provide feedback
             ShowMessage("Mods have now been moved and renamed, originals have been deleted");
+
+            //Added v1.2.2
+            //Save log just in case
+            //Create a properly formatted date/time by removing any invalid characters in the mod name
+            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+            //Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         //Changed v1.2.0, to async
@@ -1015,6 +1079,13 @@ namespace Conexus
                 //Recursively copy any files in this directory, any sub-directories, and all files therein
                 await CopyFoldersAsync(folder, dest);
             }
+
+            //Added v1.2.2
+            //Save log just in case
+            //Create a properly formatted date/time by removing any invalid characters in the mod name
+            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+            //Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
         //Utility function to write text to a file
@@ -1347,63 +1418,8 @@ namespace Conexus
             if (!File.Exists(UserSettings.Default.ModsDir + "\\Links.txt"))
                 File.Create(UserSettings.Default.ModsDir + "\\Links.txt").Dispose();
 
-            /*
-            //Initialize modInfo and appIDs lists based on the existence of the appropriate text files
-            if (File.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt"))
-            {
-                //Instantiate the lists
-                modInfo = new List<string>();
-                appIDs = new List<string>();
-
-                //Temp variable to store an individual line
-                string line;
-
-                //Create a file reader and load the previously saved ModInfo file
-                StreamReader file = new StreamReader(@UserSettings.Default.ModsDir + "\\_DD_TextFiles\\ModInfo.txt");
-
-                if (steam)
-                {
-                    //Iterate through the file one line at a time
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        //Information in the file can be added as-is to the modInfo list
-                        modInfo.Add(line);
-                        //On the other hand, info specific to the app ID needs extracted
-                        //Strip off the index of the folder name, store it
-                        line = line.Substring(4);
-                        //Strip off the ID, store it
-                        line = line.Substring(0, line.IndexOf("_"));
-                        //Now store that ID in the appIDs list
-                        appIDs.Add(line);
-                    }
-                }
-                else
-                {
-                    //Iterate through the file one line at a time
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        //Information in the file can be added as-is to the modInfo list
-                        modInfo.Add(line);
-                        //On the other hand, info specific to the app ID needs extracted
-                        //Strip off the index of the folder name, store it
-                        line = line.Substring(4);
-                        //Strip off the ID, store it
-                        //line = line.Substring(0, line.IndexOf("_"));
-                        //Now store that ID in the appIDs list
-                        appIDs.Add(line);
-                    }
-                }
-            }
-            else
-            {
-                //if the modInfo file does not exist, instantiate the lists with no data
-                modInfo = new List<string>();
-                appIDs = new List<string>();
-            }
-            */
-
-            if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
-                Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
+            //if (!Directory.Exists(UserSettings.Default.ModsDir + "\\_DD_TextFiles"))
+            //    Directory.CreateDirectory(UserSettings.Default.ModsDir + "\\_DD_TextFiles");
         }
 
         //Called right after the user indicates they want to close the program (through the use of the "X" button)
@@ -1456,10 +1472,8 @@ namespace Conexus
             if (!Directory.Exists(ModDir.Content + "\\_Logs"))
                 Directory.CreateDirectory(ModDir.Content + "\\_Logs");
 
-            //Create a properly formatted date/time by removing any invalid characters in the mod name
-            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
-            //Save logs to file
-            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+            //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + ".txt");
         }
 
         #endregion
