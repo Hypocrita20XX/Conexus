@@ -1095,7 +1095,7 @@ namespace Conexus
             //Changed v1.2.2, now with date/time and better formatting
             //Because I insist on proper formatting, here's a series of if statements
             //whose only job is to add leading zeroes
-            string lcStr;
+            string lcStr = "";
             //If lineCount is less than 10, add two leading zeroes
             if (lineCount < 10)
                 lcStr = "00" + lineCount.ToString();
@@ -1105,13 +1105,18 @@ namespace Conexus
             //If lineCount is greater than 100, no leading zeroes are needed
             else if (lineCount > 100)
                 lcStr = lineCount.ToString();
+            //If it's somehow something else, no leading zeroes
+            else
+                lcStr = lineCount.ToString();
 
             //Show desired message with appropriate line count
-            Messages.Text += "[" + lineCount.ToString() + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
+            Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
             //Save this message to the log list
-            log.Add("[" + lineCount.ToString() + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
+            log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
+
             //Increment lineCount
             lineCount++;
+
             //Scroll to the end of the scroll viewer
             MessageScrollViewer.ScrollToEnd();
         }
