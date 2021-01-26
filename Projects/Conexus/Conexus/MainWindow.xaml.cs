@@ -75,6 +75,8 @@ namespace Conexus
         //Bool to store which method the user has selected
         bool steam;
 
+        string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
+
         //Added v1.2.0
         //Keeps track of the line count in the log
         int lineCount = 0;
@@ -105,7 +107,7 @@ namespace Conexus
                 Directory.CreateDirectory(ModDir.Content + "\\_Logs");
 
             //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
-            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + ".txt");
+            WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
 
@@ -366,7 +368,7 @@ namespace Conexus
                         //Added v1.2.2
                         //Save log just in case
                         //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
-                        WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + ".txt");
+                        WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
 
                         //Added v1.2.0
                         //Enable input after operation
@@ -463,7 +465,7 @@ namespace Conexus
                     //Added v1.2.2
                     //Save log just in case
                     //Create a properly formatted date/time by removing any invalid characters in the mod name and Save logs to file
-                    WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + ".txt");
+                    WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
 
                     return;
                 }
@@ -535,9 +537,7 @@ namespace Conexus
 
             //Added v1.2.2
             //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name
-            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
-            //Save logs to file
+            //Create a properly formatted date/time by removing any invalid characters in the mod name and ave logs to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -770,9 +770,7 @@ namespace Conexus
 
             //Added v1.2.2
             //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name
-            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
-            //Save logs to file
+            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -817,9 +815,7 @@ namespace Conexus
 
             //Added v1.2.2
             //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name
-            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
-            //Save logs to file
+            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -868,9 +864,7 @@ namespace Conexus
 
             //Added v1.2.2
             //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name
-            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
-            //Save logs to file
+            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -1025,9 +1019,7 @@ namespace Conexus
 
             //Added v1.2.2
             //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name
-            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
-            //Save logs to file
+            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -1082,9 +1074,7 @@ namespace Conexus
 
             //Added v1.2.2
             //Save log just in case
-            //Create a properly formatted date/time by removing any invalid characters in the mod name
-            string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
-            //Save logs to file
+            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
