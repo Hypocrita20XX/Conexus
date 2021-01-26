@@ -23,5 +23,8 @@
     <Setting Name="Platform" Type="System.String" Scope="User">
       <Value Profile="(Default)">steam</Value>
     </Setting>
+    <Setting Name="HasDownloaded" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

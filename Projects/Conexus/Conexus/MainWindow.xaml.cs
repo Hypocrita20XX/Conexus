@@ -1464,7 +1464,7 @@ namespace Conexus
             string lcStr = "";
             //If lineCount is less than 10, add six leading zeroes
             if (lineCount < 10)
-                lcStr = "00000" + lineCount.ToString();
+                lcStr = "000000" + lineCount.ToString();
             //If lineCount is less than 100 and greater than/equal to 10, add five leading zeros
             else if (lineCount < 100 && lineCount >= 10)
                 lcStr = "00000" + lineCount.ToString();
@@ -1978,6 +1978,22 @@ namespace Conexus
                     //Added v1.2.2
                     ShowMessage("VERIFY: Links.txt found");
                 }
+
+                //Added v1.2.2
+                //Check the state of UserSettings.Default.HasDownloaded
+                //If it's false, we can reasonably say that the user has not downloaded mods yet, that we know of
+                //However, if it's true, we need to make sure the cmbMod dropdown changes to reflect this, to Update Mods mode
+                //QOL thing that will hopefully make COnexus a bit easier to work with
+                if (UserSettings.Default.HasDownloaded)
+                {
+                    ShowMessage("VERIFY: User has previously downloaded mods, setting mode to \"Update Mods\"");
+                    cmbMode.SelectedIndex = 1;
+                }
+                else
+                {
+                    ShowMessage("VERIFY: User has yet to download mods, setting mode to \"Download Mods\"");
+                    cmbMode.SelectedIndex = 0;
+                }
             }
             //This shouldn't happen too often, hopefully
             catch (System.Configuration.ConfigurationErrorsException)
@@ -2075,6 +2091,23 @@ namespace Conexus
 
                 //Added v1.2.2
                 ShowMessage("VERIFY: Chosen method (list of links) saved");
+            }
+
+            //Added v1.2.2
+            //Check the state of UserSettings.Default.HasDownloaded
+            //If it's false, we can reasonably say that the user has not downloaded mods yet, that we know of
+            //However, if it's true, we need to make sure the cmbMod dropdown changes to reflect this, to Update Mods mode
+            //QOL thing that will hopefully make COnexus a bit easier to work with
+            if (UserSettings.Default.HasDownloaded)
+            {
+                ShowMessage("VERIFY: User's current mode, \"Update Mods,\" has been saved");
+                UserSettings.Default.HasDownloaded = true;
+            }
+            //If it's false, then set it to true, user has almost certainly got some mods
+            else
+            {
+                ShowMessage("VERIFY: User's current mode, \"Download Mods,\" has been updated to \"Update Mods\"");
+                UserSettings.Default.HasDownloaded = true;
             }
 
             //Added v1.2.2
