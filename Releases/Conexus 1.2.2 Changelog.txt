@@ -1,0 +1,20 @@
+Conexus 1.2.2 Changlog
+- Log now saves much more often, to hopefully catch any possible breaks
+- Better debug info in logs: includes OS, mode, and method used
+
+- Added exception handling in a lot of places (more plainly, Conexus should crash gracefully most of the time and recover without much issue)
+- Added mode memory: Conexus will detect that you've downloaded mods, and will set the mode to update on next startup
+
+- Fixed odd creation of "_DD_TextFiles" folder outside of game's root directory
+- Fixed odd creation of "Select Mods Directory" folder in Conexus' root directory
+
+- Greatly expanded logging and saving of the log file
+- Implemented log tags:
+- INFO: General info
+- PROC: Conexus is, will, or has processed something
+- INPUT: User provided some kind of input
+- VERIFY: Some user-specific info was verified
+- WARN: Problems arose, but program did not break
+- ERROR: Problems arose, program was going to break, but was able to recover
+
+- Performance should not suffer from these changes, but it might in specific situations (IE your computer is already taxed)
