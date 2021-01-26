@@ -109,7 +109,7 @@ namespace Conexus
             if (!Directory.Exists(ModDir.Content + "\\_Logs"))
                 Directory.CreateDirectory(ModDir.Content + "\\_Logs");
 
-            //Create a properly formatted date/time by removing any invalid characters in the mod name and save logs to file
+            //Save logs to file
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
@@ -1100,10 +1100,11 @@ namespace Conexus
         {
             //Added v1.2.0
             //Changed v1.2.2, now includes current date and time for each message, and better formatting
+            string dt = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
             //Show desired message with appropriate line count
-            Messages.Text += "[" + lineCount.ToString() + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
+            Messages.Text += "[" + lineCount.ToString() + "] " + "[" + dt + "] " + msg + "\n";
             //Save this message to the log list
-            log.Add(lineCount.ToString() + ":  " + msg);
+            log.Add("[" + lineCount.ToString() + "] " + "[" + dt + "] " + msg);
             //Increment lineCount
             lineCount++;
             //Scroll to the end of the scroll viewer
