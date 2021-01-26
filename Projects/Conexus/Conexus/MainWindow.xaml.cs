@@ -341,6 +341,13 @@ namespace Conexus
             //Log info relating to what the user wants to do
             ShowMessage("INFO: Using " + System.Environment.OSVersion);
 
+            //Added v1.2.2
+            //Provide further clarification
+            if (System.Environment.OSVersion.ToString().Contains("10"))
+                ShowMessage("INFO: Using supported Windows version, 10");
+            else
+                ShowMessage("WARN: Potentially using unsupported OS!");
+
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
             {
