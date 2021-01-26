@@ -9,10 +9,10 @@ Conexus 1.2.2 Changlog
 
 - Greatly expanded logging and saving of the log file
 - Implemented log tags:
-- INFO: general info
-- PROC: Conexus has processed something
+- INFO: General info
+- PROC: Conexus is or will about to process something
 - INPUT: User provided some kind of input
 - VERIFY: some user-specific info was verified
 - WARN: problems arose, but program did not break
-- ERROR: problems arose and program was going to break
+- ERROR: problems arose, program was going to break, but was able to recover
 
