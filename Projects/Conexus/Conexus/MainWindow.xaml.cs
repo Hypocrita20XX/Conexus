@@ -100,6 +100,8 @@ namespace Conexus
         string configPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus\\Config";
         //Create a directory that will hold Links.txt
         string linksPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus\\Links";
+        //Create a directory that will hold logs
+        string logsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus\\Logs";
 
         /*
          * 
@@ -130,6 +132,7 @@ namespace Conexus
         string data = "";
         string config = "";
         string links = "";
+        string logs = "";
 
         string mods = "";
         string steamcmd = "";
@@ -1976,21 +1979,58 @@ namespace Conexus
                 Directory.CreateDirectory(dataPath);
                 Directory.CreateDirectory(configPath);
                 Directory.CreateDirectory(linksPath);
+                Directory.CreateDirectory(logsPath);
+
+                //Added v1.2.2
+                ShowMessage("INFO: No folder found in User\\Documents");
+                ShowMessage("INFO: Created Conexus\\Config, Conexus\\Data, Conexus\\Links, and Conexus\\Logs");
             }
 
             if (!Directory.Exists(dataPath))
             {
                 Directory.CreateDirectory(dataPath);
+
+                //Added v1.2.2
+                ShowMessage("WARN: Conexus\\Data missing! Folder created");
             }
 
             if (!Directory.Exists(configPath))
             {
                 Directory.CreateDirectory(configPath);
+
+                //Added v1.2.2
+                ShowMessage("WARN: Conexus\\Config missing! Folder created");
             }
 
             if (!Directory.Exists(linksPath))
             {
                 Directory.CreateDirectory(linksPath);
+
+                //Added v1.2.2
+                ShowMessage("WARN: Conexus\\Links missing! Folder created");
+            }
+
+            if (!Directory.Exists(logsPath))
+            {
+                Directory.CreateDirectory(logsPath);
+
+                //Added v1.2.2
+                ShowMessage("WARN: Conexus\\Logs missing! Folder created");
+            }
+
+            //Changed v1.2.2, to use Documents\Conexus
+            //Make sure that Links.txt exists
+            if (!File.Exists(linksPath + "\\Links.txt"))
+            {
+                File.Create(linksPath + "\\Links.txt").Dispose();
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Links.txt not found, creating file");
+            }
+            else
+            {
+                //Added v1.2.2
+                ShowMessage("VERIFY: Links.txt found");
             }
 
             if (!File.Exists(configPath + "\\config.ini"))
@@ -2001,6 +2041,7 @@ namespace Conexus
                 ini["System"]["Data"] = "\\Documents\\Conexus\\Data";
                 ini["System"]["Config"] = "\\Documents\\Conexus\\Config";
                 ini["System"]["Links"] = "\\Documents\\Conexus\\Links";
+                ini["System"]["Logs"] = "\\Documents\\Conexus\\Logs";
 
                 //ini.AddSection("Directories");
                 ini["Directories"]["Mods"] = "";
@@ -2018,6 +2059,9 @@ namespace Conexus
                 ini["Login"]["Password"] = "";
 
                 ini.Persist();
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Created INI with default settings");
             }
 
             //Read values from the INI file
@@ -2025,6 +2069,7 @@ namespace Conexus
             data = ini["System"]["Data"];
             config = ini["System"]["Config"];
             links = ini["System"]["Links"];
+            logs = ini["System"]["Logs"];
 
             mods = ini["Directories"]["Mods"];
             steamcmd = ini["Directories"]["SteamCMD"];
@@ -2038,173 +2083,128 @@ namespace Conexus
             password = ini["Login"]["Password"];
 
             //Added v1.2.2
-            try
+            ShowMessage("VERIFY: Loaded INI");
+
+            //Changed v1.2.2, now uses INI
+            //Check the contents of the ini variable in the settings file, if so, set the UI variable to it
+            if (urlcollection != "")
             {
-                //Changed v1.2.2, combined statements
-                //Ensure user.settings exists before checking its data
-                if (UserSettings.Default.CollectionURL.Length <= 0 || UserSettings.Default.CollectionURL == null)
-                {
-                    UserSettings.Default.CollectionURL = "";
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: No saved collection URL");
-                }
-
-                //Changed v1.2.2, combined statements
-                //Check the length of the URL variable in the settings file, if so, set it to the UI variable
-                if (UserSettings.Default.CollectionURL.Length > 0 || UserSettings.Default.CollectionURL != null)
-                {
-                    URLLink.Text = UserSettings.Default.CollectionURL;
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Now showing the saved URL on the UI");
-                }
-
-                //Check the length of the SteamCMD variable in the settings file, if so, set it to the UI variable
-                if (UserSettings.Default.SteamCMDDir.Length > 0)
-                {
-                    SteamCMDDir.Content = UserSettings.Default.SteamCMDDir;
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Saved SteamCMD directory found, now showing on the UI");
-                }
-                else
-                {
-                    //Added v1.2.2
-                    SteamCMDDir.Content = "Select SteamCMD Directory";
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: No saved SteamCMD directory found");
-                }
-
-                //Check the length of the ModsDir variable in the settings file, if so, set it to the UI variable
-                if (UserSettings.Default.ModsDir.Length > 0)
-                {
-                    ModDir.Content = UserSettings.Default.ModsDir;
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Saved mods directory found, now showing on the UI");
-                }
-                else
-                {
-                    //Added v1.2.2
-                    ModDir.Content = "Select Mods Directory";
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: No saved mods directory found");
-                }
-
-                //Added v1.2.0
-                //Ensure Steam username exists before checking its data
-                if (UserSettings.Default.SteamUsername.Length <= 0 || UserSettings.Default.SteamUsername == null)
-                {
-                    UserSettings.Default.SteamUsername = "";
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: No saved Steam username found");
-                }
-
-                //Added v1.2.0
-                //Changed v1.2.2, combined statements
-                //Check the length of the username variable in the settings file, if so, set it to the UI variable
-                if (UserSettings.Default.SteamUsername.Length > 0 || UserSettings.Default.SteamUsername != null)
-                {
-                    SteamUsername.Password = UserSettings.Default.SteamUsername;
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Saved Steam username found, now showing (obscured) on the UI");
-                }
-
-                //Added v1.2.0
-                //Changed v1.2.2, combined statements
-                //Ensure Steam password exists before checking its data
-                if (UserSettings.Default.SteamPassword.Length <= 0 || UserSettings.Default.SteamPassword == null)
-                {
-                    UserSettings.Default.SteamPassword = "";
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: No saved Steam password found");
-                }
-
-                //Added v1.2.0
-                //Check the length of the password variable in the settings file, if so, set it to the UI variable
-                if (UserSettings.Default.SteamPassword.Length > 0 || UserSettings.Default.SteamPassword != null)
-                {
-                    SteamPassword.Password = UserSettings.Default.SteamPassword;
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Saved Steam password found, now showing (obscured) on the UI");
-                }
-
-                //Check the platform variable and set the platform combobox accordingly
-                if (UserSettings.Default.Platform == "steam")
-                {
-                    cmbPlatform.SelectedIndex = 0;
-                    steam = true;
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Saved preferred method found: Steam collection");
-                }
-                else if (UserSettings.Default.Platform == "other")
-                {
-                    cmbPlatform.SelectedIndex = 1;
-                    steam = false;
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Saved preferred method found: list of links");
-                }
-
-                //Make sure that Links.txt exists
-                if (!File.Exists(UserSettings.Default.ModsDir + "\\Links.txt"))
-                {
-                    File.Create(UserSettings.Default.ModsDir + "\\Links.txt").Dispose();
-
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Links.txt not found, creating file");
-                }
-                else
-                {
-                    //Added v1.2.2
-                    ShowMessage("VERIFY: Links.txt found");
-                }
+                URLLink.Text = urlcollection;
 
                 //Added v1.2.2
-                //Check the state of UserSettings.Default.HasDownloaded
-                //If it's false, we can reasonably say that the user has not downloaded mods yet, that we know of
-                //However, if it's true, we need to make sure the cmbMod dropdown changes to reflect this, to Update Mods mode
-                //QOL thing that will hopefully make COnexus a bit easier to work with
-                if (UserSettings.Default.HasDownloaded)
-                {
-                    ShowMessage("VERIFY: User has previously downloaded mods, setting mode to \"Update Mods\"");
-                    cmbMode.SelectedIndex = 1;
-                }
-                else
-                {
-                    ShowMessage("VERIFY: User has yet to download mods, setting mode to \"Download Mods\"");
-                    cmbMode.SelectedIndex = 0;
-                }
+                ShowMessage("VERIFY: Now showing the saved URL on the UI");
             }
-            //This shouldn't happen too often, hopefully
-            catch (System.Configuration.ConfigurationErrorsException)
+            else
             {
                 //Added v1.2.2
-                ShowMessage("ERROR: User data corrupted!");
-
-                //User data is corrupted, and honestly trying to fix it is asking too much for the small amount of data
-                //So instead, let's delete it and restart Conexus
-                UserSettings.Default.Reset();
-
-                //Provide feedback
-                ShowMessage("PROC: User data has been deleted");
-
-                //Provide feedback
-                ShowMessage("INFO: Conexus is now reset to his default state");
+                ShowMessage("VERIFY: No saved collection URL");
             }
-            finally
+
+            //Changed v1.2.2, now uses INI
+            //Check the contents of the ini variable in the settings file, if so, set the UI variable to it
+            if (steamcmd != "")
             {
-                //Provide feedback
-                ShowMessage("INFO: Ready to begin!");
+                SteamCMDDir.Content = steamcmd;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Saved SteamCMD directory found, now showing on the UI");
             }
+            else
+            {
+                //Added v1.2.2
+                SteamCMDDir.Content = "Select SteamCMD Directory";
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: No saved SteamCMD directory found");
+            }
+
+            //Changed v1.2.2, now uses INI
+            //Check the contents of the ini variable in the settings file, if so, set the UI variable to it
+            if (mods != "")
+            {
+                ModDir.Content = mods;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Saved mods directory found, now showing on the UI");
+            }
+            else
+            {
+                //Added v1.2.2
+                ModDir.Content = "Select Mods Directory";
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: No saved mods directory found");
+            }
+
+            //Added v1.2.0
+            //Changed v1.2.2, now uses INI
+            //Check the contents of the ini variable in the settings file, if so, set the UI variable to it
+            if (username != "")
+            {
+                SteamUsername.Text = username;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Saved Steam username found, now showing (obscured) on the UI");
+            }
+            else
+            {
+                //Added v1.2.2
+                ShowMessage("VERIFY: No saved Steam username found");
+            }
+
+            //Added v1.2.0
+            //Changed v1.2.2, now uses INI
+            //Check the contents of the ini variable in the settings file, if so, set the UI variable to it
+            if (password != "")
+            {
+                SteamPassword.Password = password;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Saved Steam password found, now showing (obscured) on the UI");
+            }
+            else
+            {
+                //Added v1.2.2
+                ShowMessage("VERIFY: No saved Steam password found");
+            }
+
+            //Changed v1.2.2, now uses INI
+            //Check the platform variable and set the platform combobox accordingly
+            if (method == "steam")
+            {
+                cmbPlatform.SelectedIndex = 0;
+                steam = true;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Saved preferred method found: Steam collection");
+            }
+            else if (method == "other")
+            {
+                cmbPlatform.SelectedIndex = 1;
+                steam = false;
+
+                //Added v1.2.2
+                ShowMessage("VERIFY: Saved preferred method found: list of links");
+            }
+
+            //NON-FUNCTIONAL
+            /*
+            //Added v1.2.2
+            //Check the state of UserSettings.Default.HasDownloaded
+            //If it's false, we can reasonably say that the user has not downloaded mods yet, that we know of
+            //However, if it's true, we need to make sure the cmbMod dropdown changes to reflect this, to Update Mods mode
+            //QOL thing that will hopefully make COnexus a bit easier to work with
+            if (UserSettings.Default.HasDownloaded)
+            {
+                ShowMessage("VERIFY: User has previously downloaded mods, setting mode to \"Update Mods\"");
+                cmbMode.SelectedIndex = 1;
+            }
+            else
+            {
+                ShowMessage("VERIFY: User has yet to download mods, setting mode to \"Download Mods\"");
+                cmbMode.SelectedIndex = 0;
+            }
+            */
         }
 
         //Changed v1.2.2, added logging/log saving
