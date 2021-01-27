@@ -1492,6 +1492,69 @@ namespace Conexus
                 lcStr = lineCount.ToString();
 
             //Added v1.2.2
+            //Check to see if the Messages extblock is loaded
+            //If so, proceed as normal
+            if (Messages != null && Messages.IsLoaded)
+            {
+                //Added v1.2.2
+                //If logTmp is not empty, then messages were added before the textblock was initiated
+                //and those messages should be added now to the textblock
+                if (logTmp.Count > 0)
+                {
+                    //Show desired message with appropriate line count
+                    //Messages.Text += logTmp;
+
+                    for (int i = 0; i < logTmp.Count; i++)
+                    {
+                        //Show desired message with appropriate line count
+                        Messages.Text += logTmp[i];
+                        //Save this message to the log list
+                        log.Add(logTmp[i].Substring(0, logTmp[i].Length - 2));
+                    }
+
+                    //Clear out logTmp
+                    logTmp.Clear();
+
+                    //This specific part of the program will only hit once, so we can safely do this twice without issue
+                    //Add the current message to the textblock and list
+                    //Show desired message with appropriate line count
+                    Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
+                    //Save this message to the log list
+                    log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
+
+                    //Increment lineCount
+                    lineCount++;
+
+                    //Scroll to the end of the scroll viewer
+                    MessageScrollViewer.ScrollToEnd();
+                }
+                //Otherwise, proceed as normal
+                else
+                {
+                    //Show desired message with appropriate line count
+                    Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
+                    //Save this message to the log list
+                    log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
+
+                    //Increment lineCount
+                    lineCount++;
+                }
+            }
+            //Otherwise, the message needs stored until it is loaded and can accept messages
+            else
+            {
+                //Messages textblock has not initiated yet, so we need to store the messages until it is
+                logTmp.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\'' | '' ? '' * '' ']", "_", RegexOptions.None) + "] " + msg + "\n");
+
+                //Increment lineCount
+                lineCount++;
+            }
+
+
+            //For testing
+            /*
+
+            //Added v1.2.2
             try
             {
                 //Added v1.2.2
@@ -1547,6 +1610,7 @@ namespace Conexus
                 //Increment lineCount
                 lineCount++;
             }
+            */
         }
 
         #endregion
@@ -2017,7 +2081,6 @@ namespace Conexus
                 //Save log to file
                 WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
             }
-            
         }
 
         //Changed v1.2.2, added logging/log saving
