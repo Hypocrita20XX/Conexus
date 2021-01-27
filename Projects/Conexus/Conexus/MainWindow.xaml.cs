@@ -6,12 +6,15 @@
 
 > APIs used:
     Ookii.Dialogs
+    Authors: Sven Groot, Augusto Proiete
     Source: http://www.ookii.org/software/dialogs/
 
     Extended WPF Toolkit
+    Author: Xceed Software
     Source: https://github.com/xceedsoftware/wpftoolkit
 
     Peanut Butter INI
+    Author: Davys McColl
     Source: https://github.com/fluffynuts/PeanutButter
 
 > Code used/adapated:
@@ -624,10 +627,8 @@ namespace Conexus
                     //It is assumed that at this point, the user has entered a valid URL to the collection
                     if (URLLink.Text.Length > 0)
                     {
-                        //Set the setting's file variable to the correct URL
-                        UserSettings.Default.CollectionURL = URLLink.Text;
-                        //Save this setting
-                        UserSettings.Default.Save();
+                        ini["URL"]["Collection"] = URLLink.Text;
+                        ini.Persist();
 
                         //Added v1.3.0
                         //Log info relating to what the user wants to do
@@ -683,7 +684,7 @@ namespace Conexus
 
                         //Changed v1.2.0, to async
                         //Create all necessary text files
-                        await DownloadHTMLAsync(UserSettings.Default.CollectionURL, dataPath);
+                        await DownloadHTMLAsync(urlcollection, dataPath);
 
                         //Added v1.2.0
                         //Changed v1.3.0, formatting
@@ -843,7 +844,7 @@ namespace Conexus
             if (!Directory.Exists(fileDir))
             {
                 //Added v1.3.0
-                ShowMessage("INFO: _DD_TextFiles does not exist, creating now");
+                ShowMessage("INFO: " + fileDir + " does not exist, creating now");
 
                 Directory.CreateDirectory(fileDir);
             }
@@ -1034,9 +1035,9 @@ namespace Conexus
             // > Ignore: * 50% Stealth Chance in Veteran Quests
 
             //Overwrite whatever may be in ModInfo.txt, if it exists
-            if (File.Exists(mods + "\\_DD_TextFiles\\ModInfo.txt"))
+            if (File.Exists(dataPath + "\\ModInfo.txt"))
             {
-                File.WriteAllText(mods + "\\_DD_TextFiles\\ModInfo.txt", String.Empty);
+                File.WriteAllText(dataPath + "\\ModInfo.txt", String.Empty);
 
                 //Added v1.3.0
                 ShowMessage("PROC: ModInfo contents have been ovewritten");
@@ -1109,7 +1110,7 @@ namespace Conexus
             ShowMessage("INFO: Finished processing mod info in Links file");
 
             //Write the modInfo to a text file
-            WriteToFile(modInfo.ToArray(), @fileDir + "\\_DD_TextFiles\\ModInfo.txt");
+            WriteToFile(modInfo.ToArray(), @fileDir + "\\ModInfo.txt");
 
             //Added v1.2.0
             //Close file, cleanup
