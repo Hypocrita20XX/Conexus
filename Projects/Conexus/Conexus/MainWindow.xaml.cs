@@ -285,8 +285,11 @@ namespace Conexus
             {
                 //Set the settings variable to the one selected
                 mods = folderBrowser.SelectedPath;
-                //Save this setting
-                UserSettings.Default.Save();
+
+                //Added v1.3.0
+                ini["Directories"]["Mods"] = mods;
+                ini.Persist();
+
 
                 //Added v1.3.0
                 //Log info relating to what the user wants to do
@@ -331,10 +334,13 @@ namespace Conexus
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
             if (VerifySteamCMDDir(folderBrowser.SelectedPath))
             {
+                //Changed v1.3.0
                 //Set the settings variable to the one selected
-                UserSettings.Default.SteamCMDDir = folderBrowser.SelectedPath;
-                //Save this setting
-                UserSettings.Default.Save();
+                steamcmd = folderBrowser.SelectedPath;
+
+                //Added v1.3.0
+                ini["Directories"]["SteamCMD"] = mods;
+                ini.Persist();
 
                 //Added v1.3.0
                 //Log info relating to what the user wants to do
