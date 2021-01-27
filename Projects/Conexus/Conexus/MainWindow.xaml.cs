@@ -11,6 +11,9 @@
     Extended WPF Toolkit
     Source: https://github.com/xceedsoftware/wpftoolkit
 
+    Peanut Butter INI
+    Source: https://github.com/fluffynuts/PeanutButter
+
 > Code used/adapated:
     Function: CopyFolders
     Author: Timm
