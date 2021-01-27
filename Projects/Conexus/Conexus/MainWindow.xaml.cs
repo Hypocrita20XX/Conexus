@@ -2141,7 +2141,7 @@ namespace Conexus
             //Check the contents of the ini variable in the settings file, if so, set the UI variable to it
             if (username != "")
             {
-                SteamUsername.Text = username;
+                SteamUsername.Password = username;
 
                 //Added v1.2.2
                 ShowMessage("VERIFY: Saved Steam username found, now showing (obscured) on the UI");
@@ -2212,74 +2212,58 @@ namespace Conexus
         //Used to ensure all proper data is set to their corrosponding variables in the settings file
         void Window_Closing(object sender, EventArgs e)
         {
+            //Changed v1.2.2, now uses INI
             //Check to ensure the URLLink content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (URLLink.Text.Length > 0)
             {
-                UserSettings.Default.CollectionURL = URLLink.Text;
+                ini["URL"]["Collection"] = URLLink.Text;
 
                 //Added v1.2.2
                 ShowMessage("VERIFY: Chosen collection URL saved");
             }
 
+            //Changed v1.2.2, now uses INI
             //Check to ensure the SteamCMDDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (SteamCMDDir.Content != null)
             {
-                UserSettings.Default.SteamCMDDir = SteamCMDDir.Content.ToString();
+                ini["Directories"]["SteamCMD"] = SteamCMDDir.Content.ToString();
 
                 //Added v1.2.2
                 ShowMessage("VERIFY: Chosen SteamCMD directory saved");
             }
 
+            //Changed v1.2.2, now uses INI
             //Check to ensure the ModDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (ModDir.Content != null)
             {
-                UserSettings.Default.ModsDir = ModDir.Content.ToString();
+                ini["Directories"]["Mods"] = ModDir.Content.ToString();
 
                 //Added v1.2.2
                 ShowMessage("VERIFY: Chosen mods directory saved");
             }
 
-            //Added v1.2.0
-            //Check to ensure the Steam username content is indeed provided (length greater than 0 indicates data in the field)
-            //Make sure the variable in the settings file is correct
-            if (SteamUsername.Password.Length > 0)
-            {
-                UserSettings.Default.SteamUsername = SteamUsername.Password;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Chosen Steam username saved");
-            }
-
-            //Added v1.2.0
-            //Check to ensure the Steam password content is indeed provided (length greater than 0 indicates data in the field)
-            //Make sure the variable in the settings file is correct
-            if (SteamPassword.Password.Length > 0)
-            {
-                UserSettings.Default.SteamPassword = SteamPassword.Password;
-
-                //Added v1.2.2
-                ShowMessage("VERIFY: Chosen Steam password saved");
-            }
-
+            //Changed v1.2.2, now uses INI
             //Save which platform the user has chosen
             if (steam)
             {
-                UserSettings.Default.Platform = "steam";
+                ini["Misc"]["Method"] = "steam";
 
                 //Added v1.2.2
                 ShowMessage("VERIFY: Chosen method (Steam collection) saved");
             }
             else
             {
-                UserSettings.Default.Platform = "other";
+                ini["Misc"]["Method"] = "other";
 
                 //Added v1.2.2
                 ShowMessage("VERIFY: Chosen method (list of links) saved");
             }
 
+            //NON-FUNCTIONAL
+            /*
             //Added v1.2.2
             //Check the state of UserSettings.Default.HasDownloaded
             //If it's false, we can reasonably say that the user has not downloaded mods yet, that we know of
@@ -2296,12 +2280,15 @@ namespace Conexus
                 ShowMessage("VERIFY: User's current mode, \"Download Mods,\" has been updated to \"Update Mods\"");
                 UserSettings.Default.HasDownloaded = true;
             }
+            */
 
             //Added v1.2.2
             ShowMessage("PROC: All user data has been saved!");
 
             //Added v1.2.2
             ShowMessage("INFO: Conexus will close now");
+
+            ini.Persist();
 
             //Added v1.2.2
             //Save log to file
@@ -2314,16 +2301,16 @@ namespace Conexus
         void Window_Closed(object sender, EventArgs e)
         {
             //Save all data to the settings file
-            UserSettings.Default.Save();
+            //UserSettings.Default.Save();
 
             //Added v1.2.0
             //Ensure the Logs folder exists
-            if (!Directory.Exists(ModDir.Content + "\\_Logs"))
+            if (!Directory.Exists(logsPath))
             {
                 //Added v1.2.2
                 ShowMessage("WARN: _Logs folder is missing! Creating now");
 
-                Directory.CreateDirectory(ModDir.Content + "\\_Logs");
+                Directory.CreateDirectory(logsPath);
             }
 
             //Save log to file
