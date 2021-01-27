@@ -1,6 +1,7 @@
 Conexus 1.2.2 Changlog
 - Log now saves much more often, to hopefully catch any possible breaks
 - Better debug info in logs: includes OS, mode, and method used
+- Moved generated files to Documents/Conexus (_DD_TextFiles, _Logs, Linkx.txt)
 
 - Added exception handling in a lot of places (more plainly, Conexus should crash gracefully most of the time and recover without much issue)
 - Added mode memory: Conexus will detect that you've downloaded mods, and will set the mode to update on next startup

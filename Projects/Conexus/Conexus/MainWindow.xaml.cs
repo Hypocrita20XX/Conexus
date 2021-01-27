@@ -1444,6 +1444,8 @@ namespace Conexus
         //Utility function to write text to a file
         void WriteToFile(string[] text, string fileDir)
         {
+            string sysPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
             File.WriteAllLines(@fileDir, text);
         }
 
@@ -2077,9 +2079,8 @@ namespace Conexus
             }
             finally
             {
-                //Added v1.2.2
-                //Save log to file
-                WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
+                //Provide feedback
+                ShowMessage("INFO: Ready to begin!");
             }
         }
 
