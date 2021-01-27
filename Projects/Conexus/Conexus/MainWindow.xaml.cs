@@ -45,6 +45,7 @@
 #region Using Statements
 
 using Ookii.Dialogs.Wpf;
+using PeanutButter.INI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -90,6 +91,54 @@ namespace Conexus
         //Stores logs temporarily until the message textblock is initiated
         List<string> logTmp = new List<string>();
 
+        //Added v1.2.2
+        //Create a root directory in the user's Documents folder for all generated data
+        string rootPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus";
+        //Create a data directory for all text files (HTML.txt, Mods.txt, ModInfo.txt)
+        string dataPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Data";
+        //Create a config directory for all user data
+        string configPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Config";
+        //Create a directory that will hold Links.txt
+        string linksPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Links";
+        
+        /*
+         * 
+         * New config file as of v1.2.2
+         * config.ini, stored in Documents\Conexus\Config
+         * 
+         * [System]
+         * Root=\Documents\Conexus
+         * Data=\Documents\Conexus\Data
+         * Config=\Documents\Conexus\Config
+         * Links=\Documents\Conexus\Links
+         * 
+         * [Directories]
+         * Mods=\DarkestDungeon\mods
+         * SteamCmd=\steamcmd
+         * 
+         * [URL]
+         * Collection=https://steamcommunity.com
+         * 
+         * [Misc]
+         * Mode=download
+         * Method=steam
+         * 
+         */
+        INIFile ini = new INIFile(System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\config.ini");
+
+        string root = "";
+        string data = "";
+        string config = "";
+        string links = "";
+
+        string mods = "";
+        string steamcmd = "";
+
+        string urlcollection = "";
+
+        string mode = "";
+        string method = "";
+
         #endregion
 
         public MainWindow()
@@ -101,6 +150,24 @@ namespace Conexus
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             this.DataContext = this;
+        }
+
+        //Added v1.2.2
+        void INIInit()
+        {
+            //Read values from the INI file
+            root = ini["Root"]["System"];
+            data = ini["Data"]["System"];
+            config = ini["Config"]["System"];
+            links = ini["Links"]["System"];
+
+            mods = ini["Mods"]["Directories"];
+            steamcmd = ini["SteamCMD"]["Directories"];
+
+            urlcollection = ini["Collection"]["URL"];
+
+            mode = ini["Mode"]["Misc"];
+            method = ini["Method"]["Misc"];
         }
 
         //Added v1.2.0? (Missing from source, not sure if in final build for v1.20 and v1.2.1)
@@ -1441,10 +1508,18 @@ namespace Conexus
             WriteToFile(log.ToArray(), ModDir.Content + "\\_Logs\\" + dateTime + ".txt");
         }
 
+        //Changed v1.2.2, fileDir now accepts generalized input instead of file path (ROOT, DATA, CONFIG, LINKS)
         //Utility function to write text to a file
         void WriteToFile(string[] text, string fileDir)
         {
-            string sysPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (Directory.Exists(rootPath))
+            {
+
+            }
+            else
+            {
+                Directory.CreateDirectory(rootPath);
+            }
 
             File.WriteAllLines(@fileDir, text);
         }
