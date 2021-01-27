@@ -95,12 +95,12 @@ namespace Conexus
         //Create a root directory in the user's Documents folder for all generated data
         string rootPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus";
         //Create a data directory for all text files (HTML.txt, Mods.txt, ModInfo.txt)
-        string dataPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Data";
+        string dataPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus\\Data";
         //Create a config directory for all user data
-        string configPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Config";
+        string configPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus\\Config";
         //Create a directory that will hold Links.txt
-        string linksPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Links";
-        
+        string linksPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus\\Links";
+
         /*
          * 
          * New config file as of v1.2.2
@@ -124,7 +124,7 @@ namespace Conexus
          * Method=steam
          * 
          */
-        INIFile ini = new INIFile(System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\config.ini");
+        INIFile ini;
 
         string root = "";
         string data = "";
@@ -139,6 +139,10 @@ namespace Conexus
         string mode = "";
         string method = "";
 
+        //If the user provides this info, we also need to read the Steam username and password
+        string username = "";
+        string password = "";
+
         #endregion
 
         public MainWindow()
@@ -149,25 +153,9 @@ namespace Conexus
             //Very basic, unstead exception handling
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+            ini = new INIFile(configPath + "\\config.ini");
+
             this.DataContext = this;
-        }
-
-        //Added v1.2.2
-        void INIInit()
-        {
-            //Read values from the INI file
-            root = ini["Root"]["System"];
-            data = ini["Data"]["System"];
-            config = ini["Config"]["System"];
-            links = ini["Links"]["System"];
-
-            mods = ini["Mods"]["Directories"];
-            steamcmd = ini["SteamCMD"]["Directories"];
-
-            urlcollection = ini["Collection"]["URL"];
-
-            mode = ini["Mode"]["Misc"];
-            method = ini["Method"]["Misc"];
         }
 
         //Added v1.2.0? (Missing from source, not sure if in final build for v1.20 and v1.2.1)
@@ -1512,15 +1500,6 @@ namespace Conexus
         //Utility function to write text to a file
         void WriteToFile(string[] text, string fileDir)
         {
-            if (Directory.Exists(rootPath))
-            {
-
-            }
-            else
-            {
-                Directory.CreateDirectory(rootPath);
-            }
-
             File.WriteAllLines(@fileDir, text);
         }
 
@@ -1989,6 +1968,75 @@ namespace Conexus
         //Called when the UI window has loaded, used to set proper info in the UI from the settings file
         void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //Added v1.2.2
+            //TEST
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath);
+                Directory.CreateDirectory(dataPath);
+                Directory.CreateDirectory(configPath);
+                Directory.CreateDirectory(linksPath);
+            }
+
+            if (!Directory.Exists(dataPath))
+            {
+                Directory.CreateDirectory(dataPath);
+            }
+
+            if (!Directory.Exists(configPath))
+            {
+                Directory.CreateDirectory(configPath);
+            }
+
+            if (!Directory.Exists(linksPath))
+            {
+                Directory.CreateDirectory(linksPath);
+            }
+
+            if (!File.Exists(configPath + "\\config.ini"))
+            {
+                //Initialize data structure
+                //ini.AddSection("System\\Root");
+                ini["System"]["Root"] = "\\Documents\\Conexus";
+                ini["System"]["Data"] = "\\Documents\\Conexus\\Data";
+                ini["System"]["Config"] = "\\Documents\\Conexus\\Config";
+                ini["System"]["Links"] = "\\Documents\\Conexus\\Links";
+
+                //ini.AddSection("Directories");
+                ini["Directories"]["Mods"] = "";
+                ini["Directories"]["SteamCMD"] = "";
+
+                //ini.AddSection("URL");
+                ini["URL"]["Collection"] = "";
+
+                //ini.AddSection("Misc");
+                ini["Misc"]["Mode"] = "download";
+                ini["Misc"]["Method"] = "steam";
+
+                //ini.AddSection("Login");
+                ini["Login"]["Username"] = "";
+                ini["Login"]["Password"] = "";
+
+                ini.Persist();
+            }
+
+            //Read values from the INI file
+            root = ini["System"]["Root"];
+            data = ini["System"]["Data"];
+            config = ini["System"]["Config"];
+            links = ini["System"]["Links"];
+
+            mods = ini["Directories"]["Mods"];
+            steamcmd = ini["Directories"]["SteamCMD"];
+
+            urlcollection = ini["URL"]["Collection"];
+
+            mode = ini["Misc"]["Mode"];
+            method = ini["Misc"]["Method"];
+
+            username = ini["Login"]["Username"];
+            password = ini["Login"]["Password"];
+
             //Added v1.2.2
             try
             {
