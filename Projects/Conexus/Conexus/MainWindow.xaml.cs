@@ -1927,8 +1927,6 @@ namespace Conexus
             }
             catch (ArgumentOutOfRangeException)
             {
-                ShowMessage("ERROR: Invalid mods directory!");
-
                 return false;
             }
         }
