@@ -176,8 +176,8 @@ namespace Conexus
 
             //If an exception does happen, I'm assuming Conexus will crash, so here's this just in case
             //Ensure the Logs folder exists
-            if (!Directory.Exists(ModDir.Content + "\\_Logs"))
-                Directory.CreateDirectory(ModDir.Content + "\\_Logs");
+            if (!Directory.Exists(logsPath))
+                Directory.CreateDirectory(logsPath);
 
             //Save logs to file
             WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
@@ -292,7 +292,6 @@ namespace Conexus
                 //Added v1.3.0
                 ini["Directories"]["Mods"] = mods;
                 ini.Persist();
-
 
                 //Added v1.3.0
                 //Log info relating to what the user wants to do
@@ -778,7 +777,7 @@ namespace Conexus
 
                     //Changed v1.2.0, to async
                     //Parse IDs from the user-populated list
-                    await ParseFromListAsync(mods);
+                    await ParseFromListAsync(linksPath);
 
                     //Added v1.2.0
                     //Changed v1.3.0, formatting
@@ -799,7 +798,7 @@ namespace Conexus
                     ShowMessage("INFO: Mod info will now be updated");
 
                     //Changed v1.2.0, to async
-                    await ParseFromListAsync(mods);
+                    await ParseFromListAsync(linksPath);
 
                     //Added v1.2.0
                     //Changed v1.3.0, formatting
@@ -840,7 +839,8 @@ namespace Conexus
         //Download source HTML from a given Steam collection URL
         async Task DownloadHTMLAsync(string url, string fileDir)
         {
-            //If the _DD_TextFiles folder does not exist, create it
+            //Changed v1.3.0, to reflect Documents\Conexus
+            //If the Data folder does not exist, create it
             if (!Directory.Exists(fileDir))
             {
                 //Added v1.3.0
@@ -1154,7 +1154,7 @@ namespace Conexus
             WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
+            ProcessStartInfo processInfo = new ProcessStartInfo(steamcmd + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
@@ -1215,7 +1215,7 @@ namespace Conexus
             WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
-            ProcessStartInfo processInfo = new ProcessStartInfo(UserSettings.Default.SteamCMDDir + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
+            ProcessStartInfo processInfo = new ProcessStartInfo(steamcmd + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
@@ -1266,7 +1266,7 @@ namespace Conexus
                 for (int i = 0; i < appIDs.Count; i++)
                 {
                     //Changed v1.2.0, to async
-                    await Task.Run(() => source[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
+                    await Task.Run(() => source[i] = Path.Combine(steamcmd + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
                 }
 
                 //Added v1.2.0
@@ -1320,18 +1320,18 @@ namespace Conexus
                 {
                     //Added v1.2.0
                     //Hopefully more reliable directory deletion
-                    DirectoryInfo dirInfo = new DirectoryInfo(@UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\");
+                    DirectoryInfo dirInfo = new DirectoryInfo(@steamcmd + "\\steamapps\\workshop\\content\\262060\\");
 
-                    foreach (var dir in Directory.GetDirectories(@UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\"))
+                    foreach (var dir in Directory.GetDirectories(@steamcmd + "\\steamapps\\workshop\\content\\262060\\"))
                     {
-                        if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
-                        {
+                        //if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
+                        //{
                             await Task.Run(() => Directory.Delete(dir, true));
 
                             //Changed v1.3.0, formatting
                             //Provide feedback
                             ShowMessage("PROC: " + dir + " deleted");
-                        }
+                        //}
                     }
 
                     //Added v1.2.0
@@ -1553,7 +1553,7 @@ namespace Conexus
             else if (lineCount >= 1000000)
             {
                 //Seriously, how?
-                ShowMessage("If by some miracle, Conexus is still working AT OVER A MILLION LINES, let me know. Wow. Also, HOW DID YOU GET THIS MANY LINES? (And here I thought I like mods.)");
+                ShowMessage("Impressive, and I thought I liked mods. Nice!)");
                 lcStr = lineCount.ToString();
             }
             //If it's somehow something else, no leading zeroes
@@ -1618,68 +1618,6 @@ namespace Conexus
                 //Increment lineCount
                 lineCount++;
             }
-
-
-            //For testing
-            /*
-
-            //Added v1.3.0
-            try
-            {
-                //Added v1.3.0
-                //If logTmp is not empty, then messages were added before the textblock was initiated
-                //and those messages should be added now to the textblock
-                if (logTmp.Count > 0)
-                {
-                    //Show desired message with appropriate line count
-                    //Messages.Text += logTmp;
-                    
-                    for (int i = 0; i < logTmp.Count; i++)
-                    {
-                        //Show desired message with appropriate line count
-                        Messages.Text += logTmp[i];
-                        //Save this message to the log list
-                        log.Add(logTmp[i].Substring(0, logTmp[i].Length - 2));
-                    }
-
-                    //Clear out logTmp
-                    logTmp.Clear();
-
-                    //This specific part of the program will only hit once, so we can safely do this twice without issue
-                    //Add the current message to the textblock and list
-                    //Show desired message with appropriate line count
-                    Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
-                    //Save this message to the log list
-                    log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
-
-                    //Scroll to the end of the scroll viewer
-                    MessageScrollViewer.ScrollToEnd();
-                }
-                //If logTmp is empty, then the textblock should be initiated, and we can proceed as normal
-                //However logTmp could also be empty because the textblock is not initiated, 
-                //which is fine because then an exception happens and the message won't be lost
-                else
-                {
-                    //Show desired message with appropriate line count
-                    Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
-                    //Save this message to the log list
-                    log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
-
-                    //Scroll to the end of the scroll viewer
-                    MessageScrollViewer.ScrollToEnd();
-                }
-            }
-            catch (NullReferenceException)
-            {
-                //Messages textblock has not initiated yet, so we need to store the messages until it is
-                logTmp.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\'' | '' ? '' * '' ']", "_", RegexOptions.None) + "] " + msg + "\n");
-            }
-            finally
-            {
-                //Increment lineCount
-                lineCount++;
-            }
-            */
         }
 
         #endregion
@@ -2325,6 +2263,9 @@ namespace Conexus
 
             //Save log to file
             WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+
+            //Added v1.3.0
+            ini.Persist();
         }
 
         #endregion
