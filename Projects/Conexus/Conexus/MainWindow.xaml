@@ -59,7 +59,10 @@
         <!-- Added "GotMouseCapture", "GotKeyboardFocus" in v1.2.0 -->
         <!-- Removed labels, rearanged everything in v1.2.1 -->
         <xctk:WatermarkTextBox Watermark="Steam Collection URL" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="1" Name="URLLink" TextAlignment="Center" Margin="5" Background="#bedce4"/>
+
+
         <Button Grid.Column="1" Grid.Row="3" Name="SteamCMDDir" Content="Select SteamCMD Directory" Click="SteamCMDDir_Click" Margin="5" Background="#82959f"/>
+
         <Button Grid.Column="1" Grid.Row="4" Name="ModDir" Content="Select Mods Directory" Click="ModDir_Click" Margin="5" Background="#82959f"/>
 
         <!-- Added v1.2.0 -->

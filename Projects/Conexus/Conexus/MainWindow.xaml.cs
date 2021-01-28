@@ -157,6 +157,9 @@ namespace Conexus
         string username = "";
         string password = "";
 
+
+        bool loaded = false;
+
         #endregion
 
         public MainWindow()
@@ -223,9 +226,10 @@ namespace Conexus
                 ShowMessage("INPUT: Mode switched to \"Update Mods\"");
             }
 
-            //Added v1.3.0
-            //Save log to file
-            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            if (loaded)
+                //Added v1.3.0
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.3.0, added logging
@@ -259,9 +263,10 @@ namespace Conexus
                 ShowMessage("INPUT: Method switched to \"List\"");
             }
 
-            //Added v1.3.0
-            //Save log to file
-            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            if (loaded)
+                //Added v1.3.0
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         #endregion
@@ -281,11 +286,11 @@ namespace Conexus
             //Ensure this description is used (seems to be non-functional, low priority to fix)
             folderBrowser.UseDescriptionForTitle = true;
             //Set the content of the button to what the user has selected
-            ModDir.Content = folderBrowser.SelectedPath;
+            mods = folderBrowser.SelectedPath;
 
             //Added v1.3.0
             //Log info relating to what the user wants to do
-            ShowMessage("INPUT: Mods directory set to \"" + ModDir.Content + "\"");
+            ShowMessage("INPUT: Mods directory set to \"" + mods + "\"");
 
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains Darkest.exe
@@ -301,6 +306,8 @@ namespace Conexus
                 //Added v1.3.0
                 //Log info relating to what the user wants to do
                 ShowMessage("VERIFY: Mods directory is valid and has been saved to config file");
+
+                ModDir.Content = mods;
             }
             //If the given path is invalid, let the user know why
             else
@@ -313,9 +320,10 @@ namespace Conexus
                     ShowMessage("WARN: Invalid mods Location: no path given!");
             }
 
-            //Added v1.3.0
-            //Save log to file
-            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            if (loaded)
+                //Added v1.3.0
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.3.0, added logging
@@ -331,11 +339,11 @@ namespace Conexus
             //Ensure this description is used (seems to be non-functional, low priority to fix)
             folderBrowser.UseDescriptionForTitle = true;
             //Set the content of the button to what the user has selected
-            SteamCMDDir.Content = folderBrowser.SelectedPath;
+            steamcmd = folderBrowser.SelectedPath;
 
             //Added v1.3.0
             //Log info relating to what the user wants to do
-            ShowMessage("INPUT: SteamCMD directory set to \"" + SteamCMDDir.Content + "\"");
+            ShowMessage("INPUT: SteamCMD directory set to \"" + steamcmd + "\"");
 
             //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
@@ -354,6 +362,9 @@ namespace Conexus
                 //Added v1.3.0
                 //Log info relating to what the user wants to do
                 ShowMessage("VERIFY: SteamCMD directory is valid and has been saved to config file");
+
+                //Addvd v1.3.0
+                SteamCMDDir.Content = steamcmd;
             }
             //If the given path is invalid, let the user know why
             else
@@ -366,9 +377,10 @@ namespace Conexus
                     ShowMessage("WARN: Invalid SteamCMD location: no path given!");
             }
 
-            //Added v1.3.0
-            //Save log to file
-            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            if (loaded)
+                //Added v1.3.0
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Added v1.2.1
@@ -636,7 +648,7 @@ namespace Conexus
                     //It is assumed that at this point, the user has entered a valid URL to the collection
                     if (urlcollection.Length > 0)
                     {
-                        ini["URL"]["Collection"] = URLLink.Text;
+                        ini["URL"]["Collection"] = urlcollection;
                         ini.Persist();
 
                         //Added v1.3.0
@@ -1523,7 +1535,11 @@ namespace Conexus
         //Utility function to write text to a file
         void WriteToFile(string[] text, string fileDir)
         {
-            File.WriteAllLines(@fileDir, text);
+            //Added v1.3.0
+            if (!File.Exists(fileDir))
+                File.Create(fileDir).Dispose();
+            else
+                File.WriteAllLines(@fileDir, text);
         }
 
         //Added v1.2.0
@@ -2067,6 +2083,8 @@ namespace Conexus
             }
             else
             {
+                URLLink.Text = string.Empty;
+
                 //Added v1.3.0
                 ShowMessage("VERIFY: No saved collection URL");
             }
@@ -2082,9 +2100,7 @@ namespace Conexus
             }
             else
             {
-                //Added v1.3.0
                 SteamCMDDir.Content = "Select SteamCMD Directory";
-
                 //Added v1.3.0
                 ShowMessage("VERIFY: No saved SteamCMD directory found");
             }
@@ -2100,9 +2116,7 @@ namespace Conexus
             }
             else
             {
-                //Added v1.3.0
                 ModDir.Content = "Select Mods Directory";
-
                 //Added v1.3.0
                 ShowMessage("VERIFY: No saved mods directory found");
             }
@@ -2119,6 +2133,8 @@ namespace Conexus
             }
             else
             {
+                SteamUsername.Password = "";
+
                 //Added v1.3.0
                 ShowMessage("VERIFY: No saved Steam username found");
             }
@@ -2135,6 +2151,8 @@ namespace Conexus
             }
             else
             {
+                SteamPassword.Password = "";
+
                 //Added v1.3.0
                 ShowMessage("VERIFY: No saved Steam password found");
             }
@@ -2191,6 +2209,8 @@ namespace Conexus
                 //Added v1.3.0
                 mode = "download";
             }
+
+            loaded = true;
         }
 
         //Changed v1.3.0, added logging/log saving
@@ -2201,10 +2221,10 @@ namespace Conexus
             //Changed v1.3.0, now uses INI
             //Check to ensure the URLLink content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (URLLink.Text.Length > 0)
+            if (urlcollection != "")
             {
                 //Added v1.3.0
-                ini["URL"]["Collection"] = URLLink.Text;
+                ini["URL"]["Collection"] = urlcollection;
 
                 //Added v1.3.0
                 ShowMessage("VERIFY: Chosen collection URL saved");
@@ -2213,10 +2233,10 @@ namespace Conexus
             //Changed v1.3.0, now uses INI
             //Check to ensure the SteamCMDDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (SteamCMDDir.Content != null)
+            if (steamcmd != "")
             {
                 //Added v1.3.0
-                ini["Directories"]["SteamCMD"] = SteamCMDDir.Content.ToString();
+                ini["Directories"]["SteamCMD"] = steamcmd;
 
                 //Added v1.3.0
                 ShowMessage("VERIFY: Chosen SteamCMD directory saved");
@@ -2225,10 +2245,10 @@ namespace Conexus
             //Changed v1.3.0, now uses INI
             //Check to ensure the ModDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
-            if (ModDir.Content != null)
+            if (mods != "")
             {
                 //Added v1.3.0
-                ini["Directories"]["Mods"] = ModDir.Content.ToString();
+                ini["Directories"]["Mods"] = mods;
 
                 //Added v1.3.0
                 ShowMessage("VERIFY: Chosen mods directory saved");
@@ -2262,6 +2282,24 @@ namespace Conexus
 
                 //Added v1.3.0
                 ShowMessage("VERIFY: Mods have been downloaded, Conexus will next start in update mode");
+            }
+
+            if (mods != "" && Directory.GetDirectories(mods).Length > 0)
+            {
+                //Added v1.3.0
+                ini["Misc"]["Mode"] = "update";
+
+                //Added v1.3.0
+                ShowMessage("VERIFY: Mods have been downloaded, Conexus will next start in update mode");
+            }
+            //Otherwise if there is no mods path, let's just assume they need to download
+            else if (mods == "")
+            {
+                //Added v1.3.0
+                ini["Misc"]["Mode"] = "download";
+
+                //Added v1.3.0
+                ShowMessage("VERIFY: Mods have not been downloaded, Conexus will next start in download mode");
             }
 
 
