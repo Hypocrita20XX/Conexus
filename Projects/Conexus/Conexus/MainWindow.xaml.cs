@@ -157,7 +157,8 @@ namespace Conexus
         string username = "";
         string password = "";
 
-
+        //Added v1.3.0
+        //Ensures that certain messages don't happen until the textblock is initialized
         bool loaded = false;
 
         #endregion
