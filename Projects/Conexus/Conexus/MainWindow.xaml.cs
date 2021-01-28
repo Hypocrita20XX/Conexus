@@ -1912,16 +1912,25 @@ namespace Conexus
              * 
              */
 
-            //Temp string to store the root directory
-            string dirRoot = fileDir.Substring(0, fileDir.Length - 5);
-            //Temp string to store the _windows directory
-            string win = dirRoot + "\\_windows";
+            try
+            {
+                //Temp string to store the root directory
+                string dirRoot = fileDir.Substring(0, fileDir.Length - 5);
+                //Temp string to store the _windows directory
+                string win = dirRoot + "\\_windows";
 
-            //Verify if this directory contains steamcmd.exe
-            if (File.Exists(win + "\\Darkest.exe"))
-                return true;
-            else
+                //Verify if this directory contains steamcmd.exe
+                if (File.Exists(win + "\\Darkest.exe"))
+                    return true;
+                else
+                    return false;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                ShowMessage("ERROR: Invalid mods directory!");
+
                 return false;
+            }
         }
 
         #endregion
