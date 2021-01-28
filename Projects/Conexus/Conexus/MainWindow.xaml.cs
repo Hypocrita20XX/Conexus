@@ -1421,7 +1421,7 @@ namespace Conexus
                     {
                         //if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
                         //{
-                        //    await Task.Run(() => Directory.Delete(dir, true));
+                            await Task.Run(() => Directory.Delete(dir, true));
 
                             //Changed v1.3.0, formatting
                             //Provide feedback
