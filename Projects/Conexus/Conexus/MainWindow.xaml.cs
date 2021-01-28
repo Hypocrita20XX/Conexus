@@ -119,6 +119,7 @@ namespace Conexus
          * Data=\Documents\Conexus\Data
          * Config=\Documents\Conexus\Config
          * Links=\Documents\Conexus\Links
+         * Logs="\Documents\Conexus\Logs"
          * 
          * [Directories]
          * Mods=\DarkestDungeon\mods
@@ -130,6 +131,10 @@ namespace Conexus
          * [Misc]
          * Mode=download
          * Method=steam
+         * 
+         * [Login]
+         * Username=""
+         * Password=""
          * 
          */
         INIFile ini;
@@ -1981,7 +1986,8 @@ namespace Conexus
                 ShowMessage("VERIFY: Links.txt found");
             }
 
-            if (!File.Exists(configPath + "\\config.ini"))
+
+            if (File.ReadAllBytes(configPath + "\\config.ini").Length == 0)
             {
                 //Initialize data structure
                 //ini.AddSection("System\\Root");
@@ -2011,27 +2017,29 @@ namespace Conexus
                 //Added v1.3.0
                 ShowMessage("VERIFY: Created INI with default settings");
             }
+            else
+            {
+                //Read values from the INI file
+                root = ini["System"]["Root"];
+                data = ini["System"]["Data"];
+                config = ini["System"]["Config"];
+                links = ini["System"]["Links"];
+                logs = ini["System"]["Logs"];
 
-            //Read values from the INI file
-            root = ini["System"]["Root"];
-            data = ini["System"]["Data"];
-            config = ini["System"]["Config"];
-            links = ini["System"]["Links"];
-            logs = ini["System"]["Logs"];
+                mods = ini["Directories"]["Mods"];
+                steamcmd = ini["Directories"]["SteamCMD"];
 
-            mods = ini["Directories"]["Mods"];
-            steamcmd = ini["Directories"]["SteamCMD"];
+                urlcollection = ini["URL"]["Collection"];
 
-            urlcollection = ini["URL"]["Collection"];
+                mode = ini["Misc"]["Mode"];
+                method = ini["Misc"]["Method"];
 
-            mode = ini["Misc"]["Mode"];
-            method = ini["Misc"]["Method"];
+                username = ini["Login"]["Username"];
+                password = ini["Login"]["Password"];
 
-            username = ini["Login"]["Username"];
-            password = ini["Login"]["Password"];
-
-            //Added v1.3.0
-            ShowMessage("VERIFY: Loaded INI");
+                //Added v1.3.0
+                ShowMessage("VERIFY: Loaded INI");
+            }
 
             //Changed v1.3.0, now uses INI
             //Check the contents of the ini variable in the settings file, if so, set the UI variable to it
