@@ -1585,10 +1585,12 @@ namespace Conexus
 
                     for (int i = 0; i < logTmp.Count; i++)
                     {
-                        //Show desired message with appropriate line count
-                        Messages.Text += logTmp[i];
+                        //Show desired message without line count or date
+                        Messages.Text += logTmp[i].Substring(logTmp[i].IndexOf("*")+1);
+                        //Remove the asterisk to provide a properly formatted log message
+                        string tmp = Regex.Replace(logTmp[i], @"['*']", " ", RegexOptions.None);
                         //Save this message to the log list
-                        log.Add(logTmp[i].Substring(0, logTmp[i].Length - 2));
+                        log.Add(tmp.Substring(0, tmp.Length - 2));
                     }
 
                     //Clear out logTmp
@@ -1597,7 +1599,7 @@ namespace Conexus
                     //This specific part of the program will only hit once, so we can safely do this twice without issue
                     //Add the current message to the textblock and list
                     //Show desired message with appropriate line count
-                    Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
+                    Messages.Text += msg + "\n";
                     //Save this message to the log list
                     log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
 
@@ -1611,7 +1613,7 @@ namespace Conexus
                 else
                 {
                     //Show desired message with appropriate line count
-                    Messages.Text += "[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg + "\n";
+                    Messages.Text += msg + "\n";
                     //Save this message to the log list
                     log.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None) + "] " + msg);
 
@@ -1623,7 +1625,8 @@ namespace Conexus
             else
             {
                 //Messages textblock has not initiated yet, so we need to store the messages until it is
-                logTmp.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\'' | '' ? '' * '' ']", "_", RegexOptions.None) + "] " + msg + "\n");
+                //Add an asterisk at the end of the date for later removal of the line count and date for the log window
+                logTmp.Add("[" + lcStr + "] " + "[" + Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\'' | '' ? '' * '' ']", "_", RegexOptions.None) + "]*" + msg + "\n");
 
                 //Increment lineCount
                 lineCount++;
