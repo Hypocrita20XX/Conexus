@@ -1377,7 +1377,7 @@ namespace Conexus
                 for (int i = 0; i < modInfo.Count; i++)
                 {
                     //Changed v1.2.0, to async
-                    await Task.Run(() => destination[i] = Path.Combine(UserSettings.Default.SteamCMDDir + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
+                    await Task.Run(() => destination[i] = Path.Combine(steamcmd + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
                 }
 
                 //Added v1.2.0
@@ -1419,14 +1419,14 @@ namespace Conexus
 
                     foreach (var dir in Directory.GetDirectories(@mods))
                     {
-                        if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
-                        {
-                            await Task.Run(() => Directory.Delete(dir, true));
+                        //if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
+                        //{
+                        //    await Task.Run(() => Directory.Delete(dir, true));
 
                             //Changed v1.3.0, formatting
                             //Provide feedback
                             ShowMessage("PROC: " + dir + " deleted");
-                        }
+                        //}
                     }
 
                     //Added v1.2.0
