@@ -351,7 +351,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Log info relating to what the user wants to do
-                ShowMessage("VERIFY: Mods directory is valid and has been saved to config file");
+                ShowMessage("VERIFY: SteamCMD directory is valid and has been saved to config file");
             }
             //If the given path is invalid, let the user know why
             else
