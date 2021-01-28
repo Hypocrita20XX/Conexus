@@ -2021,25 +2021,20 @@ namespace Conexus
             if (File.ReadAllBytes(configPath + "\\config.ini").Length == 0)
             {
                 //Initialize data structure
-                //ini.AddSection("System\\Root");
-                ini["System"]["Root"] = rootPath;
-                ini["System"]["Data"] = dataPath;
-                ini["System"]["Config"] = configPath;
-                ini["System"]["Links"] = linksPath;
-                ini["System"]["Logs"] = logsPath;
+                ini["System"]["Root"] = rootPath.Replace(@"\\", @"\");
+                ini["System"]["Data"] = dataPath.Replace(@"\\", @"\");
+                ini["System"]["Config"] = configPath.Replace(@"\\", @"\");
+                ini["System"]["Links"] = linksPath.Replace(@"\\", @"\");
+                ini["System"]["Logs"] = logsPath.Replace(@"\\", @"\");
 
-                //ini.AddSection("Directories");
                 ini["Directories"]["Mods"] = "";
                 ini["Directories"]["SteamCMD"] = "";
 
-                //ini.AddSection("URL");
                 ini["URL"]["Collection"] = "";
 
-                //ini.AddSection("Misc");
                 ini["Misc"]["Mode"] = "download";
                 ini["Misc"]["Method"] = "steam";
 
-                //ini.AddSection("Login");
                 ini["Login"]["Username"] = "";
                 ini["Login"]["Password"] = "";
 
@@ -2051,22 +2046,22 @@ namespace Conexus
             else
             {
                 //Read values from the INI file
-                root = ini["System"]["Root"];
-                data = ini["System"]["Data"];
-                config = ini["System"]["Config"];
-                links = ini["System"]["Links"];
-                logs = ini["System"]["Logs"];
+                root = ini["System"]["Root"].Replace(@"\\", @"\");
+                data = ini["System"]["Data"].Replace(@"\\", @"\");
+                config = ini["System"]["Config"].Replace(@"\\", @"\");
+                links = ini["System"]["Links"].Replace(@"\\", @"\");
+                logs = ini["System"]["Logs"].Replace(@"\\", @"\");
 
-                mods = ini["Directories"]["Mods"];
-                steamcmd = ini["Directories"]["SteamCMD"];
+                mods = ini["Directories"]["Mods"].Replace(@"\\", @"\");
+                steamcmd = ini["Directories"]["SteamCMD"].Replace(@"\\", @"\");
 
-                urlcollection = ini["URL"]["Collection"];
+                urlcollection = ini["URL"]["Collection"].Replace(@"\\", @"\");
 
-                mode = ini["Misc"]["Mode"];
-                method = ini["Misc"]["Method"];
+                mode = ini["Misc"]["Mode"].Replace(@"\\", @"\");
+                method = ini["Misc"]["Method"].Replace(@"\\", @"\");
 
-                username = ini["Login"]["Username"];
-                password = ini["Login"]["Password"];
+                username = ini["Login"]["Username"].Replace(@"\\", @"\");
+                password = ini["Login"]["Password"].Replace(@"\\", @"\");
 
                 //Added v1.3.0
                 ShowMessage("VERIFY: Loaded INI");
