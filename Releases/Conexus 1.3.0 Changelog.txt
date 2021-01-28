@@ -20,6 +20,7 @@ Details:
 - User can manually enter this into the config.ini file, Conexus still loads them (still unencrypted)
 
 - Added exception handling in a lot of places (more plainly, Conexus should crash gracefully most of the time and recover without much issue)
+- Conexus should now remember if you've downloaded mods, and automatically set the mode to update for convenience
 
 - Fixed odd creation of "_DD_TextFiles" folder outside of game's root directory
 - Fixed odd creation of "Select Mods Directory" folder in Conexus' root directory

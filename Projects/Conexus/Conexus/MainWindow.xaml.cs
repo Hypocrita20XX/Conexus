@@ -185,7 +185,7 @@ namespace Conexus
                 Directory.CreateDirectory(logsPath);
 
             //Save logs to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         #region ComboBox Functionality
@@ -225,7 +225,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.3.0, added logging
@@ -261,7 +261,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         #endregion
@@ -315,7 +315,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.3.0, added logging
@@ -341,12 +341,14 @@ namespace Conexus
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
             if (VerifySteamCMDDir(folderBrowser.SelectedPath))
             {
+                string tmp = Path.GetFullPath(folderBrowser.SelectedPath);
+
                 //Changed v1.3.0
                 //Set the settings variable to the one selected
                 steamcmd = folderBrowser.SelectedPath;
 
                 //Added v1.3.0
-                ini["Directories"]["SteamCMD"] = mods;
+                ini["Directories"]["SteamCMD"] = steamcmd;
                 ini.Persist();
 
                 //Added v1.3.0
@@ -366,7 +368,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Added v1.2.1
@@ -402,7 +404,7 @@ namespace Conexus
             {
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
         }
 
@@ -439,7 +441,7 @@ namespace Conexus
             {
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
         }
 
@@ -476,7 +478,7 @@ namespace Conexus
             {
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
         }
 
@@ -513,7 +515,7 @@ namespace Conexus
             {
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
         }
 
@@ -614,7 +616,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (steam)
@@ -628,8 +630,11 @@ namespace Conexus
                 //Check the provided URL to make sure it's valid
                 if (await VerifyCollectionURLAsync(URLLink.Text, dataPath))
                 {
+                    //Added v1.3.0
+                    urlcollection = URLLink.Text;
+
                     //It is assumed that at this point, the user has entered a valid URL to the collection
-                    if (URLLink.Text.Length > 0)
+                    if (urlcollection.Length > 0)
                     {
                         ini["URL"]["Collection"] = URLLink.Text;
                         ini.Persist();
@@ -640,7 +645,7 @@ namespace Conexus
 
                         //Added v1.3.0
                         //Save log to file
-                        WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                        WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
                     }
                     //Otherwise we need to quit and provide an error message
                     else
@@ -652,7 +657,7 @@ namespace Conexus
 
                         //Added v1.3.0
                         //Save log to file
-                        WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                        WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                         //Added v1.2.0
                         //Enable input after operation
@@ -706,7 +711,7 @@ namespace Conexus
 
                         //Added v1.3.0
                         //Save log to file
-                        WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                        WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
                     }
 
                     //Changed v1.2.0, to simplify if statement after implementing mod list addition support
@@ -759,7 +764,7 @@ namespace Conexus
 
                     //Added v1.3.0
                     //Save log to file
-                    WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                     return;
                 }
@@ -837,7 +842,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save logs to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.2.0, to async
@@ -872,7 +877,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save logs to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Create a new WebClient
             WebClient webClient = new WebClient();
@@ -888,7 +893,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save logs to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Move on to parsing through the raw source
             await IterateThroughHTMLAsync(fileDir);
@@ -943,7 +948,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save logs to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Move on to parsing out the relevant info
             await SeparateInfoAsync(fileDir);
@@ -1028,7 +1033,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save logs to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.2.0, to async
@@ -1057,7 +1062,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save logs to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Temp variable to store an individual line
             string line;
@@ -1123,7 +1128,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.2.0, to async
@@ -1156,7 +1161,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save logs to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
             ProcessStartInfo processInfo = new ProcessStartInfo(steamcmd + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
@@ -1181,7 +1186,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.2.0, to async
@@ -1217,7 +1222,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
             ProcessStartInfo processInfo = new ProcessStartInfo(steamcmd + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
@@ -1243,7 +1248,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.2.0, to async
@@ -1265,7 +1270,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //Get the proper path to copy from
                 for (int i = 0; i < appIDs.Count; i++)
@@ -1281,7 +1286,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //Get the proper path that will be copied to
                 for (int i = 0; i < modInfo.Count; i++)
@@ -1297,7 +1302,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //Copy all folders/files from the SteamCMD directory to the mods directory
                 for (int i = 0; i < destination.Length; i++)
@@ -1318,7 +1323,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
@@ -1346,7 +1351,7 @@ namespace Conexus
 
                     //Added v1.3.0
                     //Save log to file
-                    WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
                 }
             }
 
@@ -1360,7 +1365,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //Get the proper path to copy from
                 for (int i = 0; i < appIDs.Count; i++)
@@ -1376,7 +1381,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //Get the proper path that will be copied to
                 for (int i = 0; i < modInfo.Count; i++)
@@ -1392,7 +1397,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //Copy all folders/files from the SteamCMD directory to the mods directory
                 for (int i = 0; i < destination.Length; i++)
@@ -1413,7 +1418,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //Check to ensure the last mod is in the destination directory
                 if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
@@ -1441,7 +1446,7 @@ namespace Conexus
 
                     //Added v1.3.0
                     //Save log to file
-                    WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
                 }
             }
 
@@ -1452,7 +1457,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.2.0, to async
@@ -1512,7 +1517,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Utility function to write text to a file
@@ -1734,7 +1739,7 @@ namespace Conexus
             {
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
 
             //If the link is valid, leads to an actual site, we need to check for a valid Steam site
@@ -1809,7 +1814,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 //If these checks fail, this is not a valid Steam collection link and the user needs to know that
                 if (!isValidSteam && !isValidCollection || isValidSteam && !isValidCollection)
@@ -1829,7 +1834,7 @@ namespace Conexus
 
                     //Added v1.3.0
                     //Save log to file
-                    WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                     return false;
                 }
@@ -1845,7 +1850,7 @@ namespace Conexus
 
                     //Added v1.3.0
                     //Save log to file
-                    WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                     return true;
                 }
@@ -1867,7 +1872,7 @@ namespace Conexus
 
                 //Added v1.3.0
                 //Save log to file
-                WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                 return false;
             }
@@ -1925,7 +1930,7 @@ namespace Conexus
         void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Added v1.3.0
-            //TEST
+            //A bunch of checks to make sure every necessary path exists
             if (!Directory.Exists(rootPath))
             {
                 Directory.CreateDirectory(rootPath);
@@ -1991,11 +1996,11 @@ namespace Conexus
             {
                 //Initialize data structure
                 //ini.AddSection("System\\Root");
-                ini["System"]["Root"] = "\\Documents\\Conexus";
-                ini["System"]["Data"] = "\\Documents\\Conexus\\Data";
-                ini["System"]["Config"] = "\\Documents\\Conexus\\Config";
-                ini["System"]["Links"] = "\\Documents\\Conexus\\Links";
-                ini["System"]["Logs"] = "\\Documents\\Conexus\\Logs";
+                ini["System"]["Root"] = rootPath;
+                ini["System"]["Data"] = dataPath;
+                ini["System"]["Config"] = configPath;
+                ini["System"]["Links"] = linksPath;
+                ini["System"]["Logs"] = logsPath;
 
                 //ini.AddSection("Directories");
                 ini["Directories"]["Mods"] = "";
@@ -2143,24 +2148,39 @@ namespace Conexus
                 ShowMessage("VERIFY: Saved preferred method found: list of links");
             }
 
-            //NON-FUNCTIONAL
-            /*
             //Added v1.3.0
-            //Check the state of UserSettings.Default.HasDownloaded
-            //If it's false, we can reasonably say that the user has not downloaded mods yet, that we know of
-            //However, if it's true, we need to make sure the cmbMod dropdown changes to reflect this, to Update Mods mode
-            //QOL thing that will hopefully make COnexus a bit easier to work with
-            if (UserSettings.Default.HasDownloaded)
+            if (mode == "download")
             {
-                ShowMessage("VERIFY: User has previously downloaded mods, setting mode to \"Update Mods\"");
-                cmbMode.SelectedIndex = 1;
-            }
-            else
-            {
-                ShowMessage("VERIFY: User has yet to download mods, setting mode to \"Download Mods\"");
+                //Added v1.3.0
                 cmbMode.SelectedIndex = 0;
+
+                //Added v1.3.0
+                ShowMessage("VERIFY: \"Download Mods\" has been set as the designated mode");
             }
-            */
+            else if (mode == "update")
+            {
+                //Added v1.3.0
+                cmbMode.SelectedIndex = 1;
+
+                //Added v1.3.0
+                ShowMessage("VERIFY: \"Update Mods\" has been set as the designated mode");
+            }
+
+            //Added v1.3.0
+            //A check to see if the user has downloaded mods
+            //Hopefully the simplicity of this solution won't bite me in the butt
+            //If the mods path is not empty, let's check the directory and see if any folders are in there
+            if (mods != "" && Directory.GetDirectories(mods).Length > 0)
+            {
+                //Added v1.3.0
+                mode = "update";
+            }
+            //Otherwise if there is no mods path, let's just assume they need to download
+            else if (mods == "")
+            {
+                //Added v1.3.0
+                mode = "download";
+            }
         }
 
         //Changed v1.3.0, added logging/log saving
@@ -2173,6 +2193,7 @@ namespace Conexus
             //Make sure the variable in the settings file is correct
             if (URLLink.Text.Length > 0)
             {
+                //Added v1.3.0
                 ini["URL"]["Collection"] = URLLink.Text;
 
                 //Added v1.3.0
@@ -2184,6 +2205,7 @@ namespace Conexus
             //Make sure the variable in the settings file is correct
             if (SteamCMDDir.Content != null)
             {
+                //Added v1.3.0
                 ini["Directories"]["SteamCMD"] = SteamCMDDir.Content.ToString();
 
                 //Added v1.3.0
@@ -2195,6 +2217,7 @@ namespace Conexus
             //Make sure the variable in the settings file is correct
             if (ModDir.Content != null)
             {
+                //Added v1.3.0
                 ini["Directories"]["Mods"] = ModDir.Content.ToString();
 
                 //Added v1.3.0
@@ -2205,38 +2228,32 @@ namespace Conexus
             //Save which platform the user has chosen
             if (steam)
             {
+                //Added v1.3.0
                 ini["Misc"]["Method"] = "steam";
 
                 //Added v1.3.0
                 ShowMessage("VERIFY: Chosen method (Steam collection) saved");
             }
+            //Added v1.3.0
             else
             {
+                //Added v1.3.0
                 ini["Misc"]["Method"] = "other";
 
                 //Added v1.3.0
                 ShowMessage("VERIFY: Chosen method (list of links) saved");
             }
 
-            //NON-FUNCTIONAL
-            /*
             //Added v1.3.0
-            //Check the state of UserSettings.Default.HasDownloaded
-            //If it's false, we can reasonably say that the user has not downloaded mods yet, that we know of
-            //However, if it's true, we need to make sure the cmbMod dropdown changes to reflect this, to Update Mods mode
-            //QOL thing that will hopefully make COnexus a bit easier to work with
-            if (UserSettings.Default.HasDownloaded)
+            if (mode == "download")
             {
-                ShowMessage("VERIFY: User's current mode, \"Update Mods,\" has been saved");
-                UserSettings.Default.HasDownloaded = true;
+                //Added v1.3.0
+                ini["Misc"]["Mode"] = "update";
+
+                //Added v1.3.0
+                ShowMessage("VERIFY: Mods have been downloaded, Conexus will next start in update mode");
             }
-            //If it's false, then set it to true, user has almost certainly got some mods
-            else
-            {
-                ShowMessage("VERIFY: User's current mode, \"Download Mods,\" has been updated to \"Update Mods\"");
-                UserSettings.Default.HasDownloaded = true;
-            }
-            */
+
 
             //Added v1.3.0
             ShowMessage("PROC: All user data has been saved!");
@@ -2248,7 +2265,7 @@ namespace Conexus
 
             //Added v1.3.0
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
         //Changed v1.3.0, added logging
@@ -2270,7 +2287,7 @@ namespace Conexus
             }
 
             //Save log to file
-            WriteToFile(log.ToArray(), logsPath + "\\" + dateTime + ".txt");
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Added v1.3.0
             ini.Persist();
