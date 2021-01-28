@@ -13,6 +13,9 @@ Details:
 - New directories are Conexus\Config, Conexus\Data, Conexus\Links, and Conexs\Logs
 - User data is now stored in Documents\Conexus\Config\config.ini
 
+- Methods are now properly separated: data specific to each is stored in Data (collection) and Links (list)
+- This means that you can technically use both methods without issue (not advised, but it shouldn't break too much)
+
 - Steam credentials are no longer saved (security concerns, was saved unencrypted)
 - User can manually enter this into the config.ini file, Conexus still loads them (still unencrypted)
 

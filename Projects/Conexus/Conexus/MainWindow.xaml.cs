@@ -1035,9 +1035,9 @@ namespace Conexus
             // > Ignore: * 50% Stealth Chance in Veteran Quests
 
             //Overwrite whatever may be in ModInfo.txt, if it exists
-            if (File.Exists(dataPath + "\\ModInfo.txt"))
+            if (File.Exists(linksPath + "\\ModInfo.txt"))
             {
-                File.WriteAllText(dataPath + "\\ModInfo.txt", String.Empty);
+                File.WriteAllText(linksPath + "\\ModInfo.txt", String.Empty);
 
                 //Added v1.3.0
                 ShowMessage("PROC: ModInfo contents have been ovewritten");
