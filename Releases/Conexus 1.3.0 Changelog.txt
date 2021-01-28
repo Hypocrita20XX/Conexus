@@ -1,10 +1,22 @@
-Conexus 1.2.2 Changlog
+Conexus 1.3.0 Changlog
+Highlights:
+- Greatly expanded logging and saving of the log file, now includes OS, mode, and method used
+- Expanded exception handling: Conexus should handle crashes more gracefully
+- New directories for user\program data: Documents\Conexus\Config, \Data, \Links, and \Logs
+- User data is now stored in Config\config.ini
+- Steam login is no longer saved, can be manually entered into config.ini file (saving removed over security concerns)
+
+Details:
 - Log now saves much more often, to hopefully catch any possible breaks
 - Better debug info in logs: includes OS, mode, and method used
-- Moved generated files to Documents/Conexus (_DD_TextFiles, _Logs, Linkx.txt)
+- Moved generated files to Documents\Conexus
+- New directories are Conexus\Config, Conexus\Data, Conexus\Links, and Conexs\Logs
+- User data is now stored in Documents\Conexus\Config\config.ini
+
+- Steam credentials are no longer saved (security concerns, was saved unencrypted)
+- User can manually enter this into the config.ini file, Conexus still loads them (still unencrypted)
 
 - Added exception handling in a lot of places (more plainly, Conexus should crash gracefully most of the time and recover without much issue)
-- Added mode memory: Conexus will detect that you've downloaded mods, and will set the mode to update on next startup
 
 - Fixed odd creation of "_DD_TextFiles" folder outside of game's root directory
 - Fixed odd creation of "Select Mods Directory" folder in Conexus' root directory
