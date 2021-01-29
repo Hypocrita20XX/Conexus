@@ -1,0 +1,435 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PeanutButter.INI</name>
+    </assembly>
+    <members>
+        <member name="T:PeanutButter.INI.ILineParser">
+            <summary>
+            Represents a line parser for parsing a data line into:
+            - key
+            - value
+            - comment
+            </summary>
+        </member>
+        <member name="M:PeanutButter.INI.ILineParser.Parse(System.String)">
+            <summary>
+            Should parse a text line out into the parts of a parsed line
+            </summary>
+            <param name="line"></param>
+            <returns></returns>
+        </member>
+        <member name="T:PeanutButter.INI.IParsedLine">
+            <summary>
+            Represents a parsed data line
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IParsedLine.Key">
+            <summary>
+            Key for this line
+            - will be a section name if this is a section line
+            - can be empty if this is a pure comment line
+            - should never be null
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IParsedLine.Value">
+            <summary>
+            Value for this line
+            - may be null, eg for the case where a key is specified on a line without an =
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IParsedLine.Comment">
+            <summary>
+            Comment for this line
+            - must include any whitespace surrounding the comment to insure
+              that rewrite of the file doesn't incur unnecessary changes
+            - may be the whole line: then ensure that the Key is empty
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IParsedLine.ContainedEscapedEntities">
+            <summary>
+            Helper flag: did the value originally contain escaped entities?
+            - used on rewrite to determine if entities should be re-escaped
+              when in best-effort mode
+            </summary>
+        </member>
+        <member name="T:PeanutButter.INI.IINIFile">
+            <summary>
+            Contract provided by the PeanutButter INI parser
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IINIFile.SectionSeparator">
+            <summary>
+            Separate sections with any string you like
+            - defaults to empty, which inserts a new line
+            - set to null for no separator at all
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IINIFile.Path">
+            <summary>
+            Exposes the path of the loaded INIFile
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IINIFile.Item(System.String)">
+            <summary>
+            Interface to treat IINIFile like a dictionary of dictionaries
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="P:PeanutButter.INI.IINIFile.Sections">
+            <summary>
+            List all the currently-available sections
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IINIFile.ParseStrategy">
+            <summary>
+            Whether or not to handle escape characters in ini values
+            When enabled (default), then the following sequences in values
+            are supported:
+            \\ -> backslash
+            \" -> quote
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IINIFile.AllSections">
+            <summary>
+            Provides an enumeration over all section names: whether
+            from merging or the initial load
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IINIFile.MergedSections">
+            <summary>
+            Provides an enumeration over all merged section names
+            </summary>
+        </member>
+        <member name="P:PeanutButter.INI.IINIFile.CustomLineParser">
+            <summary>
+            Provide a custom line parser if you like
+            - make sure to set ParseStrategies.Custom
+            </summary>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Load(System.String)">
+            <summary>
+            Attempts to load the file at the given path, discarding any existing config
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Load(System.String,PeanutButter.INI.ParseStrategies)">
+            <summary>
+            Attempts to load the file at the given path, discarding any existing config
+            </summary>
+            <param name="path"></param>
+            <param name="parseStrategy"></param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.AddSection(System.String,System.String[])">
+            <summary>
+            Add a section by name
+            </summary>
+            <param name="section">Name of the section to add</param>
+            <param name="comments">(Optional) comments for the section</param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.GetSection(System.String)">
+            <summary>
+            Retrieve the collection of settings for a section by section name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.SetValue(System.String,System.String,System.String)">
+            <summary>
+            Sets a value by section and key
+            </summary>
+            <param name="section"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.GetValue(System.String,System.String,System.String)">
+            <summary>
+            Get a configured value by section and key, optionally provide a fallback default value
+            </summary>
+            <param name="section"></param>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.HasSection(System.String)">
+            <summary>
+            Test if a section exists by name
+            </summary>
+            <param name="section"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.HasSetting(System.String,System.String)">
+            <summary>
+            Test if a setting exists by section and key
+            </summary>
+            <param name="section"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.RemoveSection(System.String)">
+            <summary>
+            Remove a section by name
+            </summary>
+            <param name="section"></param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.RenameSection(System.String,System.String)">
+            <summary>
+            Rename a section
+            </summary>
+            <param name="existingName">Name of the existing section</param>
+            <param name="newName">New name of the section that is to be renamed</param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Merge(System.String,PeanutButter.INI.MergeStrategies)">
+            <summary>
+            Merges in the ini config from the provided file path
+            - ignores paths which don't exist
+            </summary>
+            <param name="iniPath">File to merge in to current config</param>
+            <param name="mergeStrategy">Strategy to pick when merging</param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Parse(System.String)">
+            <summary>
+            Parses the string contents, loading as ini config.    
+            Will remove any prior config.
+            </summary>
+            <param name="contents"></param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Persist">
+            <summary>
+            Persists to the last-loaded file, excluding merged configuration
+            </summary>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Persist(PeanutButter.INI.PersistStrategies)">
+            <summary>
+            Persists to the last-loaded file with the specified strategy
+            </summary>
+            <param name="persistStrategy">Strategy to employ for merged config</param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Persist(System.String)">
+            <summary>
+            Persists to the specified path, excluding merged configuration
+            </summary>
+            <param name="saveToPath"></param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Persist(System.String,PeanutButter.INI.PersistStrategies)">
+            <summary>
+            Persists to the specified path with the specified strategy
+            </summary>
+            <param name="saveToPath">File to save to</param>
+            <param name="persistStrategy">Strategy to employ for merged config</param>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Persist(System.IO.Stream)">
+            <summary>
+            Persists to the specified stream, excluding merged configuration
+            <param name="toStream">Stream to persist to</param>
+            </summary>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Persist(System.IO.Stream,PeanutButter.INI.PersistStrategies)">
+            <summary>
+            Persists to the specified stream, excluding merged configuration
+            <param name="toStream">Stream to persist to</param>
+            <param name="persistStrategy">Strategy to employ for merged config</param>
+            </summary>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Reload">
+            <summary>
+            Reload config (and all merged config) from disk
+            </summary>
+        </member>
+        <member name="M:PeanutButter.INI.IINIFile.Merge(PeanutButter.INI.IINIFile,PeanutButter.INI.MergeStrategies)">
+            <summary>
+            Merges another ini file into this one
+            </summary>
+            <param name="other">other ini file</param>
+            <param name="mergeStrategy">strategy to use when encountering conflicts</param>
+        </member>
+        <member name="T:PeanutButter.INI.MergeStrategies">
+            <summary>
+            Strategies which may be employed when merging INI data
+            </summary>
+        </member>
+        <member name="F:PeanutButter.INI.MergeStrategies.OnlyAddIfMissing">
+            <summary>
+            Only add merged-in data when it's not already found
+            </summary>
+        </member>
+        <member name="F:PeanutButter.INI.MergeStrategies.Override">
+            <summary>
+            Override existing data with subsequent merges
+            </summary>
+        </member>
+        <member name="T:PeanutButter.INI.PersistStrategies">
+            <summary>
+            Strategies which may be employed when persisting INI files
+            </summary>
+        </member>
+        <member name="F:PeanutButter.INI.PersistStrategies.ExcludeMergedConfigurations">
+            <summary>
+            Exclude merged configurations when persisting
+            </summary>
+        </member>
+        <member name="F:PeanutButter.INI.PersistStrategies.IncludeMergedConfigurations">
+            <summary>
+            Include merged configurations when persisting
+            </summary>
+        </member>
+        <member name="T:PeanutButter.INI.ParseStrategies">
+            <summary>
+            Strategies which may be employed for parsing INI data
+            </summary>
+        </member>
+        <member name="F:PeanutButter.INI.ParseStrategies.BestEffort">
+            <summary>
+            Use the Best Effort line parser which may give unpredicted
+            results, especially if you have inline comments with quotes in them
+            </summary>
+        </member>
+        <member name="F:PeanutButter.INI.ParseStrategies.Strict">
+            <summary>
+            Use the Strict line parser which expects that backslashes
+            and quotes within values are _always_ escaped by another backslash,
+            eg: key="value \"in quotes\" \\slash\\"
+            </summary>
+        </member>
+        <member name="F:PeanutButter.INI.ParseStrategies.Custom">
+            <summary>
+            You must provide your own implementation of ILineParser
+            </summary>
+        </member>
+        <member name="T:PeanutButter.INI.INIFile">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.ParseStrategy">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.CustomLineParser">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.SectionSeparator">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.Sections">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.MergedSections">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.AllSections">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.Path">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.Data">
+            <summary>
+            Data storage for the current INI data
+            </summary>
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.#ctor">
+            <summary>
+            Constructs an instance of INIFile without parsing any files,
+            defaulting to best effort parser
+            </summary>
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.#ctor(System.String)">
+            <summary>
+            Constructs an instance of INIFile, parsing the provided
+            path if found, with the best-effort parser
+            </summary>
+            <param name="path">Path to an existing ini file.
+            Will not error if not found, but will be used as the default path
+            to persist to.</param>
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.#ctor(PeanutButter.INI.ILineParser)">
+            <summary>
+            Constructs an instance of INIFile with a custom line parser
+            </summary>
+            <param name="lineParser"></param>
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.#ctor(System.String,PeanutButter.INI.ILineParser)">
+            <summary>
+            Constructs an instance of INIFile with a custom line parser
+            </summary>
+            <param name="path"></param>
+            <param name="customLineParser"></param>
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.#ctor(System.String,PeanutButter.INI.ParseStrategies)">
+            <summary>
+            Constructs an instance of INIFile, parsing the provided
+            path if found, with escaped characters enabled if
+            enableEscapeCharacters is true
+            </summary>
+            <param name="path">Path to an existing ini file.
+            Will not error if not found, but will be used as the default path
+            to persist to.</param>
+            <param name="parseStrategy"></param>
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Load(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Load(System.String,PeanutButter.INI.ParseStrategies)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Parse(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:PeanutButter.INI.INIFile.Item(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.GetSection(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.AddSection(System.String,System.String[])">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.RemoveSection(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.RenameSection(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Merge(System.String,PeanutButter.INI.MergeStrategies)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Merge(PeanutButter.INI.IINIFile,PeanutButter.INI.MergeStrategies)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Persist">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Reload">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Persist(PeanutButter.INI.PersistStrategies)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Persist(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Persist(System.String,PeanutButter.INI.PersistStrategies)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Persist(System.IO.Stream)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.Persist(System.IO.Stream,PeanutButter.INI.PersistStrategies)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.SetValue(System.String,System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.GetValue(System.String,System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.HasSection(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:PeanutButter.INI.INIFile.HasSetting(System.String,System.String)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
