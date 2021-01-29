@@ -38,10 +38,11 @@
 ***
 
 ### Operating Conexus
-*You'll need three bits of information:*
+*You'll need four bits of information:*
 * *The URL of your Steam collection or list of links (saved in DarkestDungeon\mods\Links.txt)*
 * *The directory that SteamCMD was extracted/installed to*
 * *The directory of Darkest Dungeon's mod folder*
+* *Your Steam credentials*
 *Once you have that, you're ready to begin your adventure with Conexus!*</br>
 
 *You'll notice that there are two options, via dropdown menus, at the bottom:*
@@ -60,6 +61,12 @@ Just be patient, quality work takes time!*</br>
 *As of version 1.1.0, Conexus now offers a second method to utilize his services. This comes in the form of a text file, that you can enter URLs to all your mods. This file is located in DarkestDungeon\mods\Links.txt, and all you need to do is provide one URL per line. For organization, you can also add comments, with any line starting with an asterisk* * *. Useful for titles of each mod, or any other bit of snazzy info you would like!*
 
 ![Links Text File](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Links%20Text%20File.png)</br>
+
+*As of version 1.3.0, Conexus saves all data to Documents\Conexus. All user data is saved to Documents\Conexus\Confog\config.ini*
+
+![Config INI](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Config%20INI.png)</br>
+
+*He'll no longer save your Steam credentials, but you can modify this file with that information, and he'll load them just fine!*
 
 #### Potential Issues
 *Sometimes Conexus gets too caught up in his work, and can leave behind folders in places they shouldn't be.*</br>
