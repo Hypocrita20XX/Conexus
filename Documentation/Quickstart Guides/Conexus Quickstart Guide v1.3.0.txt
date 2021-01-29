@@ -61,7 +61,3 @@ Important notes:
 
 > If you're using the list of links method, please keep in mind that the result will not include
   the mod's name (005_123123123 as opposed to 005_123123123_Awesome Mod Name when using the Steam collection method)
-> If, for any reason, you need to switch modes after using Conexus 
-  (IE you downloaded mods from a Steam collection, and would like to update using a list) 
-  then you need to make sure you delete _DD_TextFiles in DarkestDungeon\Mods and any user data in AppData\Local\Conexus
-  Otherwise, Conexus will either break, you'll get unexpected results, both, or any number of other things
