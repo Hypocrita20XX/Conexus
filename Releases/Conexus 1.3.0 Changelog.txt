@@ -5,6 +5,7 @@ Highlights:
 - New directories for user\program data: Documents\Conexus\Config, \Data, \Links, and \Logs
 - User data is now stored in Config\config.ini
 - Steam login is no longer saved, can be manually entered into config.ini file (saving removed over security concerns after switch from AppData)
+- Updating from previous version? Please delete the AppData\Local\Conexus folder!
 
 Details:
 - Log now saves much more often, to hopefully catch any possible breaks
@@ -12,6 +13,8 @@ Details:
 - Moved generated files to Documents\Conexus
 - New directories are Conexus\Config, Conexus\Data, Conexus\Links, and Conexs\Logs
 - User data is now stored in Documents\Conexus\Config\config.ini
+
+- Updating from previous version? Please delete the AppData\Local\Conexus folder!
 
 - Methods are now properly separated: data specific to each is stored in Data (collection) and Links (list)
 - This means that you can technically use both methods without issue (not advised, but it shouldn't break too much)
