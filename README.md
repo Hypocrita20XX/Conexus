@@ -43,6 +43,7 @@
 * *The directory that SteamCMD was extracted/installed to*
 * *The directory of Darkest Dungeon's mod folder*
 * *Your Steam credentials*
+
 *Once you have that, you're ready to begin your adventure with Conexus!*</br>
 
 *You'll notice that there are two options, via dropdown menus, at the bottom:*
