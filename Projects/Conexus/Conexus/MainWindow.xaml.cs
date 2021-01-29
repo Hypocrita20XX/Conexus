@@ -1,28 +1,28 @@
 ﻿/*
-> Darkest Dungeon - Organize Mods
+> Conexus (v1.3.0) for Darkest Dungeon
     Created by MatthiosArcanus(Discord)/Hypocrita_2013(Steam)/Hypocrita20XX(GitHub) 
     A GUI-based program designed to streamline the process of organizing mods according to an existing Steam collection or list of links
     Handles downloading and updating mods through the use of SteamCMD (https://developer.valvesoftware.com/wiki/SteamCMD)
 
 > APIs used:
-    Ookii.Dialogs
+    Ookii.Dialogs (v3.1.0)
     Authors: Sven Groot, Augusto Proiete
     Source: http://www.ookii.org/software/dialogs/
 
-    Extended WPF Toolkit
+    Extended WPF Toolkit (v4.0.2
     Author: Xceed Software
     Source: https://github.com/xceedsoftware/wpftoolkit
 
-    Peanut Butter INI
+    Peanut Butter INI (v2.0.2)
     Author: Davys McColl
     Source: https://github.com/fluffynuts/PeanutButter
 
 > Code used/adapated:
-    Function: CopyFolders
+    Function: Copy Folders
     Author: Timm
     Source: http://www.csharp411.com/c-copy-folder-recursively/
 
-    Function: password reveal functionality
+    Function: Password Reveal Functionality
     Author: DaisyTian-MSFT
     Source: https://docs.microsoft.com/en-us/answers/questions/99602/wpf-passwordbox-passwordrevealmode-was-not-found-i.html
 

@@ -35,7 +35,8 @@ Details:
 - ERROR: Problems arose, program was going to break, but was able to recover
 
 - Updated header information, to include new API, Peanut Butter INI
-- Header information was also updated to include each API's author(s)
+- Header information was also updated to include each API's author(s) and version
+- Changed header info to show current version of Conexus
 
 - Known oddities:
 - After a fresh SteamCMD install, Conexus might crash if SteamCMD asks for a SteamGuard code prior to downloading/updating
