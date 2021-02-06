@@ -1338,34 +1338,9 @@ namespace Conexus
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
-                //Check to ensure the last mod is in the destination directory
-                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
-                {
-                    //Added v1.2.0
-                    //Hopefully more reliable directory deletion
-                    DirectoryInfo dirInfo = new DirectoryInfo(@steamcmd + "\\steamapps\\workshop\\content\\262060\\");
-
-                    foreach (var dir in Directory.GetDirectories(@steamcmd + "\\steamapps\\workshop\\content\\262060\\"))
-                    {
-                        //if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
-                        //{
-                            await Task.Run(() => Directory.Delete(dir, true));
-
-                            //Changed v1.3.0, formatting
-                            //Provide feedback
-                            ShowMessage("PROC: " + dir + " deleted");
-                        //}
-                    }
-
-                    //Added v1.2.0
-                    //Changed v1.3.0, formatting/phrasing
-                    //Provide feedback
-                    ShowMessage("INFO: Original copies have been deleted");
-
-                    //Added v1.3.0
-                    //Save log to file
-                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-                }
+                //****!!!****
+                //TESTING
+                await DeleteDirectory(@steamcmd + "\\steamapps\\workshop\\content\\262060\\");
             }
 
             //If the userwants to update mods, copy all files/folders from the mod directory to the SteamCMD directory
@@ -1433,34 +1408,10 @@ namespace Conexus
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
-                //Check to ensure the last mod is in the destination directory
-                if (Directory.Exists(destination[modInfo.Count - 1]) && modInfo.Count != 0)
-                {
-                    //Added v1.2.0
-                    //Hopefully more reliable directory deletion
-                    DirectoryInfo dirInfo = new DirectoryInfo(@mods);
 
-                    foreach (var dir in Directory.GetDirectories(@mods))
-                    {
-                        //if (!dir.Contains("_DD_TextFiles") && !dir.Contains("_Logs"))
-                        //{
-                            await Task.Run(() => Directory.Delete(dir, true));
-
-                            //Changed v1.3.0, formatting
-                            //Provide feedback
-                            ShowMessage("PROC: " + dir + " deleted");
-                        //}
-                    }
-
-                    //Added v1.2.0
-                    //Changed v1.3.0, formatting/phrasing
-                    //Provide feedback
-                    ShowMessage("INFO: Original copies have been deleted");
-
-                    //Added v1.3.0
-                    //Save log to file
-                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-                }
+                //Added v1.3.1
+                //TESTING
+                await DeleteDirectory(@mods);
             }
 
             //Added v1.2.0
@@ -1469,6 +1420,26 @@ namespace Conexus
             ShowMessage("INFO: Mods have now been moved and renamed, originals have been deleted");
 
             //Added v1.3.0
+            //Save log to file
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+        }
+
+        //Added v1.3.1
+        //Fix for index out of bounds when stuff gets deleted
+        //Handles any deletions of directories and sub-directories
+        async Task DeleteDirectory(string directory)
+        {
+            foreach (var dir in Directory.GetDirectories(directory))
+            {
+                await Task.Run(() => Directory.Delete(dir, true));
+
+                //Provide feedback
+                ShowMessage("PROC: " + dir + " deleted");
+            }
+
+            //Provide feedback
+            ShowMessage("INFO: Original copies have been deleted");
+
             //Save log to file
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
