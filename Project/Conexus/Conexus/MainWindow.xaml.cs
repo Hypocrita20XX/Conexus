@@ -1429,19 +1429,29 @@ namespace Conexus
         //Handles any deletions of directories and sub-directories
         async Task DeleteDirectory(string directory)
         {
-            foreach (var dir in Directory.GetDirectories(directory))
+            try
             {
-                await Task.Run(() => Directory.Delete(dir, true));
+                foreach (var dir in Directory.GetDirectories(directory))
+                {
+                    await Task.Run(() => Directory.Delete(dir, true));
+
+                    //Provide feedback
+                    ShowMessage("PROC: " + dir + " deleted");
+                }
 
                 //Provide feedback
-                ShowMessage("PROC: " + dir + " deleted");
+                ShowMessage("INFO: Original copies have been deleted");
             }
-
-            //Provide feedback
-            ShowMessage("INFO: Original copies have been deleted");
-
-            //Save log to file
-            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            catch (System.IO.DirectoryNotFoundException)
+            {
+                //Provide feedback
+                ShowMessage("ERROR: Directory could not be found: " + directory + "!");
+            }
+            finally
+            {
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            }
         }
 
         //Changed v1.2.0, to async
