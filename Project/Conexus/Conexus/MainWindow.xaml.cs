@@ -1177,7 +1177,7 @@ namespace Conexus
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
-            ProcessStartInfo processInfo = new ProcessStartInfo(steamcmd + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
+            ProcessStartInfo processInfo = new ProcessStartInfo("\"" + steamcmd + "\\steamcmd.exe" + "\"", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
@@ -1238,7 +1238,7 @@ namespace Conexus
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Create a process that will contain all relevant SteamCMD commands for all mods
-            ProcessStartInfo processInfo = new ProcessStartInfo(steamcmd + "\\steamcmd.exe", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
+            ProcessStartInfo processInfo = new ProcessStartInfo("\"" + steamcmd + "\\steamcmd.exe" + "\"", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
 
             //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
             using (Process process = new Process())
