@@ -1,4 +1,4 @@
-Conexus Changelog 1.3.1:
+Conexus Changelog 1.4.0:
 > Merged modes (download/update) and simplified overall operation
 > Adjusted UI to acommodate this change
 > Made log window bigger to keep overall window the same size
