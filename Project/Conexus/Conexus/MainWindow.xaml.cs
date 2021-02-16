@@ -1053,7 +1053,6 @@ namespace Conexus
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             await DeleteDirectory(@steamcmd + "\\steamapps\\workshop\\content\\262060\\");
-            
 
             //Provide feedback
             ShowMessage("INFO: Mods have now been moved and renamed, originals have been deleted");
@@ -1239,6 +1238,9 @@ namespace Conexus
 
                     //Increment lineCount
                     lineCount++;
+
+                    //Scroll to the end of the scroll viewer
+                    MessageScrollViewer.ScrollToEnd();
                 }
             }
             //Otherwise, the message needs stored until it is loaded and can accept messages
