@@ -1,2 +1,7 @@
 Conexus Changelog 1.3.1:
 > Merged modes (download/update)
+> Adjusted UI to acommodate this change
+> Made log window and its font bigger due to that change
+
+> Cleaned up XML, specifically comments, adding/changing/removing
+> Cleaned up CS, again comments, removed version tags, started to feel like it was more bloat than help

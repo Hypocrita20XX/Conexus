@@ -108,7 +108,7 @@
 
         <!-- A combobox which lets the user switch which method they're using, a Steam collection or list of links -->
         <Label Grid.Column="1" Grid.Row="6" Content="Method" HorizontalContentAlignment="Center" Margin="5" FontStyle="Italic" Background="#7da9b6" />
-        <ComboBox Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="6" Margin="5" Name="cmbPlatform" SelectionChanged="Platform_SelectionChanged">
+        <ComboBox Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="6" Margin="5" Name="cmbMethod" SelectionChanged="Method_SelectionChanged">
             <ComboBoxItem IsSelected="True">Steam Collection</ComboBoxItem>
             <ComboBoxItem>List</ComboBoxItem>
         </ComboBox>
