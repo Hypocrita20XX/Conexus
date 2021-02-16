@@ -1,0 +1,51 @@
+Welcome to Conexus!
+Lost? You've come to the right place!
+Let me give you a rundown of the functionality Conexus currently has.
+
+Conexus can:
+Download/update mods from a Steam collection
+Download/update mods from a list given in a text file
+
+
+Please note, you need to have SteamCMD installed for Conexus to work
+Please see https://developer.valvesoftware.com/wiki/SteamCMD for more info!
+As of v1.2.0, Epic and GOG are not supported, see https://github.com/Hypocrita20XX/Conexus/issues/11 for more info
+
+
+Let's go over the details!
+
+Downloading/updating from a Steam collection:
+> You'll need a URL to any Steam collection, but that Steam collection has to either be unlisted or public.
+  If the collection is hidden or set to friends-only, Conexus sadly can't read that collection.
+> Copy/paste that url to the right of where it says "Collection URL"
+> Next, you need to provide the location of SteamCMD and Darkest Dungeon's mod directory.
+  Just click on each of the "Select Directory" buttons and you'll be presented with a file browser
+  that will let you navigate to each location.
+> After that, ensure that "Steam Collection" is selected 
+  from the dropdown menu to the right of "Organize Mods"
+> Provide your Steam username and password, don't worry, this is only used by SteamCMD and is not saved!
+> Finally, hit the "Organize Mods" button and Conexus will get to work!
+
+Downloading/updating from a list of links:
+> This method is a bit more manual, sadly. Navigate to Documents\Conexus\Links
+  and if you've already run Conexus, there will be a file named Links.txt. 
+  If it isn't there, just make one and name it Links.txt (the name is very important)
+> Enter each mod's URL on one line, you can also add a comment using * (for instance, *Amazing Mod Name)
+  Great to organize your mods, so you don't have to guess what each link is!
+> Once you've done that, make sure that "List" is selected 
+  in the dropdown menu to the right of "Organize Mods"
+> Provide your Steam username and password, don't worry this is only used by SteamCMD and is not saved!
+> Hit the "Organize Mods" button and you're good to go!
+
+
+Important notes:
+> As of v1.2.0: you will need your Steam Credentials to use Conexus.
+> As of v1.2.0: Conexus has a log window that will show you what he's working on and when.
+
+> As of v1.3.0: Conexus will not save your Steam credentials, but they can be added to the new config.ini if you would like
+> As of v1.3.0: Conexus now saves all data to Documents\Conexus, \Config, \Data, \Links, and \Logs
+
+> As of v1.4.0: There's no longer a dropdown for modes, downloading/updating, but functionally everything should work the same.
+ 
+> If you're using the list of links method, please keep in mind that the result will not include
+  the mod's name (005_123123123 as opposed to 005_123123123_Awesome Mod Name when using the Steam collection method)
