@@ -76,10 +76,6 @@ namespace Conexus
         List<string> modInfo = new List<string>();
         List<string> appIDs = new List<string>();
 
-        //Bools to store the value of each combobox
-        bool downloadMods;
-        bool updateMods;
-
         //Bool to store which method the user has selected
         bool steam;
 
@@ -154,10 +150,6 @@ namespace Conexus
         //Ensures that certain messages don't happen until the textblock is initialized
         bool loaded = false;
 
-
-        //^(O.o)^
-        string mode = "";
-
         #endregion
 
         public MainWindow()
@@ -203,7 +195,6 @@ namespace Conexus
                 //Change local variables accordingly
                 steam = true;
 
-                //Added v1.3.0
                 //Log info relating to what the user wants to do
                 ShowMessage("INPUT: Method switched to \"Steam Collection\"");
             }
@@ -214,13 +205,11 @@ namespace Conexus
                 //Change local variables accordingly
                 steam = false;
 
-                //Added v1.3.0
                 //Log info relating to what the user wants to do
                 ShowMessage("INPUT: Method switched to \"List\"");
             }
 
             if (loaded)
-                //Added v1.3.0
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
@@ -276,7 +265,6 @@ namespace Conexus
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
-        //Changed v1.3.0, added logging
         //Provides functionality to allow the user to select the SteamCMD directory
         void SteamCMDDir_Click(object sender, RoutedEventArgs e)
         {
@@ -291,17 +279,14 @@ namespace Conexus
             //Set the content of the button to what the user has selected
             steamcmd = folderBrowser.SelectedPath;
 
-            //Added v1.3.0
             //Log info relating to what the user wants to do
             ShowMessage("INPUT: SteamCMD directory set to \"" + steamcmd + "\"");
 
-            //Added v1.2.0
             //Verify that the provided directory is valid, not empty, and contains steamcmd.exe
             if (VerifySteamCMDDir(folderBrowser.SelectedPath))
             {
                 string tmp = Path.GetFullPath(folderBrowser.SelectedPath);
 
-                //Changed v1.3.0
                 //Set the settings variable to the one selected
                 steamcmd = folderBrowser.SelectedPath;
 
@@ -309,11 +294,9 @@ namespace Conexus
                 ini["Directories"]["SteamCMD"] = steamcmd;
                 ini.Persist();
 
-                //Added v1.3.0
                 //Log info relating to what the user wants to do
                 ShowMessage("VERIFY: SteamCMD directory is valid and has been saved to config file");
 
-                //Addvd v1.3.0
                 SteamCMDDir.Content = steamcmd;
             }
             //If the given path is invalid, let the user know why
@@ -328,13 +311,10 @@ namespace Conexus
             }
 
             if (loaded)
-                //Added v1.3.0
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
-        //Added v1.2.1
-        //Changed v1.3.0, added exception handling
         //Opens a link to Conexus on Nexus Mods
         void URL_Nexus_Click(object sender, RoutedEventArgs e)
         {
@@ -364,14 +344,11 @@ namespace Conexus
             //Save log file no matter what happens
             finally
             {
-                //Added v1.3.0
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
         }
 
-        //Added v1.2.1
-        //Changed v1.3.0, added exception handling
         //Opens a link to Conexus on Github
         void URL_Github_Click(object sender, RoutedEventArgs e)
         {
@@ -401,14 +378,11 @@ namespace Conexus
             //Save log file no matter what happens
             finally
             {
-                //Added v1.3.0
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
         }
 
-        //Added v1.2.1
-        //Changed v1.3.0, added exception handling
         //Opens a link to the wiki on Github
         void URL_Wiki_Click(object sender, RoutedEventArgs e)
         {
@@ -438,14 +412,11 @@ namespace Conexus
             //Save log file no matter what happens
             finally
             {
-                //Added v1.3.0
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
         }
 
-        //Added v1.2.1
-        //Changed v1.3.0, added exception handling
         //Opens a link to the issue tracker on Github
         void URL_Issue_Click(object sender, RoutedEventArgs e)
         {
@@ -475,7 +446,6 @@ namespace Conexus
             //Save log file no matter what happens
             finally
             {
-                //Added v1.3.0
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
@@ -1009,8 +979,6 @@ namespace Conexus
             string[] source = new string[appIDs.Count];
             string[] destination = new string[modInfo.Count];
 
-            //Copy all files/folders from the SteamCMD directory to the mod directory
-
             //Provide feedback
             ShowMessage("PROC: Acquiring paths to copy from");
 
@@ -1098,18 +1066,6 @@ namespace Conexus
             if (!Directory.Exists(destination))
                 Directory.CreateDirectory(destination);
 
-            //Ok this is a really lazy way to do this, but it works, so I don't care
-            //To allow for easy additions to a collection, we make sure the mods have a folder
-            //Prior to this, the HTML functions are processed, so to avoid crashes,
-            //we just create an empty dummy folder
-            if (!Directory.Exists(source))
-            {
-                //Provide feedback
-                ShowMessage("PROC: " + source + " does not exist, creating now (new mod detected)");
-
-                Directory.CreateDirectory(source);
-            }
-
             //Create an array of strings containing all files in the given source directory
             string[] files = Directory.GetFiles(source);
 
@@ -1184,7 +1140,7 @@ namespace Conexus
             else if (lineCount >= 1000000)
             {
                 //Seriously, how?
-                ShowMessage("Impressive, and I thought I liked mods. Nice!)");
+                ShowMessage("Impressive, and I thought I liked mods. Nice!");
                 lcStr = lineCount.ToString();
             }
             //If it's somehow something else, no leading zeroes
@@ -1205,7 +1161,7 @@ namespace Conexus
                     for (int i = 0; i < logTmp.Count; i++)
                     {
                         //Show desired message without line count or date
-                        Messages.Text += logTmp[i].Substring(logTmp[i].IndexOf("*")+1);
+                        Messages.Text += "    " + logTmp[i].Substring(logTmp[i].IndexOf("*")+1);
                         //Remove the asterisk to provide a properly formatted log message
                         string tmp = Regex.Replace(logTmp[i], @"['*']", " ", RegexOptions.None);
                         //Save this message to the log list
@@ -1342,11 +1298,8 @@ namespace Conexus
             {
                 //Clear URLLink Text
                 URLLink.Text = string.Empty;
-                //Provide a message to the user
-                //URLLink.Watermark = "URL is too long (more than 260 characters)";
                 //Flag this URL as invalid
                 validURL = false;
-                //Changed v1.3.0, better formatting
                 //Provide additional logging
                 ShowMessage("ERROR: Provided URL is too long! (Greater than 260 characters)");
             }
@@ -1430,9 +1383,6 @@ namespace Conexus
                 {
                     //Clear URLLink Text
                     URLLink.Text = string.Empty;
-                    //Provide a message to the user
-                    URLLink.Watermark = "Not a valid URL: " + url;
-
                     //Cleanup
                     webClient.Dispose();
                     file.Close();
@@ -1465,9 +1415,6 @@ namespace Conexus
             {
                 //Clear URLLink Text
                 URLLink.Text = string.Empty;
-                //Provide a message to the user
-                URLLink.Watermark = "Not a valid URL: " + url;
-
                 //Provide feedback
                 ShowMessage("WARN: No valid Steam collection link found, please check the link provided!");
 
@@ -1552,28 +1499,24 @@ namespace Conexus
             if (!Directory.Exists(dataPath))
             {
                 Directory.CreateDirectory(dataPath);
-
                 ShowMessage("WARN: Conexus\\Data missing! Folder created");
             }
 
             if (!Directory.Exists(configPath))
             {
                 Directory.CreateDirectory(configPath);
-
                 ShowMessage("WARN: Conexus\\Config missing! Folder created");
             }
 
             if (!Directory.Exists(linksPath))
             {
                 Directory.CreateDirectory(linksPath);
-
                 ShowMessage("WARN: Conexus\\Links missing! Folder created");
             }
 
             if (!Directory.Exists(logsPath))
             {
                 Directory.CreateDirectory(logsPath);
-
                 ShowMessage("WARN: Conexus\\Logs missing! Folder created");
             }
 
@@ -1581,7 +1524,6 @@ namespace Conexus
             if (!File.Exists(linksPath + "\\Links.txt"))
             {
                 File.Create(linksPath + "\\Links.txt").Dispose();
-
                 ShowMessage("VERIFY: Links.txt not found, creating file");
             }
             else
@@ -1637,13 +1579,11 @@ namespace Conexus
             if (urlcollection != "")
             {
                 URLLink.Text = urlcollection;
-
                 ShowMessage("VERIFY: Now showing the saved URL on the UI");
             }
             else
             {
                 URLLink.Text = string.Empty;
-
                 ShowMessage("VERIFY: No saved collection URL");
             }
 
@@ -1651,13 +1591,11 @@ namespace Conexus
             if (steamcmd != "")
             {
                 SteamCMDDir.Content = steamcmd;
-
                 ShowMessage("VERIFY: Saved SteamCMD directory found, now showing on the UI");
             }
             else
             {
                 SteamCMDDir.Content = "Select SteamCMD Directory";
-
                 ShowMessage("VERIFY: No saved SteamCMD directory found");
             }
 
@@ -1665,13 +1603,11 @@ namespace Conexus
             if (mods != "")
             {
                 ModDir.Content = mods;
-
                 ShowMessage("VERIFY: Saved mods directory found, now showing on the UI");
             }
             else
             {
                 ModDir.Content = "Select Mods Directory";
-
                 ShowMessage("VERIFY: No saved mods directory found");
             }
 
@@ -1679,26 +1615,22 @@ namespace Conexus
             if (username != "")
             {
                 SteamUsername.Password = username;
-
                 ShowMessage("VERIFY: Saved Steam username found, now showing (obscured) on the UI");
             }
             else
             {
                 SteamUsername.Password = "";
-
                 ShowMessage("VERIFY: No saved Steam username found");
             }
             //Check the contents of the ini variable in the settings file, if so, set the UI variable to it
             if (password != "")
             {
                 SteamPassword.Password = password;
-
                 ShowMessage("VERIFY: Saved Steam password found, now showing (obscured) on the UI");
             }
             else
             {
                 SteamPassword.Password = "";
-
                 ShowMessage("VERIFY: No saved Steam password found");
             }
 
@@ -1730,7 +1662,6 @@ namespace Conexus
             if (urlcollection != "")
             {
                 ini["URL"]["Collection"] = urlcollection;
-
                 ShowMessage("VERIFY: Chosen collection URL saved");
             }
 
@@ -1739,7 +1670,6 @@ namespace Conexus
             if (steamcmd != "")
             {
                 ini["Directories"]["SteamCMD"] = steamcmd;
-
                 ShowMessage("VERIFY: Chosen SteamCMD directory saved");
             }
 
@@ -1748,7 +1678,6 @@ namespace Conexus
             if (mods != "")
             {
                 ini["Directories"]["Mods"] = mods;
-
                 ShowMessage("VERIFY: Chosen mods directory saved");
             }
 
@@ -1756,40 +1685,15 @@ namespace Conexus
             if (steam)
             {
                 ini["Misc"]["Method"] = "steam";
-
                 ShowMessage("VERIFY: Chosen method (Steam collection) saved");
             }
             else
             {
                 ini["Misc"]["Method"] = "other";
-
                 ShowMessage("VERIFY: Chosen method (list of links) saved");
             }
 
-            if (mode == "download")
-            {
-                ini["Misc"]["Mode"] = "update";
-
-                ShowMessage("VERIFY: Mods have been downloaded, Conexus will next start in update mode");
-            }
-
-            if (mods != "" && Directory.GetDirectories(mods).Length > 0)
-            {
-                ini["Misc"]["Mode"] = "update";
-
-                ShowMessage("VERIFY: Mods have been downloaded, Conexus will next start in update mode");
-            }
-            //Otherwise if there is no mods path, let's just assume they need to download
-            else if (mods == "")
-            {
-                ini["Misc"]["Mode"] = "download";
-
-                ShowMessage("VERIFY: Mods have not been downloaded, Conexus will next start in download mode");
-            }
-
-
             ShowMessage("PROC: All user data has been saved!");
-
             ShowMessage("INFO: Conexus will close now");
 
             ini.Persist();
