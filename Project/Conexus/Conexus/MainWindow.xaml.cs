@@ -618,48 +618,24 @@ namespace Conexus
                         return;
                     }
 
-                    //If the user wants to download mods, send them through that chain
-                    if (downloadMods)
-                    {
-                        //Log info relating to what the user wants to do
-                        ShowMessage("INFO: User is downloading mods");
+                    //Provide feedback
+                    ShowMessage("INFO: Mod info will now be obtained from the collection link");
 
-                        //Provide feedback
-                        ShowMessage("INFO: Mod info will now be obtained from the collection link");
+                    //Create all necessary text files
+                    await DownloadHTMLAsync(urlcollection, dataPath);
 
-                        //Create all necessary text files
-                        await DownloadHTMLAsync(urlcollection, dataPath);
+                    //Provide feedback
+                    ShowMessage("INFO: HTML has been downloaded and processed");
 
-                        //Provide feedback
-                        ShowMessage("INFO: HTML has been downloaded and processed");
+                    //Provide feedback
+                    ShowMessage("INFO: Mods will now be downloaded");
 
-                        //Provide feedback
-                        ShowMessage("INFO: Mods will now be downloaded");
+                    //Start downloading mods
+                    await DownloadModsFromSteamAsync();
 
-                        //Start downloading mods
-                        await DownloadModsFromSteamAsync();
-
-                        //Save log to file
-                        WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-                    }
-
-                    //If the user wants to update mods, send them through that chain so long as they've run through the download chain once
-                    if (updateMods)
-                    {
-                        //Log info relating to what the user wants to do
-                        ShowMessage("INFO: User is updating mods");
-
-                        //Provide feedback
-                        ShowMessage("INFO: Mod info will now be updated");
-
-                        //Force update the mod info text files to account for any additions in the collection
-                        await DownloadHTMLAsync(urlcollection, dataPath);
-
-                        //Provide feedback
-                        ShowMessage("INFO: Mods will now be updated");
-
-                        await UpdateModsFromSteamAsync();
-                    }
+                    //Save log to file
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+                    
                 }
                 //URL is not valid, don't do anything
                 else
@@ -691,34 +667,16 @@ namespace Conexus
                 //Log info relating to what the user wants to do
                 ShowMessage("INFO: Using a list of links");
 
-                //If the user wants to download mods, send them through that chain
-                if (downloadMods)
-                {
-                    //Provide feedback
-                    ShowMessage("INFO: Mod info will now be obtained from the Links file");
+                //Provide feedback
+                ShowMessage("INFO: Mod info will now be obtained from the Links file");
 
-                    //Parse IDs from the user-populated list
-                    await ParseFromListAsync(linksPath);
+                //Parse IDs from the user-populated list
+                await ParseFromListAsync(linksPath);
 
-                    //Provide feedback
-                    ShowMessage("INFO: Mod info has been obtained, mods will now be downloaded");
+                //Provide feedback
+                ShowMessage("INFO: Mod info has been obtained, mods will now be downloaded");
 
-                    await DownloadModsFromSteamAsync();
-                }
-
-                //If the user wants to update mods, send them through that chain
-                if (updateMods)
-                {
-                    //Provide feedback
-                    ShowMessage("INFO: Mod info will now be updated");
-
-                    await ParseFromListAsync(linksPath);
-
-                    //Provide feedback
-                    ShowMessage("INFO: Mods will now be updated");
-
-                    await UpdateModsFromSteamAsync();
-                }
+                await DownloadModsFromSteamAsync();
             }
 
             //Enable input after operation
@@ -733,7 +691,6 @@ namespace Conexus
             cmbMethod.IsEnabled = true;
             PasswordReveal.IsEnabled = true;
             OrganizeMods.IsEnabled = true;
-
 
             //Provide feedback
             ShowMessage("INFO: Selected process has finished successfully");
@@ -776,7 +733,6 @@ namespace Conexus
             await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
             //Free up resources, cleanup
             webClient.Dispose();
-
 
             ShowMessage("PROC: Source HTML downloaded successfully");
 
@@ -991,6 +947,16 @@ namespace Conexus
         //Handles downloading mods through SteamCMD
         async Task DownloadModsFromSteamAsync()
         {
+            //Check to see if the darkestdungeon\mods folder is empty
+            //If not, it needs cleared out to make room for the updated mods
+            if (Directory.GetDirectories(mods).Length > 0)
+            {
+                //Provide feedback
+                ShowMessage("INFO: Mods detected in " + mods + ", deleting old versions now");
+
+                await DeleteDirectory(mods);
+            }
+
             //Stores the proper commands that will be passed to SteamCMD
             string cmdList = "";
 
@@ -1025,57 +991,7 @@ namespace Conexus
                 //Wait until SteamCMD finishes
                 await Task.Run(() => process.WaitForExit());
                 //Move on to copying and renaming the mods
-                await RenameAndMoveModsAsync("DOWNLOAD");
-            }
-
-            //Provide feedback
-            ShowMessage("INFO: SteamCMD has finished downloading mods");
-
-            //Save log to file
-            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-        }
-
-        //Handles updating mods through SteamCMD
-        async Task UpdateModsFromSteamAsync()
-        {
-            //Move all mods from the mods directory to the SteamCMD directory for updating.
-            await RenameAndMoveModsAsync("UPDATE");
-
-            //Stores the proper commands that will be passed to SteamCMD
-            string cmdList = "";
-
-            //Provide feedback
-            ShowMessage("PROC: Commands will now be obtained");
-
-            //Get a list of commamds for each mod stored in a single string
-            for (int i = 0; i < appIDs.Count; i++)
-            {
-                await Task.Run(() => cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ");
-
-                //Provide feedback
-                ShowMessage("PROC: Adding command to list: " + " +\"workshop_download_item 262060 " + appIDs[i] + "\" ");
-            }
-
-            //Provide feedback
-            ShowMessage("INFO: SteamCMD will take over now");
-
-            //Save log to file
-            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-            //Create a process that will contain all relevant SteamCMD commands for all mods
-            ProcessStartInfo processInfo = new ProcessStartInfo("\"" + steamcmd + "\\steamcmd.exe" + "\"", " +login " + SteamUsername.Password + " " + SteamPassword.Password + " " + cmdList + "+quit");
-
-            //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
-            using (Process process = new Process())
-            {
-                //Set the commands for this process
-                process.StartInfo = processInfo;
-                //Start the commandline process
-                await Task.Run(() => process.Start());
-                //Wait until SteamCMD finishes
-                await Task.Run(() => process.WaitForExit());
-                //Move on to copying and renaming the mods
-                await RenameAndMoveModsAsync("DOWNLOAD");
+                await RenameAndMoveModsAsync();
             }
 
             //Provide feedback
@@ -1087,105 +1003,57 @@ namespace Conexus
 
         //Creates organized folders in the mods directory, then copies files from the SteaCMD directory to those folders
         //Requires that an operation be specified (DOWNLOAD or UPDATE)
-        async Task RenameAndMoveModsAsync(string DownloadOrUpdate)
+        async Task RenameAndMoveModsAsync()
         {
             //Create source/destination path list variables
             string[] source = new string[appIDs.Count];
             string[] destination = new string[modInfo.Count];
 
-            //If the user has downloaded/updated mods, copy all files/folders from the SteamCMD directory to the mod directory
-            if (DownloadOrUpdate == "DOWNLOAD")
+            //Copy all files/folders from the SteamCMD directory to the mod directory
+
+            //Provide feedback
+            ShowMessage("PROC: Acquiring paths to copy from");
+
+            //Save log to file
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+            //Get the proper path to copy from
+            for (int i = 0; i < appIDs.Count; i++)
+                await Task.Run(() => source[i] = Path.Combine(steamcmd + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
+
+            //Provide feedback
+            ShowMessage("PROC: Acquiring paths to copy to");
+
+            //Save log to file
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+            //Get the proper path that will be copied to
+            for (int i = 0; i < modInfo.Count; i++)
+                await Task.Run(() => destination[i] = Path.Combine(mods, modInfo[i]));
+
+            //Provide feedback
+            ShowMessage("PROC: Copying files, please wait");
+
+            //Save log to file
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+            //Copy all folders/files from the SteamCMD directory to the mods directory
+            for (int i = 0; i < destination.Length; i++)
             {
-                //Provide feedback
-                ShowMessage("PROC: Acquiring paths to copy from");
-
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-                //Get the proper path to copy from
-                for (int i = 0; i < appIDs.Count; i++)
-                    await Task.Run(() => source[i] = Path.Combine(steamcmd + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
+                await CopyFoldersAsync(source[i], destination[i]);
 
                 //Provide feedback
-                ShowMessage("PROC: Acquiring paths to copy to");
-
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-                //Get the proper path that will be copied to
-                for (int i = 0; i < modInfo.Count; i++)
-                    await Task.Run(() => destination[i] = Path.Combine(mods, modInfo[i]));
-
-                //Provide feedback
-                ShowMessage("PROC: Copying files, please wait");
-
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-                //Copy all folders/files from the SteamCMD directory to the mods directory
-                for (int i = 0; i < destination.Length; i++)
-                {
-                    await CopyFoldersAsync(source[i], destination[i]);
-
-                    //Provide feedback
-                    ShowMessage("PROC: Files copied from " + source[i] + " to " + destination[i]);
-                }
-
-                //Provide feedback
-                ShowMessage("INFO: Files copied, original copy will now be deleted");
-
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-                await DeleteDirectory(@steamcmd + "\\steamapps\\workshop\\content\\262060\\");
+                ShowMessage("PROC: Files copied from " + source[i] + " to " + destination[i]);
             }
 
-            //If the userwants to update mods, copy all files/folders from the mod directory to the SteamCMD directory
-            if (DownloadOrUpdate == "UPDATE")
-            {
-                //Provide feedback
-                ShowMessage("PROC: Acquiring paths to copy from");
+            //Provide feedback
+            ShowMessage("INFO: Files copied, original copy will now be deleted");
 
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            //Save log to file
+            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
-                //Get the proper path to copy from
-                for (int i = 0; i < appIDs.Count; i++)
-                    await Task.Run(() => source[i] = Path.Combine(mods + "\\", modInfo[i]));
-
-                //Provide feedback
-                ShowMessage("PROC: Acquiring paths to copy to");
-
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-                //Get the proper path that will be copied to
-                for (int i = 0; i < modInfo.Count; i++)
-                    await Task.Run(() => destination[i] = Path.Combine(steamcmd + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
-
-                //Provide feedback
-                ShowMessage("PROC: Copying files, please wait");
-
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-                //Copy all folders/files from the SteamCMD directory to the mods directory
-                for (int i = 0; i < destination.Length; i++)
-                {
-                    await CopyFoldersAsync(source[i], destination[i]);
-
-                    //Provide feedback
-                    ShowMessage("PROC: Files copied from " + source[i] + " to " + destination[i]);
-                }
-
-                //Provide feedback
-                ShowMessage("PROC: Files have been copied, deleting originals");
-
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-                await DeleteDirectory(@mods);
-            }
+            await DeleteDirectory(@steamcmd + "\\steamapps\\workshop\\content\\262060\\");
+            
 
             //Provide feedback
             ShowMessage("INFO: Mods have now been moved and renamed, originals have been deleted");
