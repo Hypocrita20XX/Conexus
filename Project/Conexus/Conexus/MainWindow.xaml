@@ -18,19 +18,19 @@
             <ColumnDefinition Width="*" />
             <!-- C1 -->
             <ColumnDefinition Width="100" />
-            <!-- C1  b -->
-            <ColumnDefinition Width="100" />
             <!-- C2 -->
-            <ColumnDefinition Width="10" />
-            <!-- C3 -->
             <ColumnDefinition Width="100" />
-            <!-- C3  b -->
-            <ColumnDefinition Width="75" />
+            <!-- C3 -->
+            <ColumnDefinition Width="10" />
             <!-- C4 -->
-            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="100" />
             <!-- C5 -->
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="75" />
             <!-- C6 -->
+            <ColumnDefinition Width="25" />
+            <!-- C7 -->
+            <ColumnDefinition Width="*" />
+            <!-- C8 -->
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -81,7 +81,7 @@
         <Rectangle Grid.Column="3" Grid.Row="3" Grid.RowSpan="5" Fill="#25363b"/>
         <!-- C3 R3:R8 -->
         <Rectangle Grid.Column="3" Grid.Row="9" Grid.RowSpan="3" Fill="#25363b"/>
-        <!-- C6 R0:R11 -->
+        <!-- C7 R0:R11 -->
         <Rectangle Grid.Column="7" Grid.Row="0" Grid.RowSpan="12" Fill="#25363b"/>
 
         <!-- Required inputs -->
