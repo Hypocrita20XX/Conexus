@@ -77,8 +77,10 @@
         <!-- Lighter vertical foreground border fills, spans contextually -->
         <!-- C0 R0:R11 -->
         <Rectangle Grid.Column="0" Grid.Row="0" Grid.RowSpan="12" Fill="#25363b"/>
-        <!-- C2 R3:R8 -->
+        <!-- C3 R3:R8 -->
         <Rectangle Grid.Column="3" Grid.Row="3" Grid.RowSpan="5" Fill="#25363b"/>
+        <!-- C3 R3:R8 -->
+        <Rectangle Grid.Column="3" Grid.Row="9" Grid.RowSpan="3" Fill="#25363b"/>
         <!-- C6 R0:R11 -->
         <Rectangle Grid.Column="7" Grid.Row="0" Grid.RowSpan="12" Fill="#25363b"/>
 
@@ -101,7 +103,6 @@
         <CheckBox Grid.Column="6" Grid.Row="4" Name="PasswordReveal" Unchecked="PasswordReveal_Unchecked" Checked="PasswordReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="#82959f"/>
 
         <!-- A combobox which lets the user switch which method they're using, a Steam collection or list of links -->
-        
         <ComboBox Grid.Column="4" Grid.ColumnSpan="3" Grid.Row="6" Margin="5" Name="cmbMethod" SelectionChanged="Method_SelectionChanged">
             <ComboBoxItem IsSelected="True">Steam Collection</ComboBoxItem>
             <ComboBoxItem>List</ComboBoxItem>
