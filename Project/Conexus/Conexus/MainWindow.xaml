@@ -80,8 +80,8 @@
 
         <!-- User options -->
         <!-- Added labels, rearanged everything in v1.2.1 -->
-        <Label Grid.Column="1" Grid.Row="6" Content="Mode" HorizontalContentAlignment="Center" Margin="5" FontStyle="Italic" Background="#7da9b6" />
-        <ComboBox Grid.Column="1" Grid.Row="7" Margin="5" Name="cmbMode" SelectionChanged="Mode_SelectionChanged">
+        <Label Grid.Column="1" Grid.Row="6" Content="Mode" HorizontalContentAlignment="Center" Margin="5" FontStyle="Italic" Background="#7da9b6" Visibility="Hidden"/>
+        <ComboBox Grid.Column="1" Grid.Row="7" Margin="5" Name="cmbMode" SelectionChanged="Mode_SelectionChanged" Visibility="Hidden">
             <ComboBoxItem IsSelected="True">Download Mods</ComboBoxItem>
             <ComboBoxItem>Update Mods</ComboBoxItem>
         </ComboBox>

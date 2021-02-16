@@ -1,0 +1,2 @@
+Conexus v1.3.1 Changelog:
+> Merged modes (download/update)
