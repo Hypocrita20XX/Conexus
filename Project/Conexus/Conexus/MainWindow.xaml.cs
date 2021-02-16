@@ -1,5 +1,5 @@
 ﻿/*
-> Conexus (v1.3.2) for Darkest Dungeon
+> Conexus (v1.4.0) for Darkest Dungeon
     Created by MatthiosArcanus(Discord)/Hypocrita(Steam)/Hypocrita20XX(GitHub) 
     A GUI-based program designed to streamline the process of organizing mods according to an existing Steam collection or list of links
     Handles downloading and updating mods through the use of SteamCMD (https://developer.valvesoftware.com/wiki/SteamCMD)
@@ -1634,7 +1634,7 @@ namespace Conexus
                 ShowMessage("VERIFY: No saved Steam password found");
             }
 
-            //Check the platform variable and set the platform combobox accordingly
+            //Check the method variable and set the platform combobox accordingly
             if (method == "steam")
             {
                 cmbMethod.SelectedIndex = 0;
