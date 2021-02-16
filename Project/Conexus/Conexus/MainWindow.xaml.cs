@@ -9,7 +9,7 @@
     Authors: Sven Groot, Augusto Proiete
     Source: http://www.ookii.org/software/dialogs/
 
-    Extended WPF Toolkit (v4.0.2
+    Extended WPF Toolkit (v4.0.2)
     Author: Xceed Software
     Source: https://github.com/xceedsoftware/wpftoolkit
 
@@ -75,6 +75,7 @@ namespace Conexus
         //Lists to store info related to the mods that will/are downloaded
         List<string> modInfo = new List<string>();
         List<string> appIDs = new List<string>();
+
         //Bools to store the value of each combobox
         bool downloadMods;
         bool updateMods;
@@ -82,22 +83,17 @@ namespace Conexus
         //Bool to store which method the user has selected
         bool steam;
 
-        //Added v1.3.0
         //Create a global dateTime for this session
         string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
 
-        //Added v1.2.0
-        //Changed v1.3.0, so that it's not zero-based (better for most to understand)
         //Keeps track of the line count in the log
         int lineCount = 1;
         //Stores all logs in a list, for later storage in a text file
         List<string> log = new List<string>();
 
-        //Added v1.3.0
         //Stores logs temporarily until the message textblock is initiated
         List<string> logTmp = new List<string>();
 
-        //Added v1.3.0
         //Create a root directory in the user's Documents folder for all generated data
         string rootPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Conexus";
         //Create a data directory for all text files (HTML.txt, Mods.txt, ModInfo.txt)
@@ -129,7 +125,6 @@ namespace Conexus
          * Collection=https://steamcommunity.com
          * 
          * [Misc]
-         * Mode=download
          * Method=steam
          * 
          * [Login]
@@ -150,16 +145,18 @@ namespace Conexus
 
         string urlcollection = "";
 
-        string mode = "";
         string method = "";
 
         //If the user provides this info, we also need to read the Steam username and password
         string username = "";
         string password = "";
 
-        //Added v1.3.0
         //Ensures that certain messages don't happen until the textblock is initialized
         bool loaded = false;
+
+
+        //^(O.o)^
+        string mode = "";
 
         #endregion
 
@@ -1841,7 +1838,6 @@ namespace Conexus
                 cmbMethod.SelectedIndex = 0;
                 steam = true;
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Saved preferred method found: Steam collection");
             }
             else if (method == "other")
@@ -1849,117 +1845,89 @@ namespace Conexus
                 cmbMethod.SelectedIndex = 1;
                 steam = false;
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Saved preferred method found: list of links");
             }
 
             loaded = true;
         }
 
-        //Changed v1.3.0, added logging/log saving
         //Called right after the user indicates they want to close the program (through the use of the "X" button)
         //Used to ensure all proper data is set to their corrosponding variables in the settings file
         void Window_Closing(object sender, EventArgs e)
         {
-            //Changed v1.3.0, now uses INI
             //Check to ensure the URLLink content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (urlcollection != "")
             {
-                //Added v1.3.0
                 ini["URL"]["Collection"] = urlcollection;
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Chosen collection URL saved");
             }
 
-            //Changed v1.3.0, now uses INI
             //Check to ensure the SteamCMDDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (steamcmd != "")
             {
-                //Added v1.3.0
                 ini["Directories"]["SteamCMD"] = steamcmd;
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Chosen SteamCMD directory saved");
             }
 
-            //Changed v1.3.0, now uses INI
             //Check to ensure the ModDir content is indeed provided (length greater than 0 indicates data in the field)
             //Make sure the variable in the settings file is correct
             if (mods != "")
             {
-                //Added v1.3.0
                 ini["Directories"]["Mods"] = mods;
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Chosen mods directory saved");
             }
 
-            //Changed v1.3.0, now uses INI
-            //Save which platform the user has chosen
+            //Save which method the user has chosen
             if (steam)
             {
-                //Added v1.3.0
                 ini["Misc"]["Method"] = "steam";
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Chosen method (Steam collection) saved");
             }
-            //Added v1.3.0
             else
             {
-                //Added v1.3.0
                 ini["Misc"]["Method"] = "other";
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Chosen method (list of links) saved");
             }
 
-            //Added v1.3.0
             if (mode == "download")
             {
-                //Added v1.3.0
                 ini["Misc"]["Mode"] = "update";
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Mods have been downloaded, Conexus will next start in update mode");
             }
 
             if (mods != "" && Directory.GetDirectories(mods).Length > 0)
             {
-                //Added v1.3.0
                 ini["Misc"]["Mode"] = "update";
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Mods have been downloaded, Conexus will next start in update mode");
             }
             //Otherwise if there is no mods path, let's just assume they need to download
             else if (mods == "")
             {
-                //Added v1.3.0
                 ini["Misc"]["Mode"] = "download";
 
-                //Added v1.3.0
                 ShowMessage("VERIFY: Mods have not been downloaded, Conexus will next start in download mode");
             }
 
 
-            //Added v1.3.0
             ShowMessage("PROC: All user data has been saved!");
 
-            //Added v1.3.0
             ShowMessage("INFO: Conexus will close now");
 
             ini.Persist();
 
-            //Added v1.3.0
             //Save log to file
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
-        //Changed v1.3.0, added logging
         //Final call that happens right after the window starts to close
         //Used to save all relevant data to the settings file
         void Window_Closed(object sender, EventArgs e)
@@ -1967,11 +1935,9 @@ namespace Conexus
             //Save all data to the settings file
             //UserSettings.Default.Save();
 
-            //Added v1.2.0
             //Ensure the Logs folder exists
             if (!Directory.Exists(logsPath))
             {
-                //Added v1.3.0
                 ShowMessage("WARN: _Logs folder is missing! Creating now");
 
                 Directory.CreateDirectory(logsPath);
@@ -1980,7 +1946,6 @@ namespace Conexus
             //Save log to file
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
-            //Added v1.3.0
             ini.Persist();
         }
 
