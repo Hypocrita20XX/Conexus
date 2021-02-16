@@ -1161,7 +1161,7 @@ namespace Conexus
                     for (int i = 0; i < logTmp.Count; i++)
                     {
                         //Show desired message without line count or date
-                        Messages.Text += "    " + logTmp[i].Substring(logTmp[i].IndexOf("*")+1);
+                        Messages.Text += logTmp[i].Substring(logTmp[i].IndexOf("*")+1);
                         //Remove the asterisk to provide a properly formatted log message
                         string tmp = Regex.Replace(logTmp[i], @"['*']", " ", RegexOptions.None);
                         //Save this message to the log list
