@@ -14,97 +14,116 @@
         Closed="Window_Closed">
     <Grid Background="#1b1b1b" Name="Main">
         <Grid.ColumnDefinitions>
+            <!-- C0 -->
             <ColumnDefinition Width="*" />
+            <!-- C1 -->
             <ColumnDefinition Width="200" />
+            <!-- C2 -->
             <ColumnDefinition Width="10" />
+            <!-- C3 -->
             <ColumnDefinition Width="150" />
+            <!-- C4 -->
             <ColumnDefinition Width="25" />
+            <!-- C5 -->
             <ColumnDefinition Width="*" />
+            <!-- C6 -->
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <!-- R0 -->
             <RowDefinition Height="*" />
+            <!-- R1 -->
             <RowDefinition Height="35" />
+            <!-- R2 -->
             <RowDefinition Height="10" />
+            <!-- R3 -->
             <RowDefinition Height="35" />
+            <!-- R4 -->
             <RowDefinition Height="35" />
+            <!-- R5 -->
             <RowDefinition Height="10" />
+            <!-- R6 -->
             <RowDefinition Height="35" />
+            <!-- R7 -->
             <RowDefinition Height="10" />
+            <!-- R8 -->
             <RowDefinition Height="35" />
+            <!-- R9 -->
             <RowDefinition Height="10" />
+            <!-- R10 -->
             <RowDefinition Height="145" />
+            <!-- R11 -->
             <RowDefinition Height="10" />
+            <!-- R12 -->
             <RowDefinition Height="35" />
+            <!-- R13 -->
             <RowDefinition Height="35" />
+            <!-- R14 -->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <!-- Lighter horizontal foreground border fills, spans across entire window -->
+        <!-- C0 R0-->
         <Rectangle Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="6" Fill="#25363b"/>
-        <Rectangle Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="6" Fill="#25363b"/>
+        <!-- C0 R2-->
         <Rectangle Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" Fill="#25363b"/>
+        <!-- C0 R5-->
         <Rectangle Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="6" Fill="#25363b"/>
+        <!-- C0 R7-->
         <Rectangle Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="6" Fill="#25363b"/>
+        <!-- C0 R9-->
         <Rectangle Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="6" Fill="#25363b"/>
+        <!-- C0 R11-->
         <Rectangle Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="6" Fill="#25363b"/>
+        <!-- C0 R14-->
         <Rectangle Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="6" Fill="#25363b"/>
-        
+
+        <!-- Lighter vertical foreground border fills, spans contextually -->
+        <!-- C0 R0:R16 -->
         <Rectangle Grid.Column="0" Grid.Row="0" Grid.RowSpan="16" Fill="#25363b"/>
+        <!-- C2 R3:R8 -->
         <Rectangle Grid.Column="2" Grid.Row="3" Grid.RowSpan="5" Fill="#25363b"/>
+        <!-- C2 R12:R16 -->
         <Rectangle Grid.Column="2" Grid.Row="12" Grid.RowSpan="4" Fill="#25363b"/>
+        <!-- C6 R0:R16 -->
         <Rectangle Grid.Column="6" Grid.Row="0" Grid.RowSpan="16" Fill="#25363b"/>
-        
+
         <!-- Required inputs -->
-        <!-- Added "GotMouseCapture", "GotKeyboardFocus" in v1.2.0 -->
-        <!-- Removed labels, rearanged everything in v1.2.1 -->
+        <!-- Holds the supplied Steam collection URL -->
         <xctk:WatermarkTextBox Watermark="Steam Collection URL" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="1" Name="URLLink" TextAlignment="Center" Margin="5" Background="#bedce4"/>
-
-
+        <!-- Holds the supplied SteamCMD directory -->
         <Button Grid.Column="1" Grid.Row="3" Name="SteamCMDDir" Content="Select SteamCMD Directory" Click="SteamCMDDir_Click" Margin="5" Background="#82959f"/>
-
+        <!-- Holds the supplied mods directory -->
         <Button Grid.Column="1" Grid.Row="4" Name="ModDir" Content="Select Mods Directory" Click="ModDir_Click" Margin="5" Background="#82959f"/>
 
-        <!-- Added v1.2.0 -->
-        <!-- Removed labels, rearanged everything in v1.2.1 -->
+        <!-- Holds the supplied Steam username, in a censored password field, as well as a checkbox which will reveal that username -->
         <xctk:WatermarkPasswordBox Watermark="Steam Username" Grid.Column="3" Grid.Row="3" Name="SteamUsername" Margin="5" Background="#bedce4"/>
         <TextBox Grid.Column="3" Grid.Row="3" Name="SteamUsername_TextBox" Visibility="Collapsed" Margin="5" Background="#bedce4"/>
         <CheckBox Grid.Column="4" Grid.Row="3" Name="UsernameReveal" Unchecked="UsernameReveal_Unchecked" Checked="UsernameReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="#82959f"/>
 
-        <!-- Added v1.2.0 -->
-        <!-- Removed labels, rearanged everything in v1.2.1 -->
+        <!-- Holds the supplied Steam password, in a censored password field, as well as a checkbox which will reveal that password -->
         <xctk:WatermarkPasswordBox Watermark="Steam Password" Grid.Column="3" Grid.Row="4" Name="SteamPassword" Margin="5" Background="#bedce4"/>
         <TextBox Grid.Column="3" Grid.Row="4" Name="SteamPassword_TextBox" Visibility="Collapsed" Margin="5" Background="#bedce4"/>
         <CheckBox Grid.Column="4" Grid.Row="4" Name="PasswordReveal" Unchecked="PasswordReveal_Unchecked" Checked="PasswordReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="#82959f"/>
 
-
-        <!-- User options -->
-        <!-- Added labels, rearanged everything in v1.2.1 -->
-        <Label Grid.Column="1" Grid.Row="6" Content="Mode" HorizontalContentAlignment="Center" Margin="5" FontStyle="Italic" Background="#7da9b6" Visibility="Hidden"/>
-        <ComboBox Grid.Column="1" Grid.Row="7" Margin="5" Name="cmbMode" SelectionChanged="Mode_SelectionChanged" Visibility="Hidden">
-            <ComboBoxItem IsSelected="True">Download Mods</ComboBoxItem>
-            <ComboBoxItem>Update Mods</ComboBoxItem>
-        </ComboBox>
-
-        <!-- Added labels, rearanged everything in v1.2.1 -->
+        <!-- A combobox which lets the user switch which method they're using, a Steam collection or list of links -->
         <Label Grid.Column="1" Grid.Row="6" Content="Method" HorizontalContentAlignment="Center" Margin="5" FontStyle="Italic" Background="#7da9b6" />
         <ComboBox Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="6" Margin="5" Name="cmbPlatform" SelectionChanged="Platform_SelectionChanged">
             <ComboBoxItem IsSelected="True">Steam Collection</ComboBoxItem>
             <ComboBoxItem>List</ComboBoxItem>
         </ComboBox>
 
-        <!-- Run whichever process the user wants -->
-        <!-- Rearanged in v1.2.1 -->
+        <!-- The main event, once everything is set, this button starts the show -->
         <Button Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="8" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#82959f"/>
 
-        <!-- Added v1.2.1-->
+        <!-- A fancy useless image of the Conexus logo behind the log window -->
         <Image Source="/Resources/Logo.png" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="10" Margin="10" Opacity="0.35"/>
-        <!-- Added v1.2.0 -->
-        <!-- Rearanged in v1.2.1 -->
+        <!-- Scrollviewer window which houses the log window, which lets the user know what Conexus is doing, and when -->
         <ScrollViewer x:Name="MessageScrollViewer" Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="4" HorizontalAlignment="Left" Opacity="0.75" Margin="0,5" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Width="385" Height="135">
             <TextBlock Name="Messages" TextAlignment="Left" Background="#7da9b6" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" FontSize="12" Width="375"/>
         </ScrollViewer>
 
-        <!-- Added v1.2.1 -->
+        <!-- Various buttons that lead to Conexus on various platforms -->
         <Button Grid.Column="1" Grid.Row="12" Name="URL_Nexus" Content="Nexus Mods" Click="URL_Nexus_Click" Margin="5" Background="#82959f" FontStyle="Italic"/>
         <Button Grid.Column="1" Grid.Row="13" Name="URL_Github" Content="Github" Click="URL_Github_Click" Margin="5" Background="#82959f" FontStyle="Italic"/>
         <Button Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="12" Name="URL_Wiki" Content="Wiki" Click="URL_Wiki_Click" Margin="5" Background="#82959f" FontStyle="Italic"/>
