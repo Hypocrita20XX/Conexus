@@ -1476,6 +1476,55 @@ namespace Conexus
             }
         }
 
+        //After SteamCMD has closed, this will check to see if SteamCMD successfully downloaded mods
+        //Returns:
+        //VALID - steamcmd\steamapps\workshop contains content folder and all necessary mod folders according to ModInfo.txt
+        //        Program can proceed normally
+        //INVALID - steamcmd\steamapps\workshop does not contain content folder and, by extension, no mod folders whatsoever
+        //          Program must run a series of verification/troubleshooting checks and let the user know what they need to try
+        //MISSING_MODS - steamcmd\steamapps\workshop does contain the content folder, but mod folders are missing in part or whole
+        //               Program must re-run SteamCMD one more time to try to download mods again, then run this verification again
+        //               Only one more time so as not to bog down the program, and if there is a problem, no need wasting time
+        string VerifySteamCMDDownload(string steamCmdDir)
+        {
+            /*
+             * 
+             * This verification is mostly straightforward, but comes in two parts, one nested in the other,
+             * and becomes more complex as the implications need handled approprietly in a user-oriented manner.
+             * 
+             * The first check has to verify that steamcmd\steamapps\workshop\content exists
+             * The next check needs to go to steamcmd\steamapps\workshop\content\262060 and make sure 
+             * that there are indeed folders matching the information found in ModInfo.txt
+             * This needs to be an exact match to what's in that file, otherwise we need to run checks
+             * to see what may have gone wrong and let the user know the result of each check
+             * 
+             * There are several known reasons mods fail to download:
+             * 1.) The game is not registered to the user's Steam account (they have it on Epic/GOG, or a pirated version - all unsupported)
+             * 2.) Invalid Steam credentials (the user typed in something accidentally)
+             * 3.) Invalid mod info (either their links file is invalid/missing or URL is invalid - previous check should handle the URL)
+             * 
+             * There are also a number of suspected reasons mods could fail to download:
+             * 1.) No internet connection
+             * 2.) Incorrect or corrupt SteamCMD installation (possibly missing SteamGuard code/account not linked to SteamCMD)
+             * 3.) Unsupported OS (only Windows 10 is tested, if tried on Linux, Mac, Android, etc. I'm almost certain Conexus will break)
+             * 
+             * 
+             * Concerning known reasons and how to check them:
+             * 1 is unrecoverable, there is no known workaround for Epic/GOG, and I won't support a pirated version
+             * 2 is easy enough in theory, just let the user know there was a problem logging in
+             * 3 should also be straightforward, let them know that no valid mod information was found
+             * and point them in a few directions as to how to fix it, related to their chosen method (collection/list of links)
+             * 
+             * Concerning suspected reasons:
+             * 1 should be simple enough, do a basic WebClient read and see if you get a true result
+             * 2 is also simple, let the user know there's an issue (so long as you can detect it) and have them do a manual clean reinstall of SteamCMD
+             * the trick is detecting the problem, and it will probably be simplest to just do a blanket, blind check and point them
+             * in that direction
+             * 3 is already implented elsewhere and we can reuse that code here, just let the user know that their OS is not supported and that I can't help them
+             * 
+             */
+        }
+
         #endregion
 
         #region Data Saving Functionality
