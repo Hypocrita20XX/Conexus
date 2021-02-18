@@ -968,15 +968,34 @@ namespace Conexus
                 await Task.Run(() => process.Start());
                 //Wait until SteamCMD finishes
                 await Task.Run(() => process.WaitForExit());
-                //Move on to copying and renaming the mods
-                await RenameAndMoveModsAsync();
             }
 
             //Provide feedback
-            ShowMessage("INFO: SteamCMD has finished downloading mods");
+            ShowMessage("INFO: SteamCMD has closed");
 
-            //Save log to file
-            WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            //Verify that mods downloaded
+            if (await VerifySteamCMDDownload(steamcmd) == "VALID")
+            {
+                //Provide feedback
+                ShowMessage("INFO: Mods have been successfully downloaded");
+
+                //Move on to copying and renaming the mods
+                await RenameAndMoveModsAsync();
+
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            }
+            else
+            {
+                //Provide feedback
+                ShowMessage("ERROR: Mods could not be downloaded, process has now stopped");
+
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+                //Don't continue
+                return;
+            }
         }
 
         //Creates organized folders in the mods directory, then copies files from the SteaCMD directory to those folders
@@ -1699,11 +1718,6 @@ namespace Conexus
                 }
             }
 
-            //Now that we have broad checks out of the way, we can start getting into some of the specifics
-            //First, if e equals "VALID", we just need to return that and move on
-            if (e == "VALID")
-                return "VALID";
-
             //Second, for any "INVALID" occurences
             //This, again happens if:
             //1.) The content folder is missing (which also means 2 and 3 are true)
@@ -1763,6 +1777,9 @@ namespace Conexus
                         //Also make sure that "process finished successfully" thing doesn't show up
                     }
 
+                    //Save log to file
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
                     ShowMessage("DEBUG: 3 - We've verified your internet connection, so let's check other potential causes");
 
                     //Specific to a collection
@@ -1781,12 +1798,18 @@ namespace Conexus
                         ShowMessage("DEBUG: 4 - And that each URL is also on its own line");
                     }
 
+                    //Save log to file
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
                     //Let's move on to verifying their OS
                     //We can just copy/paste this from earlier in the program
                     if (System.Environment.OSVersion.ToString().Contains("10"))
                         ShowMessage("DEBUG: 5 - You're using a supported OS, Windows 10");
                     else
                         ShowMessage("DEBUG: 5 - Unsupported OS detected, please try again using Windows 10!");
+
+                    //Save log to file
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
                     /*
                      * 
@@ -1820,8 +1843,20 @@ namespace Conexus
                     ShowMessage("DEBUG: 7 - First, I need the logs located in Documents\\Conexus\\Logs");
                     ShowMessage("DEBUG: 7 - Second, also send the logs in steamcmd\\logs");
                     ShowMessage("DEBUG: 7 - Just send everything in those folders, thanks!");
+
+                    //Save log to file
+                    WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
                 }
             }
+
+            if (e == "VALID")
+                return "VALID";
+            else if (e == "INVALID")
+                return "INVALID";
+            else if (e == "MISSING_MODS")
+                return "MISSING_MODS";
+            else
+                return "INVALID";
         }
 
         //A generic method that takes in a website and appends "generate_204" to the end
