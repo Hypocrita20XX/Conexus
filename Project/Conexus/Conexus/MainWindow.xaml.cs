@@ -985,17 +985,6 @@ namespace Conexus
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
-            else
-            {
-                //Provide feedback
-                ShowMessage("ERROR: Mods could not be downloaded, process has now stopped");
-
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-
-                //Don't continue
-                return;
-            }
         }
 
         //Creates organized folders in the mods directory, then copies files from the SteaCMD directory to those folders
