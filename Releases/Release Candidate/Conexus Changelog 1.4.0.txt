@@ -8,3 +8,8 @@ Conexus Changelog 1.4.0:
 
 > Log window should now properly scroll to the bottom of the window with each new window
 > New log tag, DEBUG, to hopefully help you with specific troubleshooting steps
+
+> Changed log level in generic exception from WARNING to ERROR
+
+> Added lengthy debug/diagnostics when SteamCMD fails to download mods
+> When this happens, it's going to be a giant wall of text with hopefully useful info that can get you back up and running

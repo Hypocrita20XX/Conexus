@@ -175,8 +175,8 @@ namespace Conexus
         //Very basic exception handling
         void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            ShowMessage("WARNING: exception occured! " + (e.ExceptionObject as Exception).Message);
-            ShowMessage("WARNING: Please post your logs on Github! https://github.com/Hypocrita20XX/Conexus/issues");
+            ShowMessage("ERROR: exception occured! " + (e.ExceptionObject as Exception).Message);
+            ShowMessage("ERROR: Please post your logs on Github! https://github.com/Hypocrita20XX/Conexus/issues");
 
             //If an exception does happen, I'm assuming Conexus will crash, so here's this just in case
             //Ensure the Logs folder exists
@@ -1781,10 +1781,45 @@ namespace Conexus
                         ShowMessage("DEBUG: 4 - And that each URL is also on its own line");
                     }
 
-                    //We need to check which method they're using and provide a message based on that
+                    //Let's move on to verifying their OS
+                    //We can just copy/paste this from earlier in the program
+                    if (System.Environment.OSVersion.ToString().Contains("10"))
+                        ShowMessage("DEBUG: 5 - You're using a supported OS, Windows 10");
+                    else
+                        ShowMessage("DEBUG: 5 - Unsupported OS detected, please try again using Windows 10!");
 
-                    ShowMessage("DEBUG: Content folder is missing!");
-                    ShowMessage("DEBUG: Content folder is missing!");
+                    /*
+                     * 
+                     * Now for the stuff that is a bit less simple to detect 
+                     * (and that I honestly don't want to come up with a solution for,
+                     * (stuff like login you could theoretically parse the steamcmd logs for, but.... Ehhhhhhhhhhh)
+                     * 
+                     * This includes the following:
+                     * 1.) Failure to log in
+                     * 2.) Invalid/corrupt SteamCMD installation
+                     * 3.) Epic/GOG/Pirates
+                     * 
+                     * This, we just need to provide a large block of text and hope for the best
+                     * 
+                    */
+
+                    ShowMessage("DEBUG: 6 - Now for the stuff I can't check directly");
+                    ShowMessage("DEBUG: 6 - First, make sure you entered your Steam credentials correctly");
+                    ShowMessage("DEBUG: 6 - Second, you might want to clear out your SteamCMD installation and start fresh");
+                    ShowMessage("DEBUG: 6 - If you need a refresher, visit this link: https://developer.valvesoftware.com/wiki/SteamCMD#Running_SteamCMD");
+                    ShowMessage("DEBUG: 6 - Third, if you don't own the game on Steam, unfortunately Conexus won't work");
+                    ShowMessage("DEBUG: 6 - Sadly due to technical limitations, I can't support Epic/GOG");
+                    ShowMessage("DEBUG: 6 - Please see this for more details: https://github.com/Hypocrita20XX/Conexus/issues/11");
+                    ShowMessage("DEBUG: 6 - Also, if you're using a pirated version, I can't help you whatsoever");
+                    ShowMessage("DEBUG: 6 - I only support legitimate copies");
+
+
+                    //And now, the "IDK, send me stuff" series of messages
+                    ShowMessage("DEBUG: 7 - If you still can't get Conexus to work, first of all, sorry for the inconvenience!");
+                    ShowMessage("DEBUG: 7 - I'll need you to send me some logs and create an issue on Github: https://github.com/Hypocrita20XX/Conexus/issues");
+                    ShowMessage("DEBUG: 7 - First, I need the logs located in Documents\\Conexus\\Logs");
+                    ShowMessage("DEBUG: 7 - Second, also send the logs in steamcmd\\logs");
+                    ShowMessage("DEBUG: 7 - Just send everything in those folders, thanks!");
                 }
             }
         }
