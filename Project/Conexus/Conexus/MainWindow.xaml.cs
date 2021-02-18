@@ -150,6 +150,10 @@ namespace Conexus
         //Ensures that certain messages don't happen until the textblock is initialized
         bool loaded = false;
 
+        //Stores number of download attempts made
+        //Maximum allowed: 2
+        int dlAttempts = 0;
+
         #endregion
 
         public MainWindow()
@@ -1480,12 +1484,12 @@ namespace Conexus
         //Returns:
         //VALID - steamcmd\steamapps\workshop contains content folder and all necessary mod folders according to ModInfo.txt
         //        Program can proceed normally
-        //INVALID - steamcmd\steamapps\workshop does not contain content folder and, by extension, no mod folders whatsoever
+        //INVALID - steamcmd\steamapps\workshop does not contain content and/or 262060 folder and, by extension, no mod folders whatsoever
         //          Program must run a series of verification/troubleshooting checks and let the user know what they need to try
         //MISSING_MODS - steamcmd\steamapps\workshop does contain the content folder, but mod folders are missing in part or whole
         //               Program must re-run SteamCMD one more time to try to download mods again, then run this verification again
         //               Only one more time so as not to bog down the program, and if there is a problem, no need wasting time
-        string VerifySteamCMDDownload(string steamCmdDir)
+        async Task<string> VerifySteamCMDDownload(string steamCmdDir)
         {
             /*
              * 
@@ -1494,7 +1498,7 @@ namespace Conexus
              * 
              * The first check has to verify that steamcmd\steamapps\workshop\content exists
              * The next check needs to go to steamcmd\steamapps\workshop\content\262060 and make sure 
-             * that there are indeed folders matching the information found in ModInfo.txt
+             * that there are indeed folders matching the information found in the modInfo list
              * This needs to be an exact match to what's in that file, otherwise we need to run checks
              * to see what may have gone wrong and let the user know the result of each check
              * 
@@ -1523,6 +1527,167 @@ namespace Conexus
              * 3 is already implented elsewhere and we can reuse that code here, just let the user know that their OS is not supported and that I can't help them
              * 
              */
+
+            //Will store local variables that will then dictate further verification checks
+            //until final returns are needed
+            string e;
+
+            //Increment dlAttempts
+            dlAttempts++;
+
+            //Broad check for the existence of \\content, \\262060, and all necessary mod folders
+            //Allows for a maximum of 2 attempts, so that the program doesn't get stuck in an infinite loop
+            //If it doesn't work the second time, best to assume it won't work after that, and so on
+            if (dlAttempts <= 2)
+            {
+                //Check to see if \\content exists
+                if (Directory.Exists(steamCmdDir + "\\content"))
+                {
+                    //Check to see if \\262060 exists
+                    if (Directory.Exists(steamCmdDir + "\\content\\262060"))
+                    {
+                        //Keeps track of our place in the modInfo list
+                        int index = 0;
+                        //See if what's in here matches what's in the modInfo list
+                        foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\content\\262060"))
+                        {
+                            //If this directory is not contained in the modInfo list
+                            if (dir != modInfo[index])
+                                //We need to redownload mods
+                                e = "MISSING_MODS";
+                            else
+                                //Otherwise we can continue checking
+                                index++;
+                        }
+
+                        //If we made it past the foreach loop, then all the mods in \\262060 are contained in the modInfo list
+                        e = "VALID";
+                    }
+                    //Otherwise we've got problems
+                    else
+                    {
+                        //Incrment dlAttempts
+                        dlAttempts++;
+
+                        //Re-run steam and try again
+                        await DownloadModsFromSteamAsync();
+
+                        //Let's see if this worked, does \\content exist?
+                        if (Directory.Exists(steamCmdDir + "\\content"))
+                        {
+                            //Off to a good start, does \\262060 exist?
+                            if (Directory.Exists(steamCmdDir + "\\content\\262060"))
+                            {
+                                //Keeps track of our place in the modInfo list
+                                int index = 0;
+
+                                //See if what's in here matches what's in the modInfo list
+                                foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\content\\262060"))
+                                {
+                                    //If this directory is not contained in the modInfo list
+                                    if (dir != modInfo[index])
+                                    {
+                                        //Incrment dlAttempts
+                                        dlAttempts++;
+
+                                        //Something went wrong again, we've tried twice now and need to abort
+                                        e = "INVALID";
+                                    }
+                                    else
+                                        //Otherwise we can continue checking
+                                        index++;
+                                }
+
+                                //If we made it past the foreach loop, then all the mods in \\262060 are contained in the modInfo list
+                                e = "VALID";
+                            }
+                            else
+                            {
+                                //Incrment dlAttempts
+                                dlAttempts++;
+
+                                //Something went wrong again, abort
+                                e = "INVALID";
+                            }
+                        }
+                        else
+                        {
+                            //Incrment dlAttempts
+                            dlAttempts++;
+
+                            //Something went wrong again, abort
+                            e = "INVALID";
+                        }
+                    }
+                }
+                //Otherwise we've got problems
+                else
+                {
+                    //Incrment dlAttempts
+                    dlAttempts++;
+
+                    //Re-run steam and try again
+                    await DownloadModsFromSteamAsync();
+
+                    //Let's see if this worked, does \\content exist?
+                    if (Directory.Exists(steamCmdDir + "\\content"))
+                    {
+                        //Off to a good start, does \\262060 exist?
+                        if (Directory.Exists(steamCmdDir + "\\content\\262060"))
+                        {
+                            //Keeps track of our place in the modInfo list
+                            int index = 0;
+
+                            //See if what's in here matches what's in the modInfo list
+                            foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\content\\262060"))
+                            {
+                                //If this directory is not contained in the modInfo list
+                                if (dir != modInfo[index])
+                                {
+                                    //Incrment dlAttempts
+                                    dlAttempts++;
+
+                                    //Something went wrong again, we've tried twice now and need to abort
+                                    e = "INVALID";
+                                }
+                                else
+                                    //Otherwise we can continue checking
+                                    index++;
+                            }
+
+                            //If we made it past the foreach loop, then all the mods in \\262060 are contained in the modInfo list
+                            e = "VALID";
+                        }
+                        else
+                        {
+                            //Incrment dlAttempts
+                            dlAttempts++;
+
+                            //Something went wrong again, abort
+                            e = "INVALID";
+                        }
+                    }
+                    else
+                    {
+                        //Incrment dlAttempts
+                        dlAttempts++;
+
+                        //Something went wrong again, abort
+                        e = "INVALID";
+                    }
+                }
+            }
+            else if (dlAttempts > 2)
+            {
+                //No more attempts allowed
+                //Provide either specific or generic debug info here
+                e = "INVALID";
+            }
+            else
+                e ="INVALID";
+
+            //Now that we have broad checks out of the way, we can start getting into some of the specifics
+
         }
 
         #endregion
