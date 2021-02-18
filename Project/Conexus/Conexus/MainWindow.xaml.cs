@@ -677,6 +677,9 @@ namespace Conexus
             else if (!success)
                 ShowMessage("WARN: Process could not finish successfully!");
 
+            //Reset dlAttempts
+            dlAttempts = 0;
+
             //Save logs to file
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
@@ -929,30 +932,49 @@ namespace Conexus
         //Handles downloading mods through SteamCMD
         async Task DownloadModsFromSteamAsync()
         {
-            //Check to see if the darkestdungeon\mods folder is empty
-            //If not, it needs cleared out to make room for the updated mods
-            if (Directory.GetDirectories(mods).Length > 0)
+            //Only do this if this is the first attempt
+            if (dlAttempts == 0)
             {
-                //Provide feedback
-                ShowMessage("INFO: Mods detected in " + mods + ", deleting old versions now");
+                //Check to see if the darkestdungeon\mods folder is empty
+                //If not, it needs cleared out to make room for the updated mods
+                if (Directory.GetDirectories(mods).Length > 0)
+                {
+                    //Provide feedback
+                    ShowMessage("INFO: Mods detected in " + mods + ", deleting old versions now");
 
-                await DeleteDirectory(mods);
+                    await DeleteDirectory(mods);
+                }
+
+                //Check to see if the 262060 folder is empty
+                //If not, it needs cleared out, remnants of a failed download process
+                if (Directory.Exists(steamcmd + "\\steamapps\\workshop\\content") && Directory.Exists(steamcmd + "\\steamapps\\workshop\\content\\262060"))
+                    if (Directory.GetDirectories(steamcmd + "\\steamapps\\workshop\\content\\262060").Length > 0)
+                    {
+                        //Provide feedback
+                        ShowMessage("INFO: Mods detected in " + steamcmd + "\\steamapps\\workshop\\content\\262060" + ", deleting now");
+
+                        await DeleteDirectory(steamcmd + "\\steamapps\\workshop\\content\\262060");
+                    }
             }
 
             //Stores the proper commands that will be passed to SteamCMD
             string cmdList = "";
 
-            //Provide feedback
-            ShowMessage("PROC: Commands will now be obtained");
+
+            //Only do this if this is the first attempt
+            if (dlAttempts == 0) 
+                ShowMessage("PROC: Commands will now be obtained");
 
             //Get a list of commands for each mod stored in a single string
             for (int i = 0; i < appIDs.Count; i++)
             {
                 await Task.Run(() => cmdList += "+\"workshop_download_item 262060 " + appIDs[i] + "\" ");
 
-                //Provide feedback
-                ShowMessage("PROC: Adding command to list: " + " +\"workshop_download_item 262060 " + appIDs[i] + "\" ");
+                //Only do this if this is the first attempt
+                if (dlAttempts == 0)
+                    ShowMessage("PROC: Adding command to list: " + " +\"workshop_download_item 262060 " + appIDs[i] + "\" ");
             }
+            
 
             //Provide feedback
             ShowMessage("INFO: SteamCMD will take over now");
@@ -997,7 +1019,7 @@ namespace Conexus
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
             }
-            else if (!result && dlAttempts <= 2)
+            else if (!result && dlAttempts < 2)
             {
                 //Increment dlAttempts
                 dlAttempts++;
@@ -1008,13 +1030,13 @@ namespace Conexus
 
                 await DownloadModsFromSteamAsync();
             }
-            else if (!result && dlAttempts > 2)
+            else if (!result && dlAttempts >= 2)
             {
                 //Provide feedback
                 ShowMessage("Warn: Mods could not be downloaded after two attempts, process will now stop");
 
                 //Indicate failure
-                success = true;
+                success = false;
             }
         }
 
