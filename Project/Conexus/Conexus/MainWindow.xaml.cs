@@ -973,8 +973,10 @@ namespace Conexus
             //Provide feedback
             ShowMessage("INFO: SteamCMD has closed");
 
+            string result = await VerifySteamCMDDownload(steamcmd);
+
             //Verify that mods downloaded
-            if (await VerifySteamCMDDownload(steamcmd) == "VALID")
+            if (result == "VALID")
             {
                 //Reset dlAttempts
                 dlAttempts = 0;
@@ -987,6 +989,24 @@ namespace Conexus
 
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+            }
+            else if (result == "INVALID")
+            {
+
+            }
+            //Mods are missing, we need to try downloading again
+            else if (result == "MISSING_MODS")
+            {
+                //Create a wrapper that will run all commands, wait for the process to finish, and then proceed to copying and renaming folders/files
+                using (Process process = new Process())
+                {
+                    //Set the commands for this process
+                    process.StartInfo = processInfo;
+                    //Start the process with the provided commands
+                    await Task.Run(() => process.Start());
+                    //Wait until SteamCMD finishes
+                    await Task.Run(() => process.WaitForExit());
+                }
             }
         }
 
