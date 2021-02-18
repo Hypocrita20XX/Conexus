@@ -976,6 +976,9 @@ namespace Conexus
             //Verify that mods downloaded
             if (await VerifySteamCMDDownload(steamcmd) == "VALID")
             {
+                //Reset dlAttempts
+                dlAttempts = 0;
+
                 //Provide feedback
                 ShowMessage("INFO: Mods have been successfully downloaded");
 
@@ -1558,29 +1561,25 @@ namespace Conexus
                     //Check to see if \\262060 exists
                     if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                     {
-                        //Keeps track of our place in the modInfo list
-                        int index = 0;
-                        //See if what's in here matches what's in the modInfo list
-                        foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
-                        {
-                            //If this directory is not contained in the modInfo list
-                            if (dir != modInfo[index])
-                            {
-                                //We need to redownload mods
-                                e = "MISSING_MODS";
+                        string[] directories = Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060");
 
-                                //Get out of the loop
-                                break;
-                            }
-                            else
-                            {
-                                //Otherwise we can consider this a valid download, so far
-                                e = "VALID";
+                        //Will store how many mods have been correctly downloaded
+                        int match = 0;
 
-                                //Continue checking
-                                index++;
-                            }
-                        }
+                        //So, we run through both data sets, what has been downloaded, and what is in the appID list
+                        //We compare to make sure we get a 100% identical match in the end
+                        for (int x = 0; x < directories.Length; x++)
+                            for (int y = 0; y < appIDs.Count; y++)
+                                if (directories[x].Contains(appIDs[y]))
+                                    match++;
+
+                        //Now compare what is stored in match with what is expected
+                        if (match == appIDs.Count)
+                            //If match is the same as the count of IDs in the list, the all mods have downloaded
+                            e = "VALID";
+                        else
+                            //Otherwise something has gone wrong
+                            e = "MISSING_MODS";
                     }
                     //Otherwise we've got problems
                     else
@@ -1597,32 +1596,29 @@ namespace Conexus
                             //Off to a good start, does \\262060 exist?
                             if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                             {
-                                //Keeps track of our place in the modInfo list
-                                int index = 0;
+                                string[] directories = Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060");
 
-                                //See if what's in here matches what's in the modInfo list
-                                foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
+                                //Will store how many mods have been correctly downloaded
+                                int match = 0;
+
+                                //So, we run through both data sets, what has been downloaded, and what is in the appID list
+                                //We compare to make sure we get a 100% identical match in the end
+                                for (int x = 0; x < directories.Length; x++)
+                                    for (int y = 0; y < appIDs.Count; y++)
+                                        if (directories[x].Contains(appIDs[y]))
+                                            match++;
+
+                                //Now compare what is stored in match with what is expected
+                                if (match == appIDs.Count)
+                                    //If match is the same as the count of IDs in the list, the all mods have downloaded
+                                    e = "VALID";
+                                else
                                 {
-                                    //If this directory is not contained in the modInfo list
-                                    if (dir != modInfo[index])
-                                    {
-                                        //Incrment dlAttempts
-                                        dlAttempts++;
+                                    //Incrment dlAttempts
+                                    dlAttempts++;
 
-                                        //Something went wrong again, we've tried twice now and need to abort
-                                        e = "INVALID";
-
-                                        //Get out of the loop
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        //Otherwise we can consider this a valid download, so far
-                                        e = "VALID";
-
-                                        //Continue checking
-                                        index++;
-                                    }
+                                    //Otherwise something has gone wrong
+                                    e = "INVALID";
                                 }
                             }
                             else
@@ -1659,32 +1655,29 @@ namespace Conexus
                         //Off to a good start, does \\262060 exist?
                         if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                         {
-                            //Keeps track of our place in the modInfo list
-                            int index = 0;
+                            string[] directories = Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060");
 
-                            //See if what's in here matches what's in the modInfo list
-                            foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
+                            //Will store how many mods have been correctly downloaded
+                            int match = 0;
+
+                            //So, we run through both data sets, what has been downloaded, and what is in the appID list
+                            //We compare to make sure we get a 100% identical match in the end
+                            for (int x = 0; x < directories.Length; x++)
+                                for (int y = 0; y < appIDs.Count; y++)
+                                    if (directories[x].Contains(appIDs[y]))
+                                        match++;
+
+                            //Now compare what is stored in match with what is expected
+                            if (match == appIDs.Count)
+                                //If match is the same as the count of IDs in the list, the all mods have downloaded
+                                e = "VALID";
+                            else
                             {
-                                //If this directory is not contained in the modInfo list
-                                if (dir != modInfo[index])
-                                {
-                                    //Incrment dlAttempts
-                                    dlAttempts++;
+                                //Incrment dlAttempts
+                                dlAttempts++;
 
-                                    //Something went wrong again, we've tried twice now and need to abort
-                                    e = "INVALID";
-
-                                    //Get out of the loop
-                                    break;
-                                }
-                                else
-                                {
-                                    //Otherwise we can consider this a valid download, so far
-                                    e = "VALID";
-
-                                    //Continue checking
-                                    index++;
-                                }
+                                //Otherwise something has gone wrong
+                                e = "INVALID";
                             }
                         }
                         else
