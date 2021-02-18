@@ -1543,6 +1543,8 @@ namespace Conexus
              * 
              */
 
+            ShowMessage("INFO: Downloads will now be verified");
+
             //Will store local variables that will then dictate further verification checks
             //until final returns are needed
             string e = "";
@@ -1558,32 +1560,58 @@ namespace Conexus
                 //Check to see if \\content exists
                 if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content"))
                 {
+                    ShowMessage("INFO: " + steamCmdDir + "\\steamapps\\workshop\\content was created successfully");
+
                     //Check to see if \\262060 exists
                     if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                     {
+                        ShowMessage("INFO: " + steamCmdDir + "\\steamapps\\workshop\\content\\262060 was created successfully");
+
+                        //Get an array of all directories in \\262060
                         string[] directories = Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060");
 
                         //Will store how many mods have been correctly downloaded
                         int match = 0;
 
+                        ShowMessage("INFO: Downloaded mods will now be verified");
+
                         //So, we run through both data sets, what has been downloaded, and what is in the appID list
                         //We compare to make sure we get a 100% identical match in the end
                         for (int x = 0; x < directories.Length; x++)
+                        {
+                            ShowMessage("PROC: Checking " + directories[x] + "...");
+
                             for (int y = 0; y < appIDs.Count; y++)
                                 if (directories[x].Contains(appIDs[y]))
+                                {
+                                    ShowMessage("PROC: Match found! " + directories[x] + " for ID " + appIDs[y]);
+
                                     match++;
+                                }
+                        }
 
                         //Now compare what is stored in match with what is expected
                         if (match == appIDs.Count)
+                        {
+                            ShowMessage("INFO: Download successful! " + match.ToString() + " out of a total " + appIDs.Count.ToString() + " found.");
+
                             //If match is the same as the count of IDs in the list, the all mods have downloaded
                             e = "VALID";
+                        }
                         else
+                        {
+                            ShowMessage("WARN: Download was not successful! " + match.ToString() + " out of a total " + appIDs.Count.ToString() + " found.");
+
                             //Otherwise something has gone wrong
                             e = "MISSING_MODS";
+                        }
                     }
                     //Otherwise we've got problems
                     else
                     {
+                        ShowMessage("WARN: " + steamCmdDir + "\\steamapps\\workshop\\content\\262060 is missing!");
+                        ShowMessage("INFO: Starting SteamCMD once again");
+
                         //Incrment dlAttempts
                         dlAttempts++;
 
@@ -1593,27 +1621,49 @@ namespace Conexus
                         //Let's see if this worked, does \\content exist?
                         if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content"))
                         {
+                            ShowMessage("INFO: " + steamCmdDir + "\\steamapps\\workshop\\content was created successfully");
+
                             //Off to a good start, does \\262060 exist?
                             if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                             {
+                                ShowMessage("INFO: " + steamCmdDir + "\\steamapps\\workshop\\content\\262060 was created successfully");
+
+                                //Get an array of all directories in \\262060
                                 string[] directories = Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060");
 
                                 //Will store how many mods have been correctly downloaded
                                 int match = 0;
 
+                                ShowMessage("INFO: Downloaded mods will now be verified");
+
                                 //So, we run through both data sets, what has been downloaded, and what is in the appID list
                                 //We compare to make sure we get a 100% identical match in the end
                                 for (int x = 0; x < directories.Length; x++)
+                                {
+                                    ShowMessage("PROC: Checking " + directories[x] + "...");
+
                                     for (int y = 0; y < appIDs.Count; y++)
                                         if (directories[x].Contains(appIDs[y]))
+                                        {
+                                            ShowMessage("PROC: Match found! " + directories[x] + " for ID " + appIDs[y]);
+
                                             match++;
+                                        }
+                                }
 
                                 //Now compare what is stored in match with what is expected
                                 if (match == appIDs.Count)
+                                {
+                                    ShowMessage("INFO: Download successful! " + match.ToString() + " out of a total " + appIDs.Count.ToString() + " found.");
+
                                     //If match is the same as the count of IDs in the list, the all mods have downloaded
                                     e = "VALID";
+                                }
                                 else
                                 {
+                                    ShowMessage("WARN: Download was not successful! " + match.ToString() + " out of a total " + appIDs.Count.ToString() + " found.");
+                                    ShowMessage("WARN: Downloading failed twice, process will now abort");
+
                                     //Incrment dlAttempts
                                     dlAttempts++;
 
@@ -1623,6 +1673,9 @@ namespace Conexus
                             }
                             else
                             {
+                                ShowMessage("WARN: " + steamCmdDir + "\\steamapps\\workshop\\content\\262060 is missing!");
+                                ShowMessage("WARN: Downloading failed twice, process will now abort");
+
                                 //Incrment dlAttempts
                                 dlAttempts++;
 
@@ -1632,6 +1685,9 @@ namespace Conexus
                         }
                         else
                         {
+                            ShowMessage("WARN: " + steamCmdDir + "\\steamapps\\workshop\\content\\ is missing!");
+                            ShowMessage("WARN: Downloading failed twice, process will now abort");
+
                             //Incrment dlAttempts
                             dlAttempts++;
 
@@ -1643,6 +1699,9 @@ namespace Conexus
                 //Otherwise we've got problems
                 else
                 {
+                    ShowMessage("WARN: " + steamCmdDir + "\\steamapps\\workshop\\content is missing!");
+                    ShowMessage("INFO: Starting SteamCMD once again");
+
                     //Incrment dlAttempts
                     dlAttempts++;
 
@@ -1652,27 +1711,49 @@ namespace Conexus
                     //Let's see if this worked, does \\content exist?
                     if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content"))
                     {
+                        ShowMessage("INFO: " + steamCmdDir + "\\steamapps\\workshop\\content was created successfully");
+
                         //Off to a good start, does \\262060 exist?
                         if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                         {
+                            ShowMessage("INFO: " + steamCmdDir + "\\steamapps\\workshop\\content\\262060 was created successfully");
+
+                            //Get an array of all directories in \\262060
                             string[] directories = Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060");
 
                             //Will store how many mods have been correctly downloaded
                             int match = 0;
 
+                            ShowMessage("INFO: Downloaded mods will now be verified");
+
                             //So, we run through both data sets, what has been downloaded, and what is in the appID list
                             //We compare to make sure we get a 100% identical match in the end
                             for (int x = 0; x < directories.Length; x++)
+                            {
+                                ShowMessage("PROC: Checking " + directories[x] + "...");
+
                                 for (int y = 0; y < appIDs.Count; y++)
                                     if (directories[x].Contains(appIDs[y]))
+                                    {
+                                        ShowMessage("PROC: Match found! " + directories[x] + " for ID " + appIDs[y]);
+
                                         match++;
+                                    }
+                            }
 
                             //Now compare what is stored in match with what is expected
                             if (match == appIDs.Count)
+                            {
+                                ShowMessage("INFO: Download successful! " + match.ToString() + " out of a total " + appIDs.Count.ToString() + " found.");
+
                                 //If match is the same as the count of IDs in the list, the all mods have downloaded
                                 e = "VALID";
+                            }
                             else
                             {
+                                ShowMessage("WARN: Download was not successful! " + match.ToString() + " out of a total " + appIDs.Count.ToString() + " found.");
+                                ShowMessage("WARN: Downloading failed twice, process will now abort");
+
                                 //Incrment dlAttempts
                                 dlAttempts++;
 
@@ -1682,6 +1763,9 @@ namespace Conexus
                         }
                         else
                         {
+                            ShowMessage("WARN: " + steamCmdDir + "\\steamapps\\workshop\\content\\262060 is missing!");
+                            ShowMessage("WARN: Downloading failed twice, process will now abort");
+
                             //Incrment dlAttempts
                             dlAttempts++;
 
@@ -1691,6 +1775,9 @@ namespace Conexus
                     }
                     else
                     {
+                        ShowMessage("WARN: " + steamCmdDir + "\\steamapps\\workshop\\content\\ is missing!");
+                        ShowMessage("WARN: Downloading failed twice, process will now abort");
+
                         //Incrment dlAttempts
                         dlAttempts++;
 
