@@ -1553,15 +1553,15 @@ namespace Conexus
             if (dlAttempts <= 2)
             {
                 //Check to see if \\content exists
-                if (Directory.Exists(steamCmdDir + "\\content"))
+                if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content"))
                 {
                     //Check to see if \\262060 exists
-                    if (Directory.Exists(steamCmdDir + "\\content\\262060"))
+                    if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                     {
                         //Keeps track of our place in the modInfo list
                         int index = 0;
                         //See if what's in here matches what's in the modInfo list
-                        foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\content\\262060"))
+                        foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                         {
                             //If this directory is not contained in the modInfo list
                             if (dir != modInfo[index])
@@ -1592,16 +1592,16 @@ namespace Conexus
                         await DownloadModsFromSteamAsync();
 
                         //Let's see if this worked, does \\content exist?
-                        if (Directory.Exists(steamCmdDir + "\\content"))
+                        if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content"))
                         {
                             //Off to a good start, does \\262060 exist?
-                            if (Directory.Exists(steamCmdDir + "\\content\\262060"))
+                            if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                             {
                                 //Keeps track of our place in the modInfo list
                                 int index = 0;
 
                                 //See if what's in here matches what's in the modInfo list
-                                foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\content\\262060"))
+                                foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                                 {
                                     //If this directory is not contained in the modInfo list
                                     if (dir != modInfo[index])
@@ -1654,16 +1654,16 @@ namespace Conexus
                     await DownloadModsFromSteamAsync();
 
                     //Let's see if this worked, does \\content exist?
-                    if (Directory.Exists(steamCmdDir + "\\content"))
+                    if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content"))
                     {
                         //Off to a good start, does \\262060 exist?
-                        if (Directory.Exists(steamCmdDir + "\\content\\262060"))
+                        if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                         {
                             //Keeps track of our place in the modInfo list
                             int index = 0;
 
                             //See if what's in here matches what's in the modInfo list
-                            foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\content\\262060"))
+                            foreach (var dir in Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                             {
                                 //If this directory is not contained in the modInfo list
                                 if (dir != modInfo[index])
@@ -1715,7 +1715,7 @@ namespace Conexus
             if(e == "INVALID")
             {
                 //First, let's find specifics, are content\262060 folders missing?
-                if (!Directory.Exists(steamCmdDir + "\\content") || !Directory.Exists(steamCmdDir + "\\content\\262060"))
+                if (!Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content") || !Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                 {
                     //Let's provide debug info related to that
                     ShowMessage("DEBUG: 0 - Content and\\or 262060 folder(s) are missing!");
