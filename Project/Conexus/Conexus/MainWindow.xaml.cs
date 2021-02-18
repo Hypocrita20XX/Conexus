@@ -1530,7 +1530,7 @@ namespace Conexus
 
             //Will store local variables that will then dictate further verification checks
             //until final returns are needed
-            string e;
+            string e = "";
 
             //Increment dlAttempts
             dlAttempts++;
@@ -1553,15 +1553,22 @@ namespace Conexus
                         {
                             //If this directory is not contained in the modInfo list
                             if (dir != modInfo[index])
+                            {
                                 //We need to redownload mods
                                 e = "MISSING_MODS";
-                            else
-                                //Otherwise we can continue checking
-                                index++;
-                        }
 
-                        //If we made it past the foreach loop, then all the mods in \\262060 are contained in the modInfo list
-                        e = "VALID";
+                                //Get out of the loop
+                                break;
+                            }
+                            else
+                            {
+                                //Otherwise we can consider this a valid download, so far
+                                e = "VALID";
+
+                                //Continue checking
+                                index++;
+                            }
+                        }
                     }
                     //Otherwise we've got problems
                     else
@@ -1592,14 +1599,19 @@ namespace Conexus
 
                                         //Something went wrong again, we've tried twice now and need to abort
                                         e = "INVALID";
+
+                                        //Get out of the loop
+                                        break;
                                     }
                                     else
-                                        //Otherwise we can continue checking
-                                        index++;
-                                }
+                                    {
+                                        //Otherwise we can consider this a valid download, so far
+                                        e = "VALID";
 
-                                //If we made it past the foreach loop, then all the mods in \\262060 are contained in the modInfo list
-                                e = "VALID";
+                                        //Continue checking
+                                        index++;
+                                    }
+                                }
                             }
                             else
                             {
@@ -1649,14 +1661,19 @@ namespace Conexus
 
                                     //Something went wrong again, we've tried twice now and need to abort
                                     e = "INVALID";
+
+                                    //Get out of the loop
+                                    break;
                                 }
                                 else
-                                    //Otherwise we can continue checking
-                                    index++;
-                            }
+                                {
+                                    //Otherwise we can consider this a valid download, so far
+                                    e = "VALID";
 
-                            //If we made it past the foreach loop, then all the mods in \\262060 are contained in the modInfo list
-                            e = "VALID";
+                                    //Continue checking
+                                    index++;
+                                }
+                            }
                         }
                         else
                         {
@@ -1677,16 +1694,21 @@ namespace Conexus
                     }
                 }
             }
-            else if (dlAttempts > 2)
-            {
-                //No more attempts allowed
-                //Provide either specific or generic debug info here
-                e = "INVALID";
-            }
-            else
-                e ="INVALID";
 
             //Now that we have broad checks out of the way, we can start getting into some of the specifics
+            //First, if e equals "VALID", we just need to return that and move on
+            if (e == "VALID")
+                return "VALID";
+
+            //Second, for any "INVALID" occurences
+            //This, again happens if:
+            //1.) The content folder is missing (which also means 2 and 3 are true)
+            //2.) The 262060 folder is missing (which also means 1 is false and 3 is true)
+            //3.) Any or all of the mod folders are missing (which means 1 and 2 are false)
+            if(e == "INVALID")
+            {
+
+            }
 
         }
 
