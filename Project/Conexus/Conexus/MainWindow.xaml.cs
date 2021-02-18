@@ -1715,8 +1715,8 @@ namespace Conexus
                 if (!Directory.Exists(steamCmdDir + "\\content") || !Directory.Exists(steamCmdDir + "\\content\\262060"))
                 {
                     //Let's provide debug info related to that
-                    ShowMessage("DEBUG: Content and\\or 262060 folder(s) are missing!");
-                    ShowMessage("DEBUG: This happens because SteamCMD could not download mods");
+                    ShowMessage("DEBUG: 0 - Content and\\or 262060 folder(s) are missing!");
+                    ShowMessage("DEBUG: 0 - This happens because SteamCMD could not download mods");
 
                     //Before we continue, we need to check to make sure the user is online
                     //Please note that, as far as I can tell, there's no reliable way to do this
@@ -1724,7 +1724,7 @@ namespace Conexus
                     //Or in a country where that website is unavailable
                     List<bool> netAttempts = new List<bool>();
 
-                    ShowMessage("INFO: Let's check your internet connection");
+                    ShowMessage("DEBUG: 1 - Let's check your internet connection");
 
                     netAttempts.Add(CheckForInternetConnection("google.com"));
                     netAttempts.Add(CheckForInternetConnection("yahoo.com"));
@@ -1749,27 +1749,36 @@ namespace Conexus
 
                     //If we have more true than false, I think it's safe to say their internet connection is fine
                     if (t > f)
-                        ShowMessage("INFO: It looks like your internet connnection is fine!");
+                        ShowMessage("DEBUG: 2 - It looks like your internet connnection is fine!");
+                    //Otherwise there could be an issue with their connection
                     else if (f > t)
                     {
-                        ShowMessage("DEBUG: Unforuntately there seems to be a problem with your internet connection!");
-                        ShowMessage("DEBUG: Please check your connection and try again");
-
-                        return "INVALID";
+                        ShowMessage("DEBUG: 2 - Unforuntately there seems to be a problem with your internet connection!");
+                        ShowMessage("DEBUG: 2 - Please check your connection and try again");
 
                         //Return and make sure everything else stops
+                        return "INVALID";
+
+                        
                         //Also make sure that "process finished successfully" thing doesn't show up
                     }
 
+                    ShowMessage("DEBUG: 3 - We've verified your internet connection, so let's check other potential causes");
 
-                    ShowMessage("DEBUG: 1 - There are several reasons why this could happen");
-
-                    if (cmbMethod.SelectedIndex == 1)
+                    //Specific to a collection
+                    if (cmbMethod.SelectedIndex == 0)
                     {
-                        ShowMessage("DEBUG: 2 - It looks like you're using a list of links");
-                        ShowMessage("DEBUG: 2 - Please make sure that Links.txt is located in Documents\\Conexus\\Links");
-                        ShowMessage("DEBUG: 2 - Also please be sure that each comment starts with * and is one its own line");
-                        ShowMessage("DEBUG: 2 - And that each URL is also on its own line");
+                        ShowMessage("DEBUG: 4 - It looks like you're using a Steam collection");
+                        ShowMessage("DEBUG: 4 - Please make sure that your collection is set to either unlisted or public");
+                        ShowMessage("DEBUG: 4 - Unfortunately if it's set to hidden or friends-only, Conexus can't find it");
+                    }
+                    //Specific to a list of links
+                    else if (cmbMethod.SelectedIndex == 1)
+                    {
+                        ShowMessage("DEBUG: 4 - It looks like you're using a list of links");
+                        ShowMessage("DEBUG: 4 - Please make sure that Links.txt is located in Documents\\Conexus\\Links");
+                        ShowMessage("DEBUG: 4 - Also please be sure that each comment starts with * and is one its own line");
+                        ShowMessage("DEBUG: 4 - And that each URL is also on its own line");
                     }
 
                     //We need to check which method they're using and provide a message based on that
