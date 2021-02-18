@@ -26,6 +26,10 @@
     Author: DaisyTian-MSFT
     Source: https://docs.microsoft.com/en-us/answers/questions/99602/wpf-passwordbox-passwordrevealmode-was-not-found-i.html
 
+    Function: Intenet Connectivity Test
+    Author: ChaosPandion, T.Todua
+    Source: https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
+
 > License: MIT
     Copyright (c) 2019, 2020, 2021 MatthiosArcanus/Hypocrita_2013/Hypocrita20XX
 
@@ -1707,9 +1711,94 @@ namespace Conexus
             //3.) Any or all of the mod folders are missing (which means 1 and 2 are false)
             if(e == "INVALID")
             {
+                //First, let's find specifics, are content\262060 folders missing?
+                if (!Directory.Exists(steamCmdDir + "\\content") || !Directory.Exists(steamCmdDir + "\\content\\262060"))
+                {
+                    //Let's provide debug info related to that
+                    ShowMessage("DEBUG: Content and\\or 262060 folder(s) are missing!");
+                    ShowMessage("DEBUG: This happens because SteamCMD could not download mods");
 
+                    //Before we continue, we need to check to make sure the user is online
+                    //Please note that, as far as I can tell, there's no reliable way to do this
+                    //So we'll do a shotgun approach and let the user know that they may be offline
+                    //Or in a country where that website is unavailable
+                    List<bool> netAttempts = new List<bool>();
+
+                    ShowMessage("INFO: Let's check your internet connection");
+
+                    netAttempts.Add(CheckForInternetConnection("google.com"));
+                    netAttempts.Add(CheckForInternetConnection("yahoo.com"));
+                    netAttempts.Add(CheckForInternetConnection("facebook.com"));
+                    netAttempts.Add(CheckForInternetConnection("youtube.com"));
+                    netAttempts.Add(CheckForInternetConnection("twitter.com"));
+                    //Specifically chose this one because it's not blocked in China
+                    netAttempts.Add(CheckForInternetConnection("weibo.com"));
+
+                    int t = 0;
+                    int f = 0;
+
+                    //See the ratio of true:false
+                    for (int i = 0; i < netAttempts.Count; i++)
+                    {
+                        if (netAttempts[i])
+                            t++;
+
+                        if (!netAttempts[i])
+                            f++;
+                    }
+
+                    //If we have more true than false, I think it's safe to say their internet connection is fine
+                    if (t > f)
+                        ShowMessage("INFO: It looks like your internet connnection is fine!");
+                    else if (f > t)
+                    {
+                        ShowMessage("DEBUG: Unforuntately there seems to be a problem with your internet connection!");
+                        ShowMessage("DEBUG: Please check your connection and try again");
+
+                        return "INVALID";
+
+                        //Return and make sure everything else stops
+                        //Also make sure that "process finished successfully" thing doesn't show up
+                    }
+
+
+                    ShowMessage("DEBUG: 1 - There are several reasons why this could happen");
+
+                    if (cmbMethod.SelectedIndex == 1)
+                    {
+                        ShowMessage("DEBUG: 2 - It looks like you're using a list of links");
+                        ShowMessage("DEBUG: 2 - Please make sure that Links.txt is located in Documents\\Conexus\\Links");
+                        ShowMessage("DEBUG: 2 - Also please be sure that each comment starts with * and is one its own line");
+                        ShowMessage("DEBUG: 2 - And that each URL is also on its own line");
+                    }
+
+                    //We need to check which method they're using and provide a message based on that
+
+                    ShowMessage("DEBUG: Content folder is missing!");
+                    ShowMessage("DEBUG: Content folder is missing!");
+                }
             }
+        }
 
+        //A generic method that takes in a website and appends "generate_204" to the end
+        //Modified from the StackOverflow answer so that it can accept any URL
+        bool CheckForInternetConnection(string URL)
+        {
+            try
+            {
+                using (var client = new WebClient())
+
+                using (client.OpenRead("HTTPS://" + URL + "/generate_204"))
+                {
+                    ShowMessage("PROC: Connecting to: " + URL + ", successful");
+                    return true;
+                }
+            }
+            catch
+            {
+                ShowMessage("PROC: Connecting to: " + URL + ", failed");
+                return false;
+            }
         }
 
         #endregion

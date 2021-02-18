@@ -7,3 +7,4 @@ Conexus Changelog 1.4.0:
 > Cleaned up CS, again comments, removed version tags, started to feel like it was more bloat than help
 
 > Log window should now properly scroll to the bottom of the window with each new window
+> New log tag, DEBUG, to hopefully help you with specific troubleshooting steps
