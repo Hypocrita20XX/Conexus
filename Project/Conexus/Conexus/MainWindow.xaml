@@ -102,14 +102,14 @@
         <TextBox Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="4" Name="SteamPassword_TextBox" Visibility="Collapsed" Margin="5" Background="#bedce4"/>
         <CheckBox Grid.Column="6" Grid.Row="4" Name="PasswordReveal" Unchecked="PasswordReveal_Unchecked" Checked="PasswordReveal_Checked" VerticalContentAlignment="Center" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" Background="#82959f"/>
 
-        <!-- A combobox which lets the user switch which method they're using, a Steam collection or list of links -->
+        <!-- A combobox which lets the user switch which method they're using, a Steam collection or list of links
         <ComboBox Grid.Column="4" Grid.ColumnSpan="3" Grid.Row="6" Margin="5" Name="cmbMethod" SelectionChanged="Method_SelectionChanged">
             <ComboBoxItem IsSelected="True">Steam Collection</ComboBoxItem>
             <ComboBoxItem>List</ComboBoxItem>
-        </ComboBox>
+        </ComboBox> -->
 
         <!-- The main event, once everything is set, this button starts the show -->
-        <Button Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="6" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#82959f"/>
+        <Button Grid.Column="1" Grid.ColumnSpan="6" Grid.Row="6" Name="OrganizeMods" Content="Organize Mods" Click="OrganizeMods_Click" Margin="5" Background="#82959f"/>
 
         <!-- A fancy useless image of the Conexus logo behind the log window -->
         <Image Source="/Resources/Logo.png" Grid.Column="1" Grid.ColumnSpan="6" Grid.Row="8" Margin="10" Opacity="0.35"/>

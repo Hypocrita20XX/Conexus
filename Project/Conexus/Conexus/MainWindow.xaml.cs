@@ -193,43 +193,6 @@ namespace Conexus
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
         }
 
-        #region ComboBox Functionality
-
-        //Handles method (ex platform) selection
-        void Method_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            //Get the index of the selected item
-            //0 = steam
-            //1 = list
-            int i = cmbMethod.SelectedIndex;
-
-            //If the user is using Steam
-            if (i == 0)
-            {
-                //Change local variables accordingly
-                steam = true;
-
-                //Log info relating to what the user wants to do
-                ShowMessage("INPUT: Method switched to Steam Collection");
-            }
-
-            //If the user is using a list
-            if (i == 1)
-            {
-                //Change local variables accordingly
-                steam = false;
-
-                //Log info relating to what the user wants to do
-                ShowMessage("INPUT: Method switched to List");
-            }
-
-            if (loaded)
-                //Save log to file
-                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
-        }
-
-        #endregion
-
         #region Button Functionality
 
         //Provides functionality to allow the user to select the mods directory
@@ -537,7 +500,6 @@ namespace Conexus
             UsernameReveal.IsEnabled = false;
             SteamPassword.IsEnabled = false;
             SteamPassword_TextBox.IsEnabled = false;
-            cmbMethod.IsEnabled = false;
             PasswordReveal.IsEnabled = false;
             OrganizeMods.IsEnabled = false;
 
@@ -554,10 +516,10 @@ namespace Conexus
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //If the user wants to use a Steam collection, ensure all functionality relates to that
-            if (steam)
+            if (URLLink.Text.Length > 0)
             {
                 //Log info relating to what the user wants to do
-                ShowMessage("INFO: Using a Steam collection");
+                ShowMessage("INFO: URL found, using a Steam collection");
 
                 //Check the provided URL to make sure it's valid
                 if (await VerifyCollectionURLAsync(URLLink.Text, dataPath))
@@ -594,7 +556,6 @@ namespace Conexus
                         UsernameReveal.IsEnabled = true;
                         SteamPassword.IsEnabled = true;
                         SteamPassword_TextBox.IsEnabled = true;
-                        cmbMethod.IsEnabled = true;
                         PasswordReveal.IsEnabled = true;
                         OrganizeMods.IsEnabled = true;
 
@@ -633,7 +594,6 @@ namespace Conexus
                     UsernameReveal.IsEnabled = true;
                     SteamPassword.IsEnabled = true;
                     SteamPassword_TextBox.IsEnabled = true;
-                    cmbMethod.IsEnabled = true;
                     PasswordReveal.IsEnabled = true;
                     OrganizeMods.IsEnabled = true;
 
@@ -646,10 +606,10 @@ namespace Conexus
                 }
             }
             //Otherwise, the user wants to use a list of URLs
-            else
+            else if (URLLink.Text.Length == 0)
             {
                 //Log info relating to what the user wants to do
-                ShowMessage("INFO: Using a list of links");
+                ShowMessage("INFO: No URL found, using a list of links");
 
                 //Provide feedback
                 ShowMessage("INFO: Mod info will now be obtained from the Links file");
@@ -672,7 +632,6 @@ namespace Conexus
             UsernameReveal.IsEnabled = true;
             SteamPassword.IsEnabled = true;
             SteamPassword_TextBox.IsEnabled = true;
-            cmbMethod.IsEnabled = true;
             PasswordReveal.IsEnabled = true;
             OrganizeMods.IsEnabled = true;
 
@@ -1776,14 +1735,14 @@ namespace Conexus
                     ShowMessage("DEBUG: 3 - We've verified your internet connection, so let's check other potential causes");
 
                     //Specific to a collection
-                    if (cmbMethod.SelectedIndex == 0)
+                    if (URLLink.Text.Length > 0)
                     {
                         ShowMessage("DEBUG: 4 - It looks like you're using a Steam collection");
                         ShowMessage("DEBUG: 4 - Please make sure that your collection is set to either unlisted or public");
                         ShowMessage("DEBUG: 4 - Unfortunately if it's set to hidden or friends-only, Conexus can't find it");
                     }
                     //Specific to a list of links
-                    else if (cmbMethod.SelectedIndex == 1)
+                    else if (URLLink.Text.Length == 0)
                     {
                         ShowMessage("DEBUG: 4 - It looks like you're using a list of links");
                         ShowMessage("DEBUG: 4 - Please make sure that Links.txt is located in Documents\\Conexus\\Links");
@@ -1939,8 +1898,6 @@ namespace Conexus
 
                 ini["URL"]["Collection"] = "";
 
-                ini["Misc"]["Method"] = "steam";
-
                 ini["Login"]["Username"] = "";
                 ini["Login"]["Password"] = "";
 
@@ -1961,8 +1918,6 @@ namespace Conexus
                 steamcmd = ini["Directories"]["SteamCMD"].Replace(@"\\", @"\");
 
                 urlcollection = ini["URL"]["Collection"].Replace(@"\\", @"\");
-
-                method = ini["Misc"]["Method"].Replace(@"\\", @"\");
 
                 username = ini["Login"]["Username"].Replace(@"\\", @"\");
                 password = ini["Login"]["Password"].Replace(@"\\", @"\");
@@ -2029,22 +1984,6 @@ namespace Conexus
                 ShowMessage("VERIFY: No saved Steam password found");
             }
 
-            //Check the method variable and set the platform combobox accordingly
-            if (method == "steam")
-            {
-                cmbMethod.SelectedIndex = 0;
-                steam = true;
-
-                ShowMessage("VERIFY: Saved preferred method found: Steam collection");
-            }
-            else if (method == "other")
-            {
-                cmbMethod.SelectedIndex = 1;
-                steam = false;
-
-                ShowMessage("VERIFY: Saved preferred method found: list of links");
-            }
-
             loaded = true;
         }
 
@@ -2076,18 +2015,6 @@ namespace Conexus
                 ShowMessage("VERIFY: Chosen mods directory saved");
             }
 
-            //Save which method the user has chosen
-            if (steam)
-            {
-                ini["Misc"]["Method"] = "steam";
-                ShowMessage("VERIFY: Chosen method (Steam collection) saved");
-            }
-            else
-            {
-                ini["Misc"]["Method"] = "other";
-                ShowMessage("VERIFY: Chosen method (list of links) saved");
-            }
-
             ShowMessage("PROC: All user data has been saved!");
             ShowMessage("INFO: Conexus will close now");
 
@@ -2107,7 +2034,7 @@ namespace Conexus
             //Ensure the Logs folder exists
             if (!Directory.Exists(logsPath))
             {
-                ShowMessage("WARN: _Logs folder is missing! Creating now");
+                ShowMessage("WARN: Logs folder is missing! Creating now");
 
                 Directory.CreateDirectory(logsPath);
             }
