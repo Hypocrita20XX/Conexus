@@ -158,7 +158,11 @@ namespace Conexus
         //Maximum allowed: 2
         int dlAttempts = 0;
 
+        //Indicates if downloads were successful
         bool success;
+
+        //Keeps a list of mod IDs that could not be downloaded
+        List<string> missingMods = new List<string>();
 
         #endregion
 
@@ -677,6 +681,11 @@ namespace Conexus
             else if (!success)
                 ShowMessage("WARN: Process could not finish successfully!");
 
+            //If missing mods were detected, append to the end of the log, for convenience
+            if (missingMods.Count > 0)
+                foreach (string mods in missingMods)
+                    ShowMessage("INFO: Mods that could not be downloaded: " + mods);
+
             //Reset dlAttempts
             dlAttempts = 0;
 
@@ -1158,6 +1167,9 @@ namespace Conexus
             if (!Directory.Exists(source))
             {
                 ShowMessage("WARN: " + source + " does not exist! Mod info: " + destination);
+
+                //Add destination to the missingMods list for later adding to the end of the log
+                missingMods.Add(destination.Substring(destination.IndexOf("_") + 1));
 
                 //We need to get out of here before stuff breaks
                 return;
