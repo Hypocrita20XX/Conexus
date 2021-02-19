@@ -1,15 +1,23 @@
-Conexus Changelog 1.4.0:
+Conexus Changelog 1.4.0
+Highlights:
+> New download verification and diagnostics
+> Modes have been merged and are now handled automatically
+
+Details:
 > Merged modes (download/update) and simplified overall operation
 > Adjusted UI to acommodate this change
 > Made log window bigger to keep overall window the same size
 
 > Cleaned up XML, specifically comments, adding/changing/removing
-> Cleaned up CS, again comments, removed version tags, started to feel like it was more bloat than help
+> Cleaned up CS, again comments, removed version tags, felt more like bloat than help
 
 > Log window should now properly scroll to the bottom of the window with each new window
-> New log tag, DEBUG, to hopefully help you with specific troubleshooting steps
+> New log tag, DEBUG, to hopefully help with specific troubleshooting steps
 
 > Changed log level in generic exception from WARNING to ERROR
 
 > Added lengthy debug/diagnostics when SteamCMD fails to download mods
-> When this happens, it's going to be a giant wall of text with hopefully useful info that can get you back up and running
+> Added download verification that complements the aforementioned diagnostics
+
+> Removed duplicate log message
+> Corrected spelling in certain log messages
