@@ -26,7 +26,7 @@
     Author: DaisyTian-MSFT
     Source: https://docs.microsoft.com/en-us/answers/questions/99602/wpf-passwordbox-passwordrevealmode-was-not-found-i.html
 
-    Function: Intenet Connectivity Test
+    Function: Internet Connectivity Test
     Author: ChaosPandion, T.Todua
     Source: https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
 
