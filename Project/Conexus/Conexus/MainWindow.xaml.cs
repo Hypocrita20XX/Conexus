@@ -1171,7 +1171,8 @@ namespace Conexus
         {
             if (!File.Exists(fileDir))
                 File.Create(fileDir).Dispose();
-            else
+
+            if (File.Exists(fileDir))
                 File.WriteAllLines(@fileDir, text);
         }
 
