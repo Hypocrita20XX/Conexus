@@ -1004,6 +1004,9 @@ namespace Conexus
                 await Task.Run(() => process.WaitForExit());
             }
 
+            //Increment dlAttempts
+            dlAttempts++;
+
             //Provide feedback
             ShowMessage("INFO: SteamCMD has closed");
 
@@ -1057,7 +1060,7 @@ namespace Conexus
             string[] destination = new string[modInfo.Count];
 
             //Provide feedback
-            ShowMessage("PROC: Acquiring paths to copy from");
+            //ShowMessage("PROC: Acquiring paths to copy from");
 
             //Save log to file
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
@@ -1067,7 +1070,7 @@ namespace Conexus
                 await Task.Run(() => source[i] = Path.Combine(steamcmd + "\\steamapps\\workshop\\content\\262060\\", appIDs[i]));
 
             //Provide feedback
-            ShowMessage("PROC: Acquiring paths to copy to");
+            //ShowMessage("PROC: Acquiring paths to copy to");
 
             //Save log to file
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
@@ -1091,6 +1094,11 @@ namespace Conexus
                 ShowMessage("PROC: Files copied from " + source[i] + " to " + destination[i]);
             }
 
+            /* 
+            
+            // After some thought, I don't think removing what's in the 262060 folder is the best idea
+            // It shouldn't cause any issue, and saves the user time in subsequent uses
+             
             //Provide feedback
             ShowMessage("INFO: Files copied, original copy will now be deleted");
 
@@ -1101,6 +1109,9 @@ namespace Conexus
 
             //Provide feedback
             ShowMessage("INFO: Mods have now been moved and renamed, originals have been deleted");
+            */
+
+            ShowMessage("INFO: Mods have now been moved and renamed");
 
             //Save log to file
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
@@ -1142,6 +1153,15 @@ namespace Conexus
             //Check if the directory exists, if not, create it
             if (!Directory.Exists(destination))
                 Directory.CreateDirectory(destination);
+
+            //Check to see if a mod was downloaded
+            if (!Directory.Exists(source))
+            {
+                ShowMessage("WARN: " + source + " does not exist! Mod info: " + destination);
+
+                //We need to get out of here before stuff breaks
+                return;
+            }
 
             //Create an array of strings containing all files in the given source directory
             string[] files = Directory.GetFiles(source);
@@ -1614,9 +1634,6 @@ namespace Conexus
                     //Will store how many mods have been correctly downloaded
                     int match = 0;
 
-                    //Stores which IDs were not found in the downloaded mods
-                    List<string> missingMods = new List<string>();
-
                     ShowMessage("INFO: Downloaded mods will now be verified");
 
                     //So, we run through both data sets, what has been downloaded, and what is in the appID list
@@ -1633,12 +1650,12 @@ namespace Conexus
 
                                 match++;
                             }
-
-                            //We've reached the end of the loop and could not find this ID, store it for later use in the log
-                            if (y == appIDs.Count && !directories[x].Contains(appIDs[y]))
-                                missingMods.Add(appIDs[y]);
                         }
                     }
+
+                    //To make it easier to work with, convert our ints to float 
+                    //and store that division in its own float
+                    float ratio = (float)match / (float)appIDs.Count;
 
                     //Now compare what is stored in match with what is expected
                     if (match == appIDs.Count)
@@ -1651,26 +1668,18 @@ namespace Conexus
                     //Otherwise if the ratio is above or equal to a certain percentage, deem this a success 
                     //(to account for hidden mods that SteamCMD can't download)
                     //I'm assuming an acceptable ratio is 3/4 of a modlist
-                    else if (match / appIDs.Count >= 0.75)
+                    else if (ratio >= 0.75)
                     {
                         ShowMessage("INFO: Download was partially successful! Some mods are missing");
                         ShowMessage("INFO: " + match.ToString() + " mod(s) out of a total " + appIDs.Count.ToString() + " found");
-
-                        //Let the user know which mods did not download
-                        foreach (string ID in appIDs)
-                            ShowMessage("WARN: ID not found in downloads: " + ID);
 
                         //If match is the same as the count of IDs in the list, the all mods have downloaded
                         e = true;
                     }
                     //If the match ratio is less than 75%, then we can consider this a download failure
-                    else if (match / appIDs.Count < 0.75)
+                    else if (ratio < 0.75)
                     {
                         ShowMessage("WARN: Download was not successful! " + match.ToString() + " mod(s) out of a total " + appIDs.Count.ToString() + " found");
-
-                        //Let the user know which mods did not download
-                        foreach (string ID in appIDs)
-                            ShowMessage("WARN: ID not found in downloads: " + ID);
 
                         //Otherwise something has gone wrong
                         e = false;

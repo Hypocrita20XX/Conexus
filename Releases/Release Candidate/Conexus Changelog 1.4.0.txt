@@ -18,6 +18,10 @@ Details:
 
 > Added lengthy debug/diagnostics when SteamCMD fails to download mods
 > Added download verification that complements the aforementioned diagnostics
+> Conexus will now try twice to download mods
+> If more than 1/4th of your list fails to download, Conexus will stop processing mods (to account for hidden mods)
 
 > Removed duplicate log message
 > Corrected spelling in certain log messages
+
+> Removed deleting mods in \262060, to save users of large mods lists time with subsequent use of Conexus
