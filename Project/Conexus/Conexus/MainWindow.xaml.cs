@@ -1593,12 +1593,12 @@ namespace Conexus
 
             if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content"))
             {
-                ShowMessage("INFO: " + steamCmdDir + "\\steamapps\\workshop\\content was created successfully");
+                ShowMessage("VERIFY: " + steamCmdDir + "\\steamapps\\workshop\\content was created successfully");
 
                 //Check to see if \\262060 exists
                 if (Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                 {
-                    ShowMessage("INFO: " + steamCmdDir + "\\steamapps\\workshop\\content\\262060 was created successfully");
+                    ShowMessage("VERIFY: " + steamCmdDir + "\\steamapps\\workshop\\content\\262060 was created successfully");
 
                     //Get an array of all directories in \\262060
                     string[] directories = Directory.GetDirectories(steamCmdDir + "\\steamapps\\workshop\\content\\262060");
@@ -1632,7 +1632,7 @@ namespace Conexus
                     //Now compare what is stored in match with what is expected
                     if (match == appIDs.Count)
                     {
-                        ShowMessage("INFO: Download successful! " + match.ToString() + " mod(s) out of a total " + appIDs.Count.ToString() + " found");
+                        ShowMessage("VERIFY: Download successful! " + match.ToString() + " mod(s) out of a total " + appIDs.Count.ToString() + " found");
 
                         //If match is the same as the count of IDs in the list, the all mods have downloaded
                         e = true;
@@ -1642,7 +1642,7 @@ namespace Conexus
                     //I'm assuming an acceptable ratio is 3/4 of a modlist
                     else if (ratio >= 0.75)
                     {
-                        ShowMessage("INFO: Download was partially successful! Some mods are missing");
+                        ShowMessage("VERIFY: Download was partially successful! Some mods are missing");
                         ShowMessage("INFO: " + match.ToString() + " mod(s) out of a total " + appIDs.Count.ToString() + " found");
 
                         //If match is the same as the count of IDs in the list, the all mods have downloaded
