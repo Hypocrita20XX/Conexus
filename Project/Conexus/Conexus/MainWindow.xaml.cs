@@ -1725,9 +1725,6 @@ namespace Conexus
 
                         //Return and make sure everything else stops
                         return false;
-
-
-                        //Also make sure that "process finished successfully" thing doesn't show up
                     }
 
                     //Save log to file
