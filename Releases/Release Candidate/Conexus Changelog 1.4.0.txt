@@ -25,3 +25,6 @@ Details:
 > Corrected spelling in certain log messages
 
 > Removed deleting mods in \262060, to save users of large mods lists time with subsequent use of Conexus
+
+> Changed check for Links.txt, from asterisk to steamcommunity, should be less error-prone
+> This means you don't need to preface comments with an asterisk starting with this version

@@ -845,12 +845,30 @@ namespace Conexus
 
             ShowMessage("PROC: Links.txt will now be parsed for mod info");
 
+            //Temporary lists
+            List<string> modInfo_Names = new List<string>();
+            List<string> modInfo_IDs = new List<string>();
+
+            string name = "";
+
             //Iterate through each line the file
             while ((line = file.ReadLine()) != null)
             {
-                //If the line being looked at is a comment, marked by *, then skip this line
-                //Otherwise, we need to get the ID from this line
-                if (!line.Contains("*"))
+                //If this line contains an asterisk, this is intended to be the mod name
+                if (line.Contains("*"))
+                {
+                    //Remove any illegal characters
+                    //modInfo_Names.Add(Regex.Replace(line, @"['<''>'':''/''\''|''?''*']", "", RegexOptions.None));
+
+                    name = Regex.Replace(line, @"['<''>'':''/''\''|''?''*']", "", RegexOptions.None);
+
+                    //Provide feedback
+                    //ShowMessage("PROC: Found mod name in Links file: " + Regex.Replace(line, @"['<''>'':''/''\''|''?''*']", "", RegexOptions.None));
+                }
+
+                //If the line being looked at is a Steam workshop link, we need to get the ID from this line
+                //if (!line.Contains("*"))
+                if (line.Contains("steamcommunity.com"))
                 {
                     //Remove everything up to ?id=, plus 4 to remove ?id= in the link
                     string id = line.Substring(line.IndexOf("?id=") + 4);
@@ -868,13 +886,39 @@ namespace Conexus
                         folderIndex_S = folderIndex.ToString();
 
                     //Add the final name to the modInfo list
-                    await Task.Run(() => modInfo.Add(folderIndex_S + "_" + id));
+                    //await Task.Run(() => modInfo_IDs.Add(folderIndex_S + "_" + id));
+
+                    //If we found a mod name in a previous line after finding the last link,
+                    //we need to append that to what we add to modInfo
+                    if (name != "")
+                    {
+                        await Task.Run(() => modInfo.Add(folderIndex_S + "_" + id + "_" + name));
+
+                        name = "";
+
+                        //Provide feedback
+                        ShowMessage("PROC: Found mod ID and name in Links file: " + folderIndex_S + "_" + id + "_" + name);
+                    }
+                    //Otherwise if no mod name was found this link and the last,
+                    //we can just use the old format, numerical order and ID
+                    else if (name == "")
+                    {
+                        await Task.Run(() => modInfo.Add(folderIndex_S + "_" + id));
+
+                        //Provide feedback
+                        ShowMessage("PROC: Found only mod ID in Links file: " + folderIndex_S + "_" + id);
+                    }
+
+                    //Before we move on, we need to make sure the given modInfo is no more than 260 characters
+                    //Practically, let's say it can be no more than 120 characters
+
+
 
                     //Add this ID to the appIDs list
                     await Task.Run(() => appIDs.Add(id));
 
                     //Provide feedback
-                    ShowMessage("PROC: Found mod info in Links file: " + folderIndex_S + "_" + id);
+                    //ShowMessage("PROC: Found mod info in Links file: " + folderIndex_S + "_" + id);
 
                     //Increment folderIndex
                     folderIndex++;
