@@ -856,15 +856,7 @@ namespace Conexus
             {
                 //If this line contains an asterisk, this is intended to be the mod name
                 if (line.Contains("*"))
-                {
-                    //Remove any illegal characters
-                    //modInfo_Names.Add(Regex.Replace(line, @"['<''>'':''/''\''|''?''*']", "", RegexOptions.None));
-
                     name = Regex.Replace(line, @"['<''>'':''/''\''|''?''*']", "", RegexOptions.None);
-
-                    //Provide feedback
-                    //ShowMessage("PROC: Found mod name in Links file: " + Regex.Replace(line, @"['<''>'':''/''\''|''?''*']", "", RegexOptions.None));
-                }
 
                 //If the line being looked at is a Steam workshop link, we need to get the ID from this line
                 //if (!line.Contains("*"))
@@ -885,19 +877,33 @@ namespace Conexus
                     if (folderIndex > 100)
                         folderIndex_S = folderIndex.ToString();
 
-                    //Add the final name to the modInfo list
-                    //await Task.Run(() => modInfo_IDs.Add(folderIndex_S + "_" + id));
-
                     //If we found a mod name in a previous line after finding the last link,
                     //we need to append that to what we add to modInfo
                     if (name != "")
                     {
-                        await Task.Run(() => modInfo.Add(folderIndex_S + "_" + id + "_" + name));
+                        //We need to make sure the given modInfo is no more than 260 characters
+                        //Practically, let's say it can be no more than 120 characters
+                        if ((folderIndex_S + "_" + id + "_" + name).Length > 120)
+                        {
+                            //Provide feedback
+                            ShowMessage("INFO: Mod info exceeds 120 characters! Truncating now");
 
+                            await Task.Run(() => modInfo.Add((folderIndex_S + "_" + id + "_" + name).Substring(0, 119)));
+
+                            //Provide feedback
+                            ShowMessage("PROC: Found mod ID and name in Links file: " + (folderIndex_S + "_" + id + "_" + name).Substring(0, 119));
+                        }
+                        //Otherwise the given mod info is fine
+                        else if ((folderIndex_S + "_" + id + "_" + name).Length <= 120)
+                        {
+                            await Task.Run(() => modInfo.Add(folderIndex_S + "_" + id + "_" + name));
+
+                            //Provide feedback
+                            ShowMessage("PROC: Found mod ID and name in Links file: " + folderIndex_S + "_" + id + "_" + name);
+                        }
+
+                        //Reset name string
                         name = "";
-
-                        //Provide feedback
-                        ShowMessage("PROC: Found mod ID and name in Links file: " + folderIndex_S + "_" + id + "_" + name);
                     }
                     //Otherwise if no mod name was found this link and the last,
                     //we can just use the old format, numerical order and ID
@@ -909,16 +915,8 @@ namespace Conexus
                         ShowMessage("PROC: Found only mod ID in Links file: " + folderIndex_S + "_" + id);
                     }
 
-                    //Before we move on, we need to make sure the given modInfo is no more than 260 characters
-                    //Practically, let's say it can be no more than 120 characters
-
-
-
                     //Add this ID to the appIDs list
                     await Task.Run(() => appIDs.Add(id));
-
-                    //Provide feedback
-                    //ShowMessage("PROC: Found mod info in Links file: " + folderIndex_S + "_" + id);
 
                     //Increment folderIndex
                     folderIndex++;
@@ -1399,8 +1397,6 @@ namespace Conexus
             {
                 //Clear URLLink Text
                 URLLink.Text = string.Empty;
-                //Provide a message to the user
-                URLLink.Watermark = "Not a valid URL: " + url;
                 //Flag this URL as invalid
                 validURL = false;
                 //Provide additional logging
@@ -2033,7 +2029,7 @@ namespace Conexus
         //Used to ensure all proper data is set to their corrosponding variables in the settings file
         void Window_Closing(object sender, EventArgs e)
         {
-            //Check to ensure the URLLink content is indeed provided (length greater than 0 indicates data in the field)
+            //Check to ensure the URLLink content is indeed provided
             //Make sure the variable in the settings file is correct
             if (urlcollection != "")
             {
@@ -2041,7 +2037,14 @@ namespace Conexus
                 ShowMessage("VERIFY: Chosen collection URL saved");
             }
 
-            //Check to ensure the SteamCMDDir content is indeed provided (length greater than 0 indicates data in the field)
+            //Check to see if no URL was given
+            if (URLLink.Text.Length == 0)
+            {
+                ini["URL"]["Collection"] = "";
+                ShowMessage("VERIFY: No URL found, clearing any URL saved in the config");
+            }
+
+            //Check to ensure the SteamCMDDir content is indeed provided
             //Make sure the variable in the settings file is correct
             if (steamcmd != "")
             {
@@ -2049,7 +2052,7 @@ namespace Conexus
                 ShowMessage("VERIFY: Chosen SteamCMD directory saved");
             }
 
-            //Check to ensure the ModDir content is indeed provided (length greater than 0 indicates data in the field)
+            //Check to ensure the ModDir content is indeed provided
             //Make sure the variable in the settings file is correct
             if (mods != "")
             {
