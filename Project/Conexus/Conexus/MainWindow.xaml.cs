@@ -680,8 +680,24 @@ namespace Conexus
 
             //Create a new WebClient
             WebClient webClient = new WebClient();
-            //Download the desired collection and save the file
-            await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
+
+            try
+            {
+                //Download the desired collection and save the file
+                await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
+            }
+            catch (System.Net.WebException e)
+            {
+                ShowMessage("ERROR: Something went wrong with your network connection!" + e.Message);
+
+                //Indicate failure
+                success = false;
+
+                //Get out of here
+                return;
+            }
+
+
             //Free up resources, cleanup
             webClient.Dispose();
 
@@ -1021,30 +1037,53 @@ namespace Conexus
                                 return;
                             }
                         }
-
-                        //ModInfo.txt for a list of links
-                        if (modinfo_links_txt.Length == 0)
-                        {
-                            await SeparateInfoAsync(linksPath);
-
-                            //If it's still zero bytes, there's a problem and we can't proceed
-                            if (modinfo_links_txt.Length == 0)
-                            {
-                                ShowMessage("WARN: ModInfo.txt still has no data, no mods will be downloaded! Aborting now");
-                                ShowMessage("DEBUG: Please check that your link is valid and that you're connected to the internet");
-
-                                //Indicate failure
-                                success = false;
-
-                                //Get out of here
-                                return;
-                            }
-                        }
-
-                        //If, after all of that, we've got valid files, we can continue as normal
-                        //Provide a message because... Why not
-                        ShowMessage("Info: All text files have been verified as valid, proceeding to download!");
                     }
+
+                    //Next file in line, Mods.txt
+                    if (mods_txt.Length == 0)
+                    {
+                        ShowMessage("WARN: Mods.txt contains no data, trying once again to obtain info!");
+
+                        await IterateThroughHTMLAsync(dataPath);
+
+                        //If it's still zero bytes, there's a problem and we can't proceed
+                        if (mods_txt.Length == 0)
+                        {
+                            ShowMessage("WARN: Mods.txt still has no data, no mods will be downloaded! Aborting now");
+                            ShowMessage("DEBUG: Please check that your link is valid and that you're connected to the internet");
+
+                            //Indicate failure
+                            success = false;
+
+                            //Get out of here
+                            return;
+                        }
+                    }
+
+                    //Last file, ModInfo.txt
+                    if (modinfo_url_txt.Length == 0)
+                    {
+                        ShowMessage("WARN: ModInfo.txt contains no data, trying once again to obtain info!");
+
+                        await SeparateInfoAsync(dataPath);
+
+                        //If it's still zero bytes, there's a problem and we can't proceed
+                        if (modinfo_url_txt.Length == 0)
+                        {
+                            ShowMessage("WARN: ModInfo.txt still has no data, no mods will be downloaded! Aborting now");
+                            ShowMessage("DEBUG: Please check that your link is valid and that you're connected to the internet");
+
+                            //Indicate failure
+                            success = false;
+
+                            //Get out of here
+                            return;
+                        }
+                    }
+
+                    //If, after all of that, we've got valid files, we can continue as normal
+                    //Provide a message because... Why not
+                    ShowMessage("Info: All text files have been verified as valid, proceeding to download!");
                 }
                 else if (URLLink.Text.Length == 0)
                 {
@@ -1554,8 +1593,21 @@ namespace Conexus
             {
                 ShowMessage("VERIFY: Given link is valid");
 
-                //Download the desired collection and save the file
-                await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
+                try
+                {
+                    //Download the desired collection and save the file
+                    await Task.Run(() => webClient.DownloadFile(url, fileDir + "\\HTML.txt"));
+                }
+                catch (System.Net.WebException e)
+                {
+                    ShowMessage("ERROR: Something went wrong with your network connection!" + e.Message);
+
+                    //Indicate failure
+                    success = false;
+
+                    //Get out of here
+                    return;
+                }
 
                 ShowMessage("INFO: HTML source has been downloaded");
 

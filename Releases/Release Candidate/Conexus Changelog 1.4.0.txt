@@ -38,3 +38,4 @@ Details:
 > Changed data saving, if you delete the URL after a saved URL is loaded, it will be deleted from the config when you close Conexus
 
 > Added data text file verification (for HTML, Mods, and ModInfo in \Data and \Links)
+> Added missing exception handling when downloading HTML from source
