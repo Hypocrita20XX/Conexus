@@ -2,6 +2,9 @@ Conexus Changelog 1.4.0
 Highlights:
 > New download verification and diagnostics
 > Modes have been merged and are now handled automatically
+> Methods have been merged and are now handled automatically
+> Links method now supports mod names and is overall more flexible
+> Added diagnostics when mods fail to download
 
 Details:
 > Merged modes (download/update), both are now handled automatically
@@ -33,3 +36,5 @@ Details:
 > Make sure your mod name comes before the link, otherwise odd stuff can/will happen
 
 > Changed data saving, if you delete the URL after a saved URL is loaded, it will be deleted from the config when you close Conexus
+
+> Added data text file verification (for HTML, Mods, and ModInfo in \Data and \Links)
