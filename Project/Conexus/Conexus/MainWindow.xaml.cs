@@ -145,8 +145,6 @@ namespace Conexus
 
         string urlcollection = "";
 
-        string method = "";
-
         //If the user provides this info, we also need to read the Steam username and password
         string username = "";
         string password = "";
@@ -942,6 +940,119 @@ namespace Conexus
             //Only do this if this is the first attempt
             if (dlAttempts == 0)
             {
+                //We need to verify that all the needed data text files downloaded successfully
+                //If we're working with a URL, we need to verify HTML.txt, ModInfo.txt, and Mods.txt
+                //If we're working with a list of links, we only need to verify ModInfo.txt
+                //Verification will be simple, just checking that the length of the file is greater than 0
+                //So far that's the only bug I've encountered (as of 1.4.0), and not missing info, which would require
+                //more extensive verification methods, such as parsing each file 
+                //and checking each line against known good values
+                FileInfo html_txt = new FileInfo(dataPath + "\\HTML.txt");
+                FileInfo mods_txt = new FileInfo(dataPath + "\\Mods.txt");
+                FileInfo modinfo_url_txt = new FileInfo(dataPath + "\\ModInfo.txt");
+                FileInfo modinfo_links_txt = new FileInfo(linksPath + "ModInfo.txt");
+
+                if (URLLink.Text.Length > 0)
+                {
+                    //If HTML.txt is equal to zero bytes, no data, we need to try once more to get that data
+                    //If this is the case, it's safe to assume that the other files are most likely invalid as well
+                    if (html_txt.Length == 0)
+                    {
+                        ShowMessage("WARN: HTML.txt contains no data, trying once again to obtain collection info!");
+
+                        await DownloadHTMLAsync(URLLink.Text, dataPath);
+
+                        //If it's still zero bytes, there's a problem and we can't proceed
+                        if (html_txt.Length == 0)
+                        {
+                            ShowMessage("WARN: HTML.txt still has no data, no mods will be downloaded! Aborting now");
+
+                            //We can (and have done so elsewhere) check this automatically, 
+                            //but this is such a specific and what I would think rare issue,
+                            //I don't see the point of added overhead
+                            //Just throw out the most likely problem and solution, call it a day
+                            ShowMessage("DEBUG: Please check that your link is valid and that you're connected to the internet");
+
+                            //Indicate failure
+                            success = false;
+
+                            //Get out of here
+                            return;
+                        }
+
+                        //Next file in line, Mods.txt
+                        if (mods_txt.Length == 0)
+                        {
+                            ShowMessage("WARN: Mods.txt contains no data, trying once again to obtain info!");
+
+                            await IterateThroughHTMLAsync(dataPath);
+
+                            //If it's still zero bytes, there's a problem and we can't proceed
+                            if (mods_txt.Length == 0)
+                            {
+                                ShowMessage("WARN: Mods.txt still has no data, no mods will be downloaded! Aborting now");
+                                ShowMessage("DEBUG: Please check that your link is valid and that you're connected to the internet");
+
+                                //Indicate failure
+                                success = false;
+
+                                //Get out of here
+                                return;
+                            }
+                        }
+
+                        //Last file, in two locations, for the different methods
+                        //ModInfo.txt for a collection
+                        if (modinfo_url_txt.Length == 0)
+                        {
+                            ShowMessage("WARN: ModInfo.txt contains no data, trying once again to obtain info!");
+
+                            await SeparateInfoAsync(dataPath);
+
+                            //If it's still zero bytes, there's a problem and we can't proceed
+                            if (modinfo_url_txt.Length == 0)
+                            {
+                                ShowMessage("WARN: ModInfo.txt still has no data, no mods will be downloaded! Aborting now");
+                                ShowMessage("DEBUG: Please check that your link is valid and that you're connected to the internet");
+
+                                //Indicate failure
+                                success = false;
+
+                                //Get out of here
+                                return;
+                            }
+                        }
+
+                        //ModInfo.txt for a list of links
+                        if (modinfo_links_txt.Length == 0)
+                        {
+                            await SeparateInfoAsync(linksPath);
+
+                            //If it's still zero bytes, there's a problem and we can't proceed
+                            if (modinfo_links_txt.Length == 0)
+                            {
+                                ShowMessage("WARN: ModInfo.txt still has no data, no mods will be downloaded! Aborting now");
+                                ShowMessage("DEBUG: Please check that your link is valid and that you're connected to the internet");
+
+                                //Indicate failure
+                                success = false;
+
+                                //Get out of here
+                                return;
+                            }
+                        }
+
+                        //If, after all of that, we've got valid files, we can continue as normal
+                        //Provide a message because... Why not
+                        ShowMessage("Info: All text files have been verified as valid, proceeding to download!");
+                    }
+                }
+                else if (URLLink.Text.Length == 0)
+                {
+
+                }
+
+
                 //Check to see if the darkestdungeon\mods folder is empty
                 //If not, it needs cleared out to make room for the updated mods
                 if (Directory.GetDirectories(mods).Length > 0)
