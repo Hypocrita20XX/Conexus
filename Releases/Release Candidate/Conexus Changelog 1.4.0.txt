@@ -28,3 +28,5 @@ Details:
 
 > Changed check for Links.txt, from asterisk to steamcommunity, should be less error-prone
 > This means you don't need to preface comments with an asterisk starting with this version
+> Changed how the asterisk works, it now denotes mod names
+> Links file is now much more flexible, and can be formatting in a variety of ways
