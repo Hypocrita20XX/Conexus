@@ -1606,7 +1606,7 @@ namespace Conexus
                     success = false;
 
                     //Get out of here
-                    return;
+                    return false;
                 }
 
                 ShowMessage("INFO: HTML source has been downloaded");
