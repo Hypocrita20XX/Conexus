@@ -1001,8 +1001,7 @@ namespace Conexus
                             }
                         }
 
-                        //Last file, in two locations, for the different methods
-                        //ModInfo.txt for a collection
+                        //Last file, ModInfo.txt
                         if (modinfo_url_txt.Length == 0)
                         {
                             ShowMessage("WARN: ModInfo.txt contains no data, trying once again to obtain info!");
@@ -1049,7 +1048,28 @@ namespace Conexus
                 }
                 else if (URLLink.Text.Length == 0)
                 {
+                    //ModInfo.txt for a list of links
+                    if (modinfo_links_txt.Length == 0)
+                    {
+                        await SeparateInfoAsync(linksPath);
 
+                        //If it's still zero bytes, there's a problem and we can't proceed
+                        if (modinfo_links_txt.Length == 0)
+                        {
+                            ShowMessage("WARN: ModInfo.txt still has no data, no mods will be downloaded! Aborting now");
+                            ShowMessage("DEBUG: Please check that your link is valid and that you're connected to the internet");
+
+                            //Indicate failure
+                            success = false;
+
+                            //Get out of here
+                            return;
+                        }
+                    }
+
+                    //If, after all of that, we've got valid files, we can continue as normal
+                    //Provide a message because... Why not
+                    ShowMessage("Info: All text files have been verified as valid, proceeding to download!");
                 }
 
 
