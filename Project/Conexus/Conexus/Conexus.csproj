@@ -75,7 +75,7 @@
       <HintPath>..\packages\Ookii.Dialogs.Wpf.3.1.0\lib\net45\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="PeanutButter.INI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PeanutButter.INI.2.0.2\lib\net452\PeanutButter.INI.dll</HintPath>
+      <HintPath>..\packages\PeanutButter.INI.2.0.11\lib\net452\PeanutButter.INI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

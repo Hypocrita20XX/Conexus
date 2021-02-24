@@ -13,7 +13,7 @@
     Author: Xceed Software
     Source: https://github.com/xceedsoftware/wpftoolkit
 
-    Peanut Butter INI (v2.0.2)
+    Peanut Butter INI (v2.0.11)
     Author: Davys McColl
     Source: https://github.com/fluffynuts/PeanutButter
 
