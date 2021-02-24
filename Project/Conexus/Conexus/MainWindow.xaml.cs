@@ -17,7 +17,7 @@
     Author: Davys McColl
     Source: https://github.com/fluffynuts/PeanutButter
 
-> Code used/adapated:
+> Code used/adapted:
     Function: Copy Folders
     Author: Timm
     Source: http://www.csharp411.com/c-copy-folder-recursively/
