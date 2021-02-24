@@ -962,7 +962,7 @@ namespace Conexus
                 FileInfo html_txt = new FileInfo(dataPath + "\\HTML.txt");
                 FileInfo mods_txt = new FileInfo(dataPath + "\\Mods.txt");
                 FileInfo modinfo_url_txt = new FileInfo(dataPath + "\\ModInfo.txt");
-                FileInfo modinfo_links_txt = new FileInfo(linksPath + "ModInfo.txt");
+                FileInfo modinfo_links_txt = new FileInfo(linksPath + "\\ModInfo.txt");
 
                 if (URLLink.Text.Length > 0)
                 {
