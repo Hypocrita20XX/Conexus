@@ -1,1 +1,0 @@
-_Archive of the video series available on [Youtube](https://www.youtube.com/playlist?list=PLet2vPZn40UGuVOUWylHQwKDY6rYxZoKb), as well as the transcript available on [Google Docs](https://docs.google.com/document/d/19uwA3eqZa5eyoe0uStv36fA-gKU_vHMmYCtOfuBKpbg/)_

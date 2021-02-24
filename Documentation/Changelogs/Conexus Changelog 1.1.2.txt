@@ -1,4 +1,0 @@
-Conexus Changelog 1.1.2
-> Fixed "Update Mods" mode not working in list mode
-> Added a few checks to see if you're missing relevant text files when trying to update in either mode
-> Rolled back safety checks, just don't try to use both modes for different operations

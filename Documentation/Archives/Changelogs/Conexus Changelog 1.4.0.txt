@@ -1,0 +1,41 @@
+Conexus Changelog 1.4.0
+Highlights:
+> New download verification and diagnostics
+> Modes have been merged and are now handled automatically
+> Methods have been merged and are now handled automatically
+> Links method now supports mod names and is overall more flexible
+> Added diagnostics when mods fail to download
+
+Details:
+> Merged modes (download/update), both are now handled automatically
+> Merged methods (collection/list), provide a URL to use a collection, if none is given, Links.txt will be used
+> Adjusted UI to accommodate these changes
+> Made log window bigger to keep overall window the same size
+
+> Cleaned up XML, specifically comments, adding/changing/removing
+> Cleaned up CS, again comments, removed version tags, felt more like bloat than help
+
+> Log window should now properly scroll to the bottom of the window with each new window
+> New log tag, DEBUG, to hopefully help with specific troubleshooting steps
+> Changed log level in generic exception from WARNING to ERROR (because this only happens when everything irreparably breaks)
+> Removed duplicate log message
+> Corrected spelling in certain log messages
+
+> Added lengthy debug/diagnostics when SteamCMD fails to download mods
+> Added download verification that complements the aforementioned diagnostics
+> Conexus will now try twice to download mods
+> If more than 1/4th of your list fails to download, Conexus will stop processing mods (to account for hidden mods)
+
+> Removed deleting mods in \262060, to save users of large mods lists time with subsequent use of Conexus
+
+> Changed check for Links.txt, from * to "steamcommunity", should be less error-prone
+> This means you don't need to preface comments with an asterisk starting with this version
+> Changed how the asterisk works, it now denotes mod names
+> Links file is now much more flexible, and can be formatting in a variety of ways
+> Implemented a character limit of 120 for the mod name, windows supports upwards of 260, but that seems excessive for this
+> Make sure your mod name comes before the link, otherwise odd stuff can/will happen
+
+> Changed data saving, if you delete the URL after a saved URL is loaded, it will be deleted from the config when you close Conexus
+
+> Added data text file verification (for HTML, Mods, and ModInfo in \Data and \Links)
+> Added missing exception handling when downloading HTML from source

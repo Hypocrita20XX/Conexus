@@ -1,2 +1,0 @@
-Conexus Changelog 1.1.3
-> Added a check to ensure that _DD_TextFiles is created
