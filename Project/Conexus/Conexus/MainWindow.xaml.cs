@@ -80,9 +80,6 @@ namespace Conexus
         List<string> modInfo = new List<string>();
         List<string> appIDs = new List<string>();
 
-        //Bool to store which method the user has selected
-        bool steam;
-
         //Create a global dateTime for this session
         string dateTime = Regex.Replace(DateTime.Now.ToString(), @"['<''>'':''/''\''|''?''*'' ']", "_", RegexOptions.None);
 
@@ -696,7 +693,6 @@ namespace Conexus
                 //Get out of here
                 return;
             }
-
 
             //Free up resources, cleanup
             webClient.Dispose();
