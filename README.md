@@ -10,8 +10,7 @@
 ![Conexus GUI](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/UI.png)</br>
 
 *With the help of a straightforward GUI, Conexus will anaylze your Steam collection, download or update those mods (you can do both!) and then move those folders to the correct location with names that you can understand, and that the game will read in the exact order your Steam collection is in.*</br>
-*Updating your mods with Conexus is just as easy. Just let him know you want to update, and he'll move your mods to the proper location, update them, and move them back for you, all with the same user-friendly names.*</br>
-*Not using a Steam collection? No problem, Conexus has got your back! Just provide links in a text file, and Conexus will make sure your mods are organized as you decide.*</br>
+*Not using a Steam collection? No problem, Conexus has got your back! Just provide links in a text file (located in Documents\Conexus\Links), and Conexus will make sure your mods are organized as you decide!*</br>
 
 ***
 
@@ -46,39 +45,32 @@
 
 *Once you have that, you're ready to begin your adventure with Conexus!*</br>
 
-*You'll notice that there are two options, via dropdown menus, at the bottom:*
-* *Download Mods/Update Mods*
-* *Steam Collection/List*</br></br>
+*Starting with v1.4.0, there's no longer an need to select modes or methods, everything regarding those is now automatic! If you want to use a list of links, just make sure you don't have a URL in that text field, and Conexus will load your Links.txt from Documents\Conexus\Links.
 
-* *Download mods, when selected, will do a full download of all mods listed in the provided collection URL. Please note that this assumes your Darkest Dungeon mod directory is empty, otherwise Conexus may explode. Best used when you're on your first adventure.*
-* *Update mods, when selected, will move all mods from the Darkest Dungeon mod directory to the SteamCMD/workshop directory, renaming as needed and allowing SteamCMD to ensure your mods are up to date with their counterparts in the Workshop.*
-* *Steam Collection, when selected, will parse through the given Steam collection, via URL, and ensure your mods are organized as specified in the collection.*
-* *List, when selected, will parse through the links you've provided in DarkestDungeon\mods\Links.txt and make sure your mods reflect the order given in the file.*</br>
-
-*Once you have all the needed information stored with Conexus, and your mode of operation has been decided, simply hit the "organize mods" button and Conexus will do his best to ensure your in-game load order is of the highest quality.*
+*Once you have all the needed information stored with Conexus, simply hit the "organize mods" button and Conexus will do his best to ensure your in-game load order is of the highest quality.*
 *Do note that this can take some time, depending on how large your mod list is. As of v1.2.0, Conexus will now tell you what he's working on and when. However if you want to make sure everything is operating normally, just navigate to your Darkest Dungeon mod directory and your SteamCMD workshop directory. If you see folders appearing, disappearing, and/or doing a fine jig, everything is as it should be.</br>
 Just be patient, quality work takes time!*</br>
 
-*As of version 1.1.0, Conexus now offers a second method to utilize his services. This comes in the form of a text file, that you can enter URLs to all your mods. This file is located in DarkestDungeon\mods\Links.txt, and all you need to do is provide one URL per line. For organization, you can also add comments, with any line starting with an asterisk* * *. Useful for titles of each mod, or any other bit of snazzy info you would like!*
+*As of version 1.1.0, Conexus now offers a second method to utilize his services. This comes in the form of a text file, that you can enter URLs to all your mods. This file is located in Documents\Conexus\Links\Links.txt, and all you need to do is provide one URL per line. You can add mod names, starting with v1.4.0, using an asterisk* * *, and Conexus will append that to the end of the folder name. Other than that, you're free to format your file in whatever suits you best!*
+*For more information, please see [Understanding Links.txt](https://github.com/Hypocrita20XX/Conexus/wiki/P-07:-Understanding-Links.txt) on the wiki, or in the [user guide](https://github.com/Hypocrita20XX/Conexus/blob/master/Documentation/Guides/Conexus%20User's%20Guide%20v1.4.0.pdf)*
 
 ![Links Text File](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Links%20Text%20File.png)</br>
 
-*As of version 1.3.0, Conexus saves all data to Documents\Conexus. All user data is saved to Documents\Conexus\Confog\config.ini*
+*As of version 1.3.0, Conexus saves all data to Documents\Conexus. All user data is saved to Documents\Conexus\Config\config.ini*
+*For more information regarding the config file, please see [Understanding Config.INI](https://github.com/Hypocrita20XX/Conexus/wiki/P-06:-Understanding-Config.INI) on the wiki, or in the [user guide](https://github.com/Hypocrita20XX/Conexus/blob/master/Documentation/Guides/Conexus%20User's%20Guide%20v1.4.0.pdf)*
 
 ![Config INI](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Config%20INI.png)</br>
 
-*He'll no longer save your Steam credentials, but you can modify this file with that information, and he'll load them just fine!*
+*Starting with v1.3.0, He'll no longer save your Steam credentials, but you can modify Config.ini to include that information, and he'll load them just fine!*
 
 #### Potential Issues
-*Sometimes Conexus gets too caught up in his work, and can leave behind folders in places they shouldn't be.*</br>
-*After an operation, it's always best to ensure your SteamCMD workshop directory is clean of any excess folders.*</br>
-*If you encounter any other issues, do let me know! Unfortunately I don't have a PHD in pest control, so bugs could happen spontaneously.*</br></br>
+*If you encounter any issues, do let me know! Unfortunately I don't have a PHD in pest control, so bugs could happen spontaneously.*</br></br>
 *As of v1.2.0, there's now a log file that gets created after Conexus has done his job. This is located in DarkestDungeon\mods\_Logs. If you have an issue, send that to me via the [Github issue tracker!](https://github.com/Hypocrita20XX/Conexus/issues)*
 
 #### Closing Thoughts
 *As I mentioned earlier, this entire project, source code included, is [licensed under MIT](https://github.com/Hypocrita20XX/Conexus/blob/master/LICENSE)*
 *This means that if you, or anyone else, knows of a game that could use Conexus, you're more than welcome to modify him as needed to work with those games.*
-*I'm also very much open to others taking what I've done here and making it even better. Knowledge should be open to everyone, and I intend on doing my best to share what I can without any limitations.*</br>
+*I'm also very much open to others taking what I've done here and making it even better. Knowledge should be open to everyone, and I intend on doing my best to share what I can without any limitations. Just be sure to provide credit where it's due.*</br>
 
 ## I Hope Conexus Will Take You On Many Fulfilling Adventures!</br>
 
