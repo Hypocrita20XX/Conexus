@@ -1,4 +1,4 @@
-![Conexus Banner](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Banner.png)
+![Conexus Banner](https://staticdelivery.nexusmods.com/mods/804/images/858/858-1614678343-1747320964.png)
 
 # Welcome To Conexus!
 *Conexus is an all-in-one tool to convert a Steam collection or list of links into a load order for the game [Darkest Dungeon](https://store.steampowered.com/app/262060/Darkest_Dungeon/).* 
@@ -7,7 +7,7 @@
 *If you've modded Darkest Dungeon for any length of time, you've more than likely discovered that the in-game UI breaks after an unknown  amount of mods are loaded in.*  
 
 **Enter Conexus...** </br>
-![Conexus GUI](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/UI.png)</br>
+![Conexus GUI](https://staticdelivery.nexusmods.com/mods/804/images/858/858-1614678357-1856980801.png)</br>
 
 *With the help of a straightforward GUI, Conexus will anaylze your Steam collection, download or update those mods (you can do both!) and then move those folders to the correct location with names that you can understand, and that the game will read in the exact order your Steam collection is in.*</br>
 *Not using a Steam collection? No problem, Conexus has got your back! Just provide links in a text file (located in Documents\Conexus\Links), and Conexus will make sure your mods are organized as you decide!*</br>
@@ -54,12 +54,12 @@ Just be patient, quality work takes time!*</br>
 *As of version 1.1.0, Conexus now offers a second method to utilize his services. This comes in the form of a text file, that you can enter URLs to all your mods. This file is located in Documents\Conexus\Links\Links.txt, and all you need to do is provide one URL per line. You can add mod names, starting with v1.4.0, using an asterisk* * *, and Conexus will append that to the end of the folder name. Other than that, you're free to format your file in whatever suits you best!*
 *For more information, please see [Understanding Links.txt](https://github.com/Hypocrita20XX/Conexus/wiki/P-07:-Understanding-Links.txt) on the wiki, or in the [user guide](https://github.com/Hypocrita20XX/Conexus/blob/master/Documentation/Guides/Conexus%20User's%20Guide%20v1.4.0.pdf)*
 
-![Links Text File](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Links%20Text%20File.png)</br>
+![Links Text File](https://staticdelivery.nexusmods.com/mods/804/images/858/858-1614678334-1685874311.png)</br>
 
 *As of version 1.3.0, Conexus saves all data to Documents\Conexus. All user data is saved to Documents\Conexus\Config\config.ini*
 *For more information regarding the config file, please see [Understanding Config.INI](https://github.com/Hypocrita20XX/Conexus/wiki/P-06:-Understanding-Config.INI) on the wiki, or in the [user guide](https://github.com/Hypocrita20XX/Conexus/blob/master/Documentation/Guides/Conexus%20User's%20Guide%20v1.4.0.pdf)*
 
-![Config INI](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Config%20INI.png)</br>
+![Config INI](https://staticdelivery.nexusmods.com/mods/804/images/858/858-1614681261-794366316.png)</br>
 
 *Starting with v1.3.0, He'll no longer save your Steam credentials, but you can modify Config.ini to include that information, and he'll load them just fine!*
 
@@ -74,4 +74,4 @@ Just be patient, quality work takes time!*</br>
 
 ## I Hope Conexus Will Take You On Many Fulfilling Adventures!</br>
 
-![Conexus Banner](https://github.com/Hypocrita20XX/Conexus/blob/master/Images/Banner.png)
+![Conexus Banner](https://staticdelivery.nexusmods.com/mods/804/images/858/858-1614678343-1747320964.png)
