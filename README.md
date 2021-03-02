@@ -45,7 +45,7 @@
 
 *Once you have that, you're ready to begin your adventure with Conexus!*</br>
 
-*Starting with v1.4.0, there's no longer an need to select modes or methods, everything regarding those is now automatic! If you want to use a list of links, just make sure you don't have a URL in that text field, and Conexus will load your Links.txt from Documents\Conexus\Links.
+*Starting with v1.4.0, there's no longer an need to select modes or methods, everything regarding those is now automatic! If you want to use a list of links, just make sure you don't have a URL in that text field, and Conexus will load your Links.txt from Documents\Conexus\Links.*
 
 *Once you have all the needed information stored with Conexus, simply hit the "organize mods" button and Conexus will do his best to ensure your in-game load order is of the highest quality.*
 *Do note that this can take some time, depending on how large your mod list is. As of v1.2.0, Conexus will now tell you what he's working on and when. However if you want to make sure everything is operating normally, just navigate to your Darkest Dungeon mod directory and your SteamCMD workshop directory. If you see folders appearing, disappearing, and/or doing a fine jig, everything is as it should be.</br>
