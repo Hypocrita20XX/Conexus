@@ -1,8 +1,0 @@
-Conexus Changelog 1.2.1
-> UI update, new colors, new layout - fancy!
-> New buttons, which lead to Conexus on Nexus mods, Github
-> New buttons, which lead to the wiki, issue track on Github
-
-> Added some more logging to provide information reguarding OS, method, and mode used
-
-> Updated some comments

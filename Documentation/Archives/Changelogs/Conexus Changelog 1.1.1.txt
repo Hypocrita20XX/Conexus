@@ -1,4 +1,0 @@
-Conexus Changelog 1.1.1
-> Fixed Conexus failing to start up when exiting after downloading mods
-> Fixed Conexus crashing when trying to update mods
-> Added safety check to ensure _DD_TextFiles and all files inside are properly deleted when switching methods (collection to list, or vice versa)

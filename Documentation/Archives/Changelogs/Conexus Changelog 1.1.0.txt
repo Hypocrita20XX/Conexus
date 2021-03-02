@@ -1,9 +1,0 @@
-Conexus 1.0.1 Changelog:
-> Removed requirement for Steam credentials, opting for anonymous login
-> Removed Steam login verification (the main cause of Conexus failing to work)
-> Removed default text for the Collection URL field
-> Fixed an issue that could occur if the user selects "update mods" without first downloading mods
-> Added a dropdown for "Steam Collection" or "List" (for multi-platform operation)
-> Added functionality to allow either a Steam collection or a list of links (for non_steam users)
-> Added checks to prevent a crash after folders/files are deleted
-> Updated Ookii.Dialogs to 3.1.0, from 1.1.0
