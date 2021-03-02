@@ -1546,7 +1546,7 @@ namespace Conexus
                 //Flag this URL as invalid
                 validURL = false;
                 //Provide additional logging
-                ShowMessage("ERROR: Provided URL is not valid!");
+                ShowMessage("ERROR: Provided URL is not valid! Please also check your internet connection");
             }
             //No URL at all, or something else that was unexpected
             catch (ArgumentException)
@@ -1895,7 +1895,7 @@ namespace Conexus
             //1.) The content folder is missing (which also means 2 and 3 are true)
             //2.) The 262060 folder is missing (which also means 1 is false and 3 is true)
             //3.) Any or all of the mod folders are missing (which means 1 and 2 are false)
-            if (!e)
+            if (!e && dlAttempts >= 2)
             {
                 //First, let's find specifics, are content\262060 folders missing?
                 if (!Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content") || !Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
@@ -1913,7 +1913,6 @@ namespace Conexus
                     ShowMessage("DEBUG: 1 - Let's check your internet connection");
 
                     netAttempts.Add(CheckForInternetConnection("google.com"));
-                    netAttempts.Add(CheckForInternetConnection("yahoo.com"));
                     netAttempts.Add(CheckForInternetConnection("facebook.com"));
                     netAttempts.Add(CheckForInternetConnection("youtube.com"));
                     netAttempts.Add(CheckForInternetConnection("twitter.com"));
@@ -2015,6 +2014,10 @@ namespace Conexus
 
                     //Save log to file
                     WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+                }
+                else
+                {
+                    ShowMessage("DEBUG: Downloads could not be completed for an unknown reason. Please try again!");
                 }
             }
 
