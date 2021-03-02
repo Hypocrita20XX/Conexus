@@ -52,12 +52,12 @@
 Just be patient, quality work takes time!*</br>
 
 *As of version 1.1.0, Conexus now offers a second method to utilize his services. This comes in the form of a text file, that you can enter URLs to all your mods. This file is located in Documents\Conexus\Links\Links.txt, and all you need to do is provide one URL per line. You can add mod names, starting with v1.4.0, using an asterisk* * *, and Conexus will append that to the end of the folder name. Other than that, you're free to format your file in whatever suits you best!*
-*For more information, please see [Understanding Links.txt](https://github.com/Hypocrita20XX/Conexus/wiki/P-07:-Understanding-Links.txt) on the wiki, or in the [user guide](https://github.com/Hypocrita20XX/Conexus/blob/master/Documentation/Guides/Conexus%20User's%20Guide%20v1.4.0.pdf)*
+*For more information, please see [Understanding Links.txt](https://github.com/Hypocrita20XX/Conexus/wiki/P-07:-Understanding-Links.txt) on the wiki, in the [user guide](https://github.com/Hypocrita20XX/Conexus/blob/master/Documentation/Guides/Conexus%20User's%20Guide%20v1.4.0.pdf), or in the video [Understanding Links.txt](https://youtu.be/pM-9bJrp4M4) *
 
 ![Links Text File](https://staticdelivery.nexusmods.com/mods/804/images/858/858-1614678334-1685874311.png)</br>
 
 *As of version 1.3.0, Conexus saves all data to Documents\Conexus. All user data is saved to Documents\Conexus\Config\config.ini*
-*For more information regarding the config file, please see [Understanding Config.INI](https://github.com/Hypocrita20XX/Conexus/wiki/P-06:-Understanding-Config.INI) on the wiki, or in the [user guide](https://github.com/Hypocrita20XX/Conexus/blob/master/Documentation/Guides/Conexus%20User's%20Guide%20v1.4.0.pdf)*
+*For more information regarding the config file, please see [Understanding Config.INI](https://github.com/Hypocrita20XX/Conexus/wiki/P-06:-Understanding-Config.INI) on the wiki, in the [user guide](https://github.com/Hypocrita20XX/Conexus/blob/master/Documentation/Guides/Conexus%20User's%20Guide%20v1.4.0.pdf), or in the video [Understanding Config.INI](https://youtu.be/MwJfOzasrcc)*
 
 ![Config INI](https://staticdelivery.nexusmods.com/mods/804/images/858/858-1614681261-794366316.png)</br>
 
@@ -65,7 +65,16 @@ Just be patient, quality work takes time!*</br>
 
 #### Potential Issues
 *If you encounter any issues, do let me know! Unfortunately I don't have a PHD in pest control, so bugs could happen spontaneously.*</br></br>
-*As of v1.2.0, there's now a log file that gets created after Conexus has done his job. This is located in DarkestDungeon\mods\_Logs. If you have an issue, send that to me via the [Github issue tracker!](https://github.com/Hypocrita20XX/Conexus/issues)*
+*As of v1.2.0, there's now a log file that gets created after Conexus has done his job. This is located in Documents\Conexus\Logs. If you have an issue, send that to me via the [Github issue tracker!](https://github.com/Hypocrita20XX/Conexus/issues)*
+
+#### Documentation
+*I've done my very best to provide adequate documentation in various forms. If you're more into videos, you can check out [the video tab on Nexus Mods](https://www.nexusmods.com/darkestdungeon/mods/858?tab=videos) or [this playlist on Youtube](https://www.youtube.com/playlist?list=PLet2vPZn40UGuVOUWylHQwKDY6rYxZoKb) for a series of videos covering every aspect of Conexus.*</br> 
+*If you would prefer text, you can check out the PDF guides available [in the files tab on Nexus Mods](https://www.nexusmods.com/darkestdungeon/mods/858?tab=files) as well as [on Github](https://github.com/Hypocrita20XX/Conexus/tree/master/Documentation/Guides)*</br>
+*Every release archive also contains a short quickstart guide that should get you up and running, if you prefer shorter documentation. If you don't like Youtube or just want a copy of the video series, that's also available in the files tab.*</br>
+*I've made two archives available, one without captions, and another with captions baked into each video. There's also a transcript, if you would like that as well!*</br>
+*Lastly, if you're a developer, I've got an archive [on Nexus Mods](https://www.nexusmods.com/darkestdungeon/mods/858?tab=files) containing source code for several recent releases. The code for the latest release is available here on Github and in archive form [in the releases section](https://github.com/Hypocrita20XX/Conexus/releases), basic informating concerning setting up a dev environment can be found [in this readme](https://github.com/Hypocrita20XX/Conexus/blob/master/Project/README.md).*</br>
+*Please keep in mind that I can't help you set up a dev environment. I know how to set it up on my system, but have no experience doing so for anyone else.*</br>
+*Sorry about that!*
 
 #### Closing Thoughts
 *As I mentioned earlier, this entire project, source code included, is [licensed under MIT](https://github.com/Hypocrita20XX/Conexus/blob/master/LICENSE)*
