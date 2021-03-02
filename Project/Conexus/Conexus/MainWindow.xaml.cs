@@ -513,6 +513,11 @@ namespace Conexus
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
             //Check internet connection before doing anything
+
+            //Note: ideally this would  be rolled into the CheckForInternetConnection method
+            //I don't care enough to make that happen right now, so this will work fine, despite being far too verbose
+            //IE turn the method into an int, return the value of valid pings 
+            //(Even though what I'm doing may not technically be pinging. You get the idea)
             List<bool> netAttempts = new List<bool>();
 
             netAttempts.Add(CheckForInternetConnection("google.com"));
@@ -542,6 +547,42 @@ namespace Conexus
                 ShowMessage("ERROR: There seems to be a problem with your internet connection!");
                 ShowMessage("ERROR: Conexus will now stop processing your list");
 
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+                ShowMessage("INFO: Enabling input fields now");
+
+                //Enable input after operation
+                URLLink.IsEnabled = true;
+                SteamCMDDir.IsEnabled = true;
+                ModDir.IsEnabled = true;
+                SteamUsername.IsEnabled = true;
+                SteamUsername_TextBox.IsEnabled = true;
+                UsernameReveal.IsEnabled = true;
+                SteamPassword.IsEnabled = true;
+                SteamPassword_TextBox.IsEnabled = true;
+                PasswordReveal.IsEnabled = true;
+                OrganizeMods.IsEnabled = true;
+
+                ShowMessage("WARN: Process could not finish successfully!");
+
+                //Save logs to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+                //Return and make sure everything else stops
+                return;
+            }
+
+            //Check to see if the user has selected directories for SteamCMD and Darkest Dungeon\mods
+            if ((string)SteamCMDDir.Content == "Select SteamCMD Directory")
+                ShowMessage("WARN: You didn't select a SteamCMD directory!");
+
+            if ((string)ModDir.Content == "Select Mods Directory")
+                ShowMessage("WARN: You didn't select a mods directory!");
+
+            //If either equal the default value, get out of here
+            if ((string)SteamCMDDir.Content == "Select SteamCMD Directory")
+            {
                 //Save log to file
                 WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
 
@@ -1961,6 +2002,8 @@ namespace Conexus
             //3.) Any or all of the mod folders are missing (which means 1 and 2 are false)
             if (!e && dlAttempts >= 2)
             {
+                ShowMessage("INFO: Debug info will now be generated");
+
                 //First, let's find specifics, are content\262060 folders missing?
                 if (!Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content") || !Directory.Exists(steamCmdDir + "\\steamapps\\workshop\\content\\262060"))
                 {
@@ -1972,6 +2015,11 @@ namespace Conexus
                     //Please note that, as far as I can tell, there's no reliable way to do this
                     //So we'll do a shotgun approach and let the user know that they may be offline
                     //Or in a country where that website is unavailable
+
+                    //Note: ideally this would  be rolled into the CheckForInternetConnection method
+                    //I don't care enough to make that happen right now, so this will work fine, despite being far too verbose
+                    //IE turn the method into an int, return the value of valid pings 
+                    //(Even though what I'm doing may not technically be pinging. You get the idea)
                     List<bool> netAttempts = new List<bool>();
 
                     ShowMessage("DEBUG: 1 - Let's check your internet connection");
@@ -2085,6 +2133,7 @@ namespace Conexus
                 }
             }
 
+            //Return the appropriate value
             if (e)
                 return true;
             else if (!e)
