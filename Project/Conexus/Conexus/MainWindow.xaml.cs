@@ -486,6 +486,8 @@ namespace Conexus
                 Directory.CreateDirectory(dataPath);
             }
 
+            ShowMessage("INFO: Disabling input fields now");
+
             //Disable input during operation
             URLLink.IsEnabled = false;
             SteamCMDDir.IsEnabled = false;
@@ -509,6 +511,62 @@ namespace Conexus
 
             //Save log to file
             WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+            //Check internet connection before doing anything
+            List<bool> netAttempts = new List<bool>();
+
+            netAttempts.Add(CheckForInternetConnection("google.com"));
+            netAttempts.Add(CheckForInternetConnection("facebook.com"));
+            netAttempts.Add(CheckForInternetConnection("youtube.com"));
+            netAttempts.Add(CheckForInternetConnection("twitter.com"));
+            //Specifically chose this one because it's not blocked in China
+            netAttempts.Add(CheckForInternetConnection("weibo.com"));
+
+            int t = 0;
+            int f = 0;
+
+            //See the ratio of true:false
+            for (int i = 0; i < netAttempts.Count; i++)
+            {
+                if (netAttempts[i])
+                    t++;
+
+                if (!netAttempts[i])
+                    f++;
+            }
+
+            //If we have more false than true, they're lacking an internet connection
+            if (f > t)
+            {
+                //Provide additional logging
+                ShowMessage("ERROR: There seems to be a problem with your internet connection!");
+                ShowMessage("ERROR: Conexus will now stop processing your list");
+
+                //Save log to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+                ShowMessage("INFO: Enabling input fields now");
+
+                //Enable input after operation
+                URLLink.IsEnabled = true;
+                SteamCMDDir.IsEnabled = true;
+                ModDir.IsEnabled = true;
+                SteamUsername.IsEnabled = true;
+                SteamUsername_TextBox.IsEnabled = true;
+                UsernameReveal.IsEnabled = true;
+                SteamPassword.IsEnabled = true;
+                SteamPassword_TextBox.IsEnabled = true;
+                PasswordReveal.IsEnabled = true;
+                OrganizeMods.IsEnabled = true;
+
+                ShowMessage("WARN: Process could not finish successfully!");
+
+                //Save logs to file
+                WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+                //Return and make sure everything else stops
+                return;
+            }
 
             //If the user wants to use a Steam collection, ensure all functionality relates to that
             if (URLLink.Text.Length > 0)
@@ -541,6 +599,8 @@ namespace Conexus
 
                         //Save log to file
                         WriteToFile(log.ToArray(), Path.Combine(logsPath, dateTime + ".txt"));
+
+                        ShowMessage("INFO: Enabling input fields now");
 
                         //Enable input after operation
                         URLLink.IsEnabled = true;
@@ -580,6 +640,8 @@ namespace Conexus
                 //URL is not valid, don't do anything
                 else
                 {
+                    ShowMessage("INFO: Enabling input fields now");
+
                     //Enable input after operation
                     URLLink.IsEnabled = true;
                     SteamCMDDir.IsEnabled = true;
@@ -617,6 +679,8 @@ namespace Conexus
 
                 await DownloadModsFromSteamAsync();
             }
+
+            ShowMessage("INFO: Enabling input fields now");
 
             //Enable input after operation
             URLLink.IsEnabled = true;
@@ -685,7 +749,7 @@ namespace Conexus
             }
             catch (System.Net.WebException e)
             {
-                ShowMessage("ERROR: Something went wrong with your network connection!" + e.Message);
+                ShowMessage("ERROR: Something went wrong with your network connection! " + e.Message);
 
                 //Indicate failure
                 success = false;
@@ -1546,7 +1610,7 @@ namespace Conexus
                 //Flag this URL as invalid
                 validURL = false;
                 //Provide additional logging
-                ShowMessage("ERROR: Provided URL is not valid! Please also check your internet connection");
+                ShowMessage("ERROR: Provided URL is not valid!");
             }
             //No URL at all, or something else that was unexpected
             catch (ArgumentException)
